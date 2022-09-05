@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="board">
+	<select id="getPostList" resultType="post">
+		SELECT * FROM (
+		
+			SELECT ROWNUM RN, T.*
+			FROM (
+			
+				SELECT  P.*,
+						H.EMP_NAME,
+						D.DEP_NAME
+				FROM POST P
+				INNER JOIN DEPARTMENT D
+					ON P.BOARD_NO = D.DEP_NO
+				INNER JOIN HR H
+					ON P.EMP_NO = H.EMP_NO
+				WHERE P.BOARD_NO = #{boardNo} 
+				AND P.IS_DELETED = 'N'
+				<if test='category neq "전체"'>
+				AND P.CATEGORY = #{category}
+				</if>
+				<if test='search != null and search neq ""'>
+				AND P.TITLE LIKE '%' || #{search} || '%'
+				</if>
+				ORDER BY P.CREATED_TIME DESC
+			
+			) T
+		)
+		WHERE RN BETWEEN #{startRow} AND #{endRow}
+	
+	</select>
+	
+	<insert id="insertPost">
+		INSERT INTO POST(
+			POST_NO,
+			EMP_NO,
+			BOARD_NO,
+			TITLE,
+			CATEGORY,
+			CONTENT
+		)
+		VALUES(
+			POST_SEQ.NEXTVAL,
+			#{empNo},
+			#{boardNo},
+			#{title},
+			#{category},
+			#{content}
+		)
+	</insert>
+	
+	<select id="getPost" resultType="post">
+		SELECT  P.*,
+				H.EMP_NAME,
+				D.DEP_NAME
+		FROM POST P
+		INNER JOIN DEPARTMENT D
+			ON P.BOARD_NO = D.DEP_NO
+		INNER JOIN HR H
+			ON P.EMP_NO = H.EMP_NO
+		WHERE POST_NO = #{no} 
+	</select>
+	
+	<update id="updatePost">
+		UPDATE POST
+		SET
+			TITLE = #{title},
+			CATEGORY = #{category},
+			CONTENT = #{content}
+		WHERE POST_NO = #{postNo}
+	</update>
+	
+	<delete id="deletePost">
+		DELETE FROM POST
+		WHERE POST_NO = #{postNo}
+	</delete>
+	
+	<select id="getTotalPostNum" resultType="int">
+		SELECT COUNT(*)
+		FROM POST
+		WHERE BOARD_NO = #{boardNo}
+		  AND IS_DELETED = 'N' 
+	</select>
+	
+	<select id="getRecentList" resultType="post">
+		SELECT * FROM (
+		
+			SELECT ROWNUM RN, T.*
+			FROM (
+			
+				SELECT  P.*,
+						H.EMP_NAME
+				FROM POST P
+				INNER JOIN HR H
+					ON P.EMP_NO = H.EMP_NO
+				WHERE P.BOARD_NO = 1
+				AND P.IS_DELETED = 'N'
+				ORDER BY P.POST_NO DESC
+			
+			) T
+		)
+		WHERE RN BETWEEN 1 AND 5
+	</select>
+</mapper>

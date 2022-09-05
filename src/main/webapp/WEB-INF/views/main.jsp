@@ -1,0 +1,642 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ include file="common/head.jsp" %>
+<link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" />
+<style>
+  .done{
+    text-decoration: line-through;
+  }
+  .fc-toolbar-title{
+    font-size: 1rem !important;
+  }
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<body>
+	<%@ include file="common/header.jsp" %>
+
+	<main id="main" class="main">
+	<c:if test="${empty loginEmp}">
+		<div class="pagetitle">
+      <h1>반갑습니다. 어서오세요!</h1>
+    	</div>
+    </c:if>
+    <c:if test="${not empty loginEmp}">
+    	<div class="pagetitle">
+      <h1>${loginEmp.empName}님 안녕하세요</h1>
+    	</div>
+    </c:if>
+<!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="col-12"><!-- 할일 & 투두 -->
+              <div class="row">
+            
+              <!-- 할 일 -->
+              <div class="col-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">요청</h5>
+                    <input class="form-control me-1" type="text" value="" placeholder="보낼 요청을 입력하세요">
+                    <div class="activity">
+                    
+                    <!-- Bordered Tabs -->
+                    <ul class="nav nav-tabs nav-tabs-bordered" id="borderedTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-home" type="button" role="tab" aria-controls="home" aria-selected="true">받은 요청</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">보낸 요청</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#bordered-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">완료된 요청</button>
+                      </li>
+                    </ul>
+                    
+                    <div class="tab-content pt-2" id="borderedTabContent">
+                      <div class="tab-pane fade show active" id="bordered-home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="activity-item d-flex">
+                          <div class="activite-label">
+                          <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                            이수진
+                          </div>
+                          <div class="activity-content">
+                              휴가 승인 요청 <span style="color: gray;"> - 2월 19일 (토)</span>
+                          </div>
+                          <div class="activity-button">
+                            <a href="#"><i class="bi bi-chevron-right"></i></a>
+                          </div>
+                        </div><!-- End activity item-->
+                      <div class="activity-item d-flex">
+                        <div class="activite-label">
+                        <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                          유진이
+                        </div>
+                        <div class="activity-content">
+                          휴가 승인 요청 <span style="color: gray;"> - 2월 19일 (토)</span>
+                        </div>
+                        <div class="activity-button">
+                          <a href="#"><i class="bi bi-chevron-right"></i></a>
+                        </div>
+                      </div><!-- End activity item-->
+
+                      <div class="activity-item d-flex">
+                        <div class="activite-label">
+                        <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                        이승연
+                        </div>
+                        <div class="activity-content">
+                          휴가 승인 요청 <span style="color: gray;"> - 2월 19일 (토)</span>
+                        </div>
+                        <div class="activity-button">
+                          <a href="#"><i class="bi bi-chevron-right"></i></a>
+                        </div>
+                      </div><!-- End activity item-->
+                      </div>
+                      
+                      <div class="tab-pane fade" id="bordered-profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="activity-item d-flex">
+                          <div class="activite-label">
+                          <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                            서성환
+                          </div>
+                          <div class="activity-content">
+                              휴가 승인 요청 <span style="color: gray;"> - 2월 19일 (토)</span>
+                          </div>
+                          <div class="activity-button">
+                            <a href="#"><i class="bi bi-chevron-right"></i></a>
+                          </div>
+                        </div><!-- End activity item-->
+
+                      </div>
+                      
+                      <div class="tab-pane fade" id="bordered-contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="activity-item d-flex">
+                          <div class="activite-label">
+                          <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                            장재욱
+                          </div>
+                          <div class="activity-content">
+                              휴가 승인 요청 <span style="color: gray;"> - 2월 19일 (토)</span>
+                          </div>
+                          <div class="activity-button">
+                            <a href="#"><i class="bi bi-chevron-right"></i></a>
+                          </div>
+                        </div><!-- End activity item-->
+                      </div>
+                      
+                    </div><!-- End Bordered Tabs -->
+
+                    </div>
+
+                  </div>
+                </div><!-- End 할 일 -->
+              </div>
+              <div class="col-6"><!--투두리스트-->
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">To Do</h5>
+                    <input class="form-control me-1" type="text" id="inputToDo" placeholder="할일을 입력하세요">
+                    <!-- List group With Checkboxes and radios -->
+                    <ul class="list-group" id="todoList">
+                      <li class="list-group-item">
+                        <div class="d-flex">
+                          <input class="form-check-input me-1 align-self-center todo-check" type="checkbox">
+                          <span class="align-self-center">프로젝트 시연 준비</span>
+                          <button class="btn ms-auto"><i class="bi bi-x"></i></button>
+                        </div>
+                      </li>
+                      <li class="list-group-item">
+                        <div class="d-flex">
+                          <input class="form-check-input me-1 align-self-center todo-check" type="checkbox" checked>
+                          <span class="align-self-center done">할일 끝!!</span>
+                          <button class="btn ms-auto"><i class="bi bi-x"></i></button>
+                        </div>
+                      </li>
+
+                    </ul><!-- End List Checkboxes and radios -->
+      
+                  </div>
+                </div>
+              </div><!--end 투두리스트-->
+           </div><!--end 할일 & 투두 -->
+          </div>
+          
+          <!-- 메시지 -->
+          <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"> 받은 메시지</h5>
+
+              <div class="activity" id="message">
+
+					<div class="activity-item d-flex">
+            <div class="activite-label">
+            <img src="resources/assets/img/favicon.png" class="rounded-circle">
+              이수진
+            </div>
+            <div class="activity-content">
+                점심 뭐먹을까 <span style="color: gray;"> - 오전 11:53</span>
+            </div>
+          </div><!-- End activity item-->
+
+					<div class="activity-item d-flex">
+	                  <div class="activite-label">
+		                <img src="resources/assets/img/favicon.png" class="rounded-circle">
+	                  	이승연
+	                  </div>
+	                  <div class="activity-content">
+		                    내일 회의 자료 보냈어요! <span style="color: gray;"> - 2월 17일 (목)</span>
+	                  </div>
+               		 </div><!-- End activity item-->
+              </div>
+
+            </div>
+          </div>
+          </div> <!-- End 메시지 -->
+          
+                   
+          <!-- 공지 -->
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title"> 공지사항 <span>| 전체</span></h5>
+              <div class="list-group mb-4">
+              	<c:forEach items="${notices}" var="n">              	
+	                <a href="board/1/${n.postNo}" class="list-group-item list-group-item-action" aria-current="true">
+	                  <div class="d-flex w-100 justify-content-between">
+	                    <p class="mb-1">${n.title}</p>
+	                    <small>${n.dateString}</small>
+	                  </div>
+	                  <small>${n.empName}</small>
+	                </a>
+              	</c:forEach>
+              </div>
+            </div>
+          </div><!-- End 공지 -->
+
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- 근무 Card -->
+          <c:if test="${empty loginEmp}">
+			 <div class="col-12">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <form action="work.do" method="post">
+                  <div class="d-flex flex-column align-items-center">
+                    <div id="current_time" style="font-size: 1.5em; margin-top: 30px; text-align: center;"><월요일 출근이 기다려지는 방법></div>
+                    <div id="current_date" style="font-size: 1.2em; margin-top: 10px;">금요일에 인터넷 쇼핑을 하고 <br> 택배 배송지를 회사로 적는다.</div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>	
+		  </c:if>
+          <c:if test="${not empty loginEmp}">
+            <div class="col-12">
+              <div class="card info-card sales-card">
+                <div class="card-body">
+                  <h5 class="card-title">근무 등록 <span> | 오늘</span></h5>
+                      <div class="d-flex flex-column align-items-center">
+                        <div id="current_date" style="font-size: 1.5em;"></div>
+                          <div id="current_time" style="font-size: 2.3em; margin-top: 10px;"><span id="dpTime"></span></div>
+                            <div>
+	                    	    <form action="work.do" method="post">
+	                    	    <c:if test="${empty workEmp.inDate}">
+	                    	      <input type="hidden" value="${loginEmp.empNo}" name="empNo">
+	                              <button type="submit" class="btn btn-success" style="margin-top: 20px;">지금 출근하기</button>
+	                              <a class="btn btn-outline-secondary" role="button" href="workMain" style="margin-left: 0px; margin-top: 20px;">근무 기록 확인</a>
+	                            </c:if>
+	                            </form>
+	                            <c:if test="${not empty workEmp.inDate }">
+			                      <c:if test="${null eq outTime2}">
+									<form action="out.do" method="post">
+									  <button type="submit" id="dayOutBtn" class="btn btn-danger" style="margin-top: 20px;">지금 퇴근하기</button>
+									  <a class="btn btn-outline-secondary" role="button" href="workMain" style="margin-left: 0px; margin-top: 20px;">근무 기록 확인</a>
+									</form>
+								  </c:if> 
+								  <c:if test="${null ne outTime2}">
+									  <button type="button" id="dayOutBtn" class="btn btn-dark" style="margin-top: 20px;" onclick="end()">당일 근무 종료</button>
+									  <a class="btn btn-outline-secondary" role="button" href="workMain" style="margin-left: 0px; margin-top: 20px;">근무 기록 확인</a>
+								  </c:if> 
+						       </c:if>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+		  </c:if>
+		<!-- End 근무 Card -->       
+           <!-- 일정 -->
+          <div class="col-md-12 card">
+            <div class="card-body">
+              <h5 class="card-title">일정</h5>
+              <div id="calendar">
+            </div>
+          </div>
+
+          </div><!-- End 일정 -->
+          
+
+        </div><!-- End Right side columns -->
+
+      </div>
+
+      <!-- 근무 script-->
+      <script>
+
+        date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        
+        function getweek() {
+        var week = new Array('일', '월', '화', '수', '목', '금', '토');
+        var today = new Date().getDay();
+        var todayLabel = week[today];
+        return todayLabel;
+        }
+        document.getElementById("current_date").innerHTML = year + "년 " + month + "월 " + day + "일 " + "(" + getweek() + ")";
+
+
+        setInterval("dpTime()",1000);
+        function dpTime(){
+          var now = new Date();
+          hours = now.getHours();
+          minutes = now.getMinutes();
+          seconds = now.getSeconds();
+          
+          if (hours > 12){
+            hours -= 12;
+            ampm = "오후 "; 
+          }else{
+            ampm = "오전 "; 
+          }
+          if (hours < 10){ 
+            hours = "0" + hours; 
+          } if (minutes < 10){
+            minutes = "0" + minutes; 
+          } if (seconds < 10){ 
+            seconds = "0" + seconds; 
+          } 
+          document.getElementById("dpTime").innerHTML = ampm + hours + ":" + minutes + ":" + seconds; }
+        
+        function loginX() {
+        	swal({
+        		title : "로그인이 필요합니다.",
+        	    	icon  : "info",
+        	    	closeOnClickOutside : false
+        	}, function(){
+        		location.href = "member/login";
+        	})
+		}
+        
+        function end() {
+			swal("고생하셨습니다😊","","success");
+		}
+      
+      let empNo = ${loginEmp.empNo};
+
+      $('#inputToDo').keypress(function(key){
+        if(key.keyCode == 13){
+          let content = $(this).val();
+          $(this).val("");
+          $.ajax({
+            type: 'POST',
+            url: '/helloffice/todo/' + empNo,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+				    data: content
+          }).done(function(data){
+            renderToDoList(data);
+          }).fail(function(){
+              Swal.fire(
+              'error',
+              '할일 추가중 오류가 발생했습니다.'
+            )
+          });
+        }
+      });
+	  
+      function delToDo(no){
+          $.ajax({
+            type: 'DELETE',
+            url: '/helloffice/todo/' + empNo + '/' + no,
+            dataType: 'json'
+          }).done(function(data){
+            renderToDoList(data);
+          }).fail(function(){
+            Swal.fire(
+                'error',
+                '할일 삭제중 오류가 발생했습니다.'
+              )
+          });
+        };
+
+        function updateStatus(no, input){
+          let isComplete = '';
+          if($(input).is(':checked')){
+            isComplete = 'Y';
+          }else {
+            isComplete = 'N';
+          }
+
+          $.ajax({
+            type: 'PUT',
+            url: '/helloffice/todo/' + empNo + '/' + no,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+				    data: isComplete
+          }).done(function(data){
+            renderToDoList(data);
+          }).fail(function(){
+            Swal.fire(
+                'error',
+                '할일 업데이트중 오류가 발생했습니다.'
+              )
+          });
+        }
+      
+      function renderToDoList(data){
+        $('#todoList').empty();
+            
+        for (const key in data) {
+          let isComplete = "";
+          let checked = "";
+          if(data[key]["isComplete"] == "Y") {
+            isComplete = "done";
+            checked = "checked";  
+          };
+
+          let template = 
+            `<li class="list-group-item">
+              <div class="d-flex">
+                <input class="form-check-input me-1 align-self-center" type="checkbox" onChange="updateStatus(${ '${key}' }, $(this))" ${ '${checked}' }>
+                <span class="align-self-center ${ '${isComplete}' }">${ '${data[key]["content"]}' }</span>
+                <button onClick="delToDo(${ '${key}' })" class="btn ms-auto"><i class="bi bi-x"></i></button>
+              </div>
+            </li>`;
+          $('#todoList').append(template);
+        }
+      }
+
+      
+      $(document).ready(function(){
+        $.ajax({
+          type: 'GET',
+          url: '/helloffice/todo/' + empNo,
+          dataType: 'json'
+        }).done(function(data){
+          renderToDoList(data);
+        });
+      });
+
+      const getEventList = () => {
+      $.ajax({
+        type: 'GET',
+        url: "/helloffice/calendar/" + `${loginEmp.empNo}`,
+        dataType: 'json'
+      }).done(function(data){
+        let events = []
+        data.forEach((e) => {
+          let event = {};
+          event['eventNo'] = e.eventNo;
+          event['title'] = e.title;
+          event['id'] = e.eventNo;
+          if(e.allday === 'T'){
+            event['start'] = e.startTime.split(" ")[0];
+            event['end'] = e.endTime.split(" ")[0];
+          }else{
+            event['start'] = e.startTime.split(" ")[0] + "T" + e.startTime.split(" ")[1];
+            event['end'] = e.endTime.split(" ")[0] + "T" + e.endTime.split(" ")[1];
+          }
+          events.push(event);
+        });
+        renderCal(events);
+      });
+
+    };
+
+    const renderCal = (list) => {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        themeSystem: 'bootstrap5',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'listMonth,listWeek,listDay'
+        },
+        titleFormat: {
+          month: '2-digit',
+          day: '2-digit'
+        },
+        buttonText:{
+          listWeek: '주',
+          listMonth: '월',
+          listDay: '일'
+        },
+        initialView: 'listMonth',
+        locale: 'ko',
+        navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+        nowIndicator: true, // 현재 시간 마크
+        eventClick: function(info) {
+          eventDetail(info);
+        },
+        events: list,
+        googleCalendarApiKey : '',
+        eventSources : [
+          {
+                googleCalendarId : "ko.south_korea#holiday@group.v.calendar.google.com"
+              , className : "koHolidays"
+              , color : "#FF0000"
+              , textColor : "#FFFFFF"
+          }
+        ]
+      });
+  
+      calendar.render();
+    }
+        
+    $(document).ready(getEventList);   
+    </script>
+
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+      <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+      // import { getFirestore, collection, getDocs, doc, onSnapShot } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js";
+      import firebase from "firebase/app";
+      import "firebase/firestore";
+
+
+      const firebaseConfig = {
+      };
+
+      // Initialize Firebase
+      // const app = initializeApp(firebaseConfig);
+      // const db = getFirestore(app);
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      let userRef = db.collection("users");
+      let roomRef = db.collection("rooms");
+
+      let userNo = `${loginEmp.empNo}`;
+
+      const getUserDetails = async (no) => {
+        let userDetail = {}
+        await userRef.doc(no).get()
+        .then((doc)=> {
+          if(doc.exists){
+            let data = doc.data();
+            userDetail = {
+              name: data.name,
+              rank: data.rank,
+              dept: data.dept
+            }
+          }else{
+            console.log('no data')
+          }
+        })
+        .catch((e) => {
+          console.log('::: ERROR on getUserDetails :::' + e);
+        })
+        return userDetail;
+      }
+
+      const renderRoomList = () => {
+			$('#roomList').empty();
+			roomRef.where("users", 'array-contains', userNo)
+      .orderBy("lastChatTime", "desc").limit(3)
+			.onSnapshot((querySnapshot) => {
+				$('#message').empty();
+				querySnapshot.forEach((doc) => {
+					let id = doc.id;
+					let data = doc.data();
+					let time = data.lastChatTime.toDate();
+					time = renderTime(time);
+					let msg = data.lastMsg;
+					let users = data.users[2].split(',');
+					let no = '';
+					if(users[0] == userNo){
+						no = users[1];
+					}else{
+						no = users[0]
+					}
+					
+					getUserDetails(no).then((detail) => {
+						let roomName = detail.dept + " " + detail.name + " " + detail.rank;
+						let template = `<div data-id="${ '${id}' }" class="activity-item message d-flex">
+                              <div class="activite-label">
+                              <img src="resources/assets/img/favicon.png" class="rounded-circle">
+                                ${ '${roomName}' }
+                              </div>
+                              <div class="activity-content">
+                                ${ '${msg}' } <span style="color: gray;"> - ${ '${time}' }</span>
+                              </div>
+                            </div>`;
+						$('#message').append(template);
+					});
+
+				});
+			});
+		}
+
+    $(document).on('click','.message', function(){
+      let id = $(this).attr('data-id');
+			window.open('/helloffice' + '/chat' + '/room'+ '/' + id, 'room', 'width=550px,height=800px,scrollbars=yes')
+    })
+
+    const renderTime = (time) => {
+			if(isToday(time)){
+				let hour = time.getHours().toString().padStart(2,'0');
+				let minute = time.getMinutes().toString().padStart(2,'0');
+				let result = hour + ":" + minute;
+				return result;
+			}else{
+				let today = new Date();
+				let result = Math.floor((today.getTime() - time.getTime())/(1000*60*60*24));
+				return result;
+			}
+		}
+
+    const isToday = (date) => {
+			let today = new Date();
+			return today.getFullYear() === date.getFullYear() 
+				&& today.getMonth() === date.getMonth()
+				&& today.getDate() === date.getDate()
+		}
+
+    $(window).on('load', function(){
+			renderRoomList();
+    });
+    
+    </script>
+	</main>
+	<%@ include file="common/footer.jsp" %>
+</body>
+</html>
