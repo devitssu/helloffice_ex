@@ -187,11 +187,11 @@
 		</a></li>
 		<!-- End Register Page Nav -->
 
-		<li class="nav-item"><a class="nav-link collapsed"
-			href="${root}/chat"> <i class="bi bi-chat"></i>
-				<span>메신저</span>
-		</a></li>
-		<!-- End 메신저 Page Nav -->
+<%--		<li class="nav-item"><a class="nav-link collapsed"--%>
+<%--			href="${root}/chat"> <i class="bi bi-chat"></i>--%>
+<%--				<span>메신저</span>--%>
+<%--		</a></li>--%>
+<%--		<!-- End 메신저 Page Nav -->--%>
 
 		<li class="nav-item"><a class="nav-link collapsed"
 			href="${root}/calendar"> <i class="bi bi-calendar-week"></i>
