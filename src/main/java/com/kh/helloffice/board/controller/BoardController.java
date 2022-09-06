@@ -44,7 +44,9 @@ public class BoardController {
 	}
 
 	@GetMapping("{no}")
-	public String detail(@PathVariable long no, @PathVariable long boardNo, Model model) throws Exception {
+	public String detail(@PathVariable long no,
+                         @PathVariable long boardNo,
+                         Model model) throws Exception {
 		PostDto post = service.getPost(no);
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("post", post);
@@ -58,7 +60,8 @@ public class BoardController {
 	
 	
 	@PostMapping("post")
-	public String post(PostDto post, @PathVariable String boardNo) throws Exception {
+	public String post(PostDto post,
+                       @PathVariable String boardNo) throws Exception {
 		
 		int result = service.post(post);
 		
@@ -89,7 +92,8 @@ public class BoardController {
 	}
 	
 	@DeleteMapping("{no}")
-	public String delete(@PathVariable String boardNo, @PathVariable long no) throws Exception {
+	public String delete(@PathVariable String boardNo,
+                         @PathVariable long no) throws Exception {
 		int result = service.deletePost(no);
 		if(result > 0) {			
 			return "redirect:/board/" + boardNo;
@@ -100,9 +104,8 @@ public class BoardController {
 
 	@PostMapping("{no}/reply")
 	@ResponseBody
-	public ReplyDto addReply(@PathVariable String boardNo,
-						   @PathVariable long no,
-						   @RequestBody ReplyDto reply) throws Exception {
+	public ReplyDto addReply(@PathVariable long no,
+                             @RequestBody ReplyDto reply) throws Exception {
 
 		reply.setPostNo(no);
 		log.info("ReplyDto={}", reply);

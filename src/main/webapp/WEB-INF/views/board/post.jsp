@@ -100,28 +100,69 @@
     });
 
     const renderReplyList = (list) => {
+        const reArr = [];
         for(let i=0;i<list.length;++i){
             let reEmpNo = list[i].empNo;
-            if(list[i].replyFor != 0) continue;
+            if(list[i].replyFor != 0) {
+                reArr.push(list[i]);
+                continue;
+            }
+            let template =
+            `<div id="reply${ '${list[i].replyNo}' }"><div class="list-group mb-4">
+                <div class="d-flex w-70 justify-content-between">`;
+            if(list[i].isDeleted == 'Y'){
+                template += `<p class="mb-1">삭제된 댓글입니다.</p>`;
+            }else{
+                template += `<p class="mb-1">${ '${list[i].content}' }</p>`;
+            }
+            template += `<small>${ '${list[i].createdTime}' }</small>
+            </div>
+            <div class="d-flex w-70 justify-content-between">
+                <small>${ '${list[i].empName}' }</small><small><a onclick="showInput('re',${ '${list[i].replyNo}' })">답글</a>`;
+            if(empNo == reEmpNo){
+                template += ` | <a onclick="showInput('edit',${ '${list[i].replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${list[i].replyNo}' })">삭제</a>`
+            };
+            template +=
+            `</small></div>
+            <div id="editDiv${ '${list[i].replyNo}' }" style="display:none">
+                <input type="text" class="border border-1" id="editContent">
+                <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="editReply">수정하기</button>
+                <button type="button" class="btn btn-outline-danger" onclick="cancelInput('edit',${ '${list[i].replyNo}' })">취소하기</button>
+            </div>
+            <div id="reDiv${ '${list[i].replyNo}' }" style="display:none">
+                <input type="text" class="border border-1" id="reContent">
+                <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="reReply">답글달기</button>
+                <button type="button" class="btn btn-outline-danger" onclick="cancelInput('re', ${ '${list[i].replyNo}' })">취소하기</button>
+            </div></div>`;
+            $('#replyList').after(template);
+        }
+        renderReReplyList(reArr);
+    }
+
+    const renderReReplyList = (list) => {
+        list.forEach(re => {
+            let reEmpNo = re.empNo;
+            let replyFor = re.replyFor;
             let template =
             `<div class="list-group mb-4">
                 <div class="d-flex w-70 justify-content-between">
-                <p class="mb-1">${ '${list[i].content}' }</p>
-                <small>${ '${list[i].createdTime}' }</small>
+                <p class="mb-1"><i class="bx bxs-chevron-right"></i>${ '${re.content}' }</p>
+                <small>${ '${re.createdTime}' }</small>
             </div>
             <div class="d-flex w-70 justify-content-between">
-                <small>${ '${list[i].empName}' }</small>`;
+            <small>${ '${re.empName}' }</small>`;
             if(empNo == reEmpNo){
-                template = template + `<small><a onclick="editInput(${ '${list[i].replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${list[i].replyNo}' })">삭제</a></small></div>`
-            };
-            template = template +
-            `<div id="editDiv${ '${list[i].replyNo}' }" style="display:none">
+                template += `<small><a onclick="showInput('edit',${ '${re.replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${re.replyNo}' })">삭제</a></small>`;
+            }
+
+            template += `</div>
+            <div id="editDiv${ '${re.replyNo}' }" style="display:none">
                 <input type="text" class="border border-1" id="editContent">
-                <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="editReply">수정하기</button>
-                <button type="button" class="btn btn-outline-danger" onclick="cancelEdit(${ '${list[i].replyNo}' })">취소하기</button>
+                <button type="button" class="btn btn-outline-primary" data-no="${ '${re.replyNo}' }" id="editReply">수정하기</button>
+                <button type="button" class="btn btn-outline-danger" onclick="cancelInput('edit',${ '${re.replyNo}' })">취소하기</button>
             </div>`;
-            $('#replyList').after(template);
-        }
+            $('#reply' + replyFor).after(template);
+        })
     }
 
     $(document).ready(function () {
@@ -136,15 +177,45 @@
             })
     });
 
-    const editInput = (no) => {
-        $('#editDiv' + no).show();
+    const showInput = (type, no) => {
+        if(type == 're'){
+            $('#reDiv' + no).show();
+        }else{
+            $('#editDiv' + no).show();
+        }
         $('#replyDiv').hide();
     };
 
-    const cancelEdit = (no) => {
-        $('#editDiv' + no).hide();
+    const cancelInput = (type, no) => {
+        if(type == 're'){
+            $('#reDiv' + no).hide();
+        }else{
+            $('#editDiv' + no).hide();
+        }
         $('#replyDiv').show();
-    }
+    };
+
+    $(document).on('click', '#reReply',function(){
+        const content = $(this).prev().val();
+        const no = $(this).data('no');
+        const data = {
+            "replyFor":no,
+            "content": content,
+            "empNo":empNo
+        };
+        $.ajax({
+            type: 'POST',
+            url: currentUrl + '/reply',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(){
+            cancelInput('re',no);
+            alert('답글이 등록 되었습니다.')
+            history.go(0);
+        }).fail(function (){
+            alert('답글 등록중 오류가 발생했습니다.')
+        });
+    });
 
     $(document).on('click', '#editReply',function(){
         const content = $(this).prev().val();
@@ -159,7 +230,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(){
-            cancelEdit(no);
+            cancelInput('edit',no);
             alert('댓글이 수정되었습니다.')
             history.go(0);
         }).fail(function (){
@@ -180,6 +251,7 @@
             });
         }else return false;
     }
+
 </script>
 
 </html>
