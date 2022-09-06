@@ -105,4 +105,47 @@
 		)
 		WHERE RN BETWEEN 1 AND 5
 	</select>
+
+	<insert id="insertReply">
+		INSERT INTO REPLY(
+			REPLY_NO,
+			POST_NO,
+			REPLY_FOR,
+			EMP_NO,
+			CONTENT
+		)
+		VALUES(
+			REPLY_SEQ.NEXTVAL,
+			#{postNo},
+			#{replyFor},
+			#{empNo},
+			#{content}
+		)
+	</insert>
+
+	<select id="getReplyList" resultType="reply">
+		SELECT * FROM (
+
+			SELECT ROWNUM RN, T.*
+			FROM (
+
+				SELECT  R.*,
+						H.EMP_NAME
+				FROM REPLY R
+				INNER JOIN HR H
+					ON R.EMP_NO = H.EMP_NO
+				WHERE R.POST_NO = #{no}
+				AND R.IS_DELETED = 'N'
+				ORDER BY R.REPLY_NO DESC
+
+			) T
+		)
+	</select>
+
+	<update id="updateReply">
+		UPDATE REPLY
+		SET
+			CONTENT = #{content}
+		WHERE REPLY_NO = #{replyNo}
+	</update>
 </mapper>

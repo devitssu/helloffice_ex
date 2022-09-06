@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.kh.helloffice.board.entity.ReplyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,22 @@ public class BoardServiceImpl implements BoardService{
 		
 		return postList;
 	}
-	
+
+	@Override
+	public int addReply(ReplyDto reply) throws Exception {
+		return dao.addReply(reply);
+	}
+
+    @Override
+    public List<ReplyDto> getReplyList(long no) throws Exception {
+        return dao.getReplyList(no);
+    }
+
+	@Override
+	public int editReply(ReplyDto reply) throws Exception {
+		return dao.editReply(reply);
+	}
+
 	private List<PostDto> formatPost(List<PostDto> postList){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");

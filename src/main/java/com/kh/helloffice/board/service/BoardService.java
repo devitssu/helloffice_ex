@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
+import com.kh.helloffice.board.entity.ReplyDto;
 
 public interface BoardService {
 
@@ -21,4 +22,9 @@ public interface BoardService {
 
 	List<PostDto> getRecentList() throws Exception;
 
+    int addReply(ReplyDto reply) throws Exception;
+
+    List<ReplyDto> getReplyList(long no) throws Exception;
+
+	int editReply(ReplyDto reply) throws Exception;
 }

@@ -2,6 +2,7 @@ package com.kh.helloffice.board.dao;
 
 import java.util.List;
 
+import com.kh.helloffice.board.entity.ReplyDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -48,6 +49,21 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public List<PostDto> getRecentList() throws Exception {
 		return session.selectList("board.getRecentList");
+	}
+
+	@Override
+	public int addReply(ReplyDto reply) throws Exception {
+		return session.insert("board.insertReply",reply);
+	}
+
+	@Override
+	public List<ReplyDto> getReplyList(long no) throws Exception {
+		return session.selectList("board.getReplyList", no);
+	}
+
+	@Override
+	public int editReply(ReplyDto reply) throws Exception {
+		return session.update("board.updateReply", reply);
 	}
 
 }

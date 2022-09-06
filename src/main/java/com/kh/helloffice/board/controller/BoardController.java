@@ -2,16 +2,12 @@ package com.kh.helloffice.board.controller;
 
 import java.util.List;
 
+import com.kh.helloffice.board.entity.ReplyDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
@@ -19,6 +15,7 @@ import com.kh.helloffice.board.service.BoardService;
 
 @Controller
 @RequestMapping("board/{boardNo}")
+@Slf4j
 public class BoardController {
 	
 	@Autowired
@@ -99,6 +96,40 @@ public class BoardController {
 		}else {
 			return "redirect:/board/" + boardNo + "/" + no;		
 		}
+	}
+
+	@PostMapping("{no}/reply")
+	@ResponseBody
+	public ReplyDto addReply(@PathVariable String boardNo,
+						   @PathVariable long no,
+						   @RequestBody ReplyDto reply) throws Exception {
+
+		reply.setPostNo(no);
+		log.info("ReplyDto={}", reply);
+		int result = service.addReply(reply);
+		if(result > 0) {
+			return reply;
+		}else {
+			return null;
+		}
+	}
+
+	@GetMapping("{no}/reply")
+	@ResponseBody
+	public List<ReplyDto> getReplies(@PathVariable String boardNo,
+									 @PathVariable long no,
+									 Model model) throws Exception {
+		List<ReplyDto> replies = service.getReplyList(no);
+		return replies;
+	}
+
+	@PatchMapping("{no}/reply/{replyNo}")
+	@ResponseBody
+	public String editReply(@PathVariable long replyNo,
+							@RequestBody ReplyDto reply) throws Exception {
+		int result = service.editReply(reply);
+		if(result > 0) return "ok";
+		else return "fail";
 	}
 
 }
