@@ -66,4 +66,9 @@ public class BoardDaoImpl implements BoardDao{
 		return session.update("board.updateReply", reply);
 	}
 
+	@Override
+	public int deleteReply(long replyNo) throws Exception {
+		return session.update("board.deleteReply",replyNo);
+	}
+
 }

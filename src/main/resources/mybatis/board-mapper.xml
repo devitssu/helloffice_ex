@@ -148,4 +148,11 @@
 			CONTENT = #{content}
 		WHERE REPLY_NO = #{replyNo}
 	</update>
+
+	<update id="deleteReply">
+		UPDATE REPLY
+		SET
+			IS_DELETED = 'Y'
+		WHERE REPLY_NO = #{replyNo}
+	</update>
 </mapper>

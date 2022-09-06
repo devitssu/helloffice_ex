@@ -76,7 +76,12 @@ public class BoardServiceImpl implements BoardService{
 		return dao.editReply(reply);
 	}
 
-	private List<PostDto> formatPost(List<PostDto> postList){
+    @Override
+    public int deleteReply(long replyNo) throws Exception {
+        return dao.deleteReply(replyNo);
+    }
+
+    private List<PostDto> formatPost(List<PostDto> postList){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");

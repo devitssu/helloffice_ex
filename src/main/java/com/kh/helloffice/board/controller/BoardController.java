@@ -132,4 +132,12 @@ public class BoardController {
 		else return "fail";
 	}
 
+	@DeleteMapping("{no}/reply/{replyNo}")
+	@ResponseBody
+	public String deleteReply(@PathVariable long replyNo) throws Exception{
+		int result = service.deleteReply(replyNo);
+		if(result > 0 ) return "200";
+		return null;
+	}
+
 }

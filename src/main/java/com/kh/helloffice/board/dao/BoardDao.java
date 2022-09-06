@@ -27,4 +27,6 @@ public interface BoardDao {
     List<ReplyDto> getReplyList(long no) throws Exception;
 
 	int editReply(ReplyDto reply) throws Exception;
+
+    int deleteReply(long replyNo) throws Exception;
 }
