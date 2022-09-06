@@ -55,6 +55,7 @@
 	                    <th scope="col">제목</th>
 	                    <th scope="col">작성자</th>
 	                    <th scope="col">등록일</th>
+	                    <th scope="col">조회수</th>
 	                  </tr>
 	                </thead>
 	                <tbody>
@@ -64,6 +65,7 @@
 	                    <td>${l.title}</td>
 	                    <td>${l.empName}</td>
 	                    <td>${l.dateString}</td>
+	                    <td>${l.viewCnt}</td>
 	                  </tr>
 	                </c:forEach>
 	                </tbody>

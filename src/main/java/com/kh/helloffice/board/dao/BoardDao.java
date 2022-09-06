@@ -29,4 +29,6 @@ public interface BoardDao {
 	int editReply(ReplyDto reply) throws Exception;
 
     int deleteReply(long replyNo) throws Exception;
+
+    int increaseViewCnt(long no) throws Exception;
 }

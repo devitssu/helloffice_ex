@@ -34,7 +34,9 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public PostDto getPost(long no) throws Exception {
-		return dao.getPost(no);
+	    int result = dao.increaseViewCnt(no);
+	    if(result > 0) return dao.getPost(no);
+	    else return null;
 	}
 
 	@Override

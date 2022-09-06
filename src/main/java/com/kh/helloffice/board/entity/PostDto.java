@@ -19,6 +19,7 @@ public class PostDto {
 	private String depName;
 	private String timeString;
 	private String dateString;
+	private long viewCnt;
 	
 
 }

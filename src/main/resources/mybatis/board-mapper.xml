@@ -155,4 +155,10 @@
 			IS_DELETED = 'Y'
 		WHERE REPLY_NO = #{replyNo}
 	</update>
+
+	<update id="increaseViewCnt">
+		UPDATE POST
+		SET VIEW_CNT = VIEW_CNT + 1
+		WHERE POST_NO= #{no}
+	</update>
 </mapper>

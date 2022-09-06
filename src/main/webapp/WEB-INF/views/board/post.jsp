@@ -17,21 +17,28 @@
            	  <div class="col-sm-2 col-form-label text-end">
            	 	 <h5><span class="badge border-dark border-1 text-dark">${post.category}</span></h5>
            	  </div>
-	           <label for="inputTitle" class="col-sm-1 col-form-label"><b>제목</b></label>
-	             <div class="col-sm-9 col-form-label">
+	           <label class="col-sm-2 col-form-label"><b>제목</b></label>
+	             <div class="col-sm-8 col-form-label">
                     ${post.title}
                   </div>
 	           </div>
            </div>
-           <div class="col-md-4">
+           <div class="col-md-3">
              <div class="row">
-	           <label for="inputWriter" class="col-sm-2 col-form-label"><b>작성자</b></label>
-	             <div class="col-sm-10 col-form-label">
+	           <label class="col-sm-3 col-form-label"><b>작성자</b></label>
+	             <div class="col-sm-9 col-form-label">
                     ${post.empName}
                   </div>
 	           </div>
            </div>
-           <div class="col-sm-2"></div>
+             <div class="col-md-3">
+                 <div class="row">
+                     <label class="col-sm-3 col-form-label"><b>조회수</b></label>
+                     <div class="col-sm-9 col-form-label">
+                         ${post.viewCnt}
+                     </div>
+                 </div>
+             </div>
          </div>
          <div class="row mb-3">
            <div class="col-sm-1"></div>
@@ -110,7 +117,8 @@
             template = template +
             `<div id="editDiv${ '${list[i].replyNo}' }" style="display:none">
                 <input type="text" class="border border-1" id="editContent">
-                <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="editReply">댓글쓰기</button>
+                <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="editReply">수정하기</button>
+                <button type="button" class="btn btn-outline-danger" onclick="cancelEdit(${ '${list[i].replyNo}' })">취소하기</button>
             </div>`;
             $('#replyList').after(template);
         }
@@ -133,6 +141,11 @@
         $('#replyDiv').hide();
     };
 
+    const cancelEdit = (no) => {
+        $('#editDiv' + no).hide();
+        $('#replyDiv').show();
+    }
+
     $(document).on('click', '#editReply',function(){
         const content = $(this).prev().val();
         const no = $(this).data('no');
@@ -146,8 +159,7 @@
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(){
-            $('#editDiv' + no).hide();
-            $('#replyDiv').show();
+            cancelEdit(no);
             alert('댓글이 수정되었습니다.')
             history.go(0);
         }).fail(function (){
