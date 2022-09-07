@@ -2,12 +2,6 @@
     pageEncoding="UTF-8"%>
 
 <%@ include file="../common/head.jsp" %>
-<style>
-    #file-list li{
-        list-style: none;
-        float: left;
-    }
-</style>
 <body>
 	<%@ include file="../common/header.jsp" %>
 
@@ -58,11 +52,11 @@
            <div class="col-sm-1"></div>
            <label class="col-sm-1 col-form-label"><b>첨부파일</b></label>
              <div class="col-sm-8 col-form-label ">
-                 <ul class="file-list">
+                 <ul class="file-list" style="list-style-type: none">
                       <c:forEach items="${fileList}" var="file">
-                          <li>
+                          <li style="float: left">
                               <div class="file-info col-sm-2">
-                                  <a href="#" ><i class="bx bxs-file-blank"></i>${file.originName}</a>
+                                  <a onclick="downloadFile(${file.seq})" ><i class="bx bxs-cloud-download"></i>${file.originName}</a>
                               </div>
                           </li>
                       </c:forEach>
@@ -271,6 +265,12 @@
             }).fail(function () {
                 alert('댓글 삭제 중 오류가 발생했습니다.')
             });
+        }else return false;
+    }
+
+    const downloadFile = (fileNo)  => {
+        if(confirm('파일을 다운로드하시겠습니까?')){
+            location.href = currentUrl + "/file/" + fileNo;
         }else return false;
     }
 

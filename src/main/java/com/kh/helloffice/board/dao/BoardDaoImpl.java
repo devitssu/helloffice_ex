@@ -89,4 +89,14 @@ public class BoardDaoImpl implements BoardDao{
 		return session.selectList("board.getFiles", no);
 	}
 
+    @Override
+    public FileInfoDto getFile(long fileNo) throws Exception {
+        return session.selectOne("board.getFile", fileNo);
+    }
+
+    @Override
+    public int increaseDownloadCnt(long fileNo) throws Exception {
+        return session.update("board.increaseDownloadCnt",fileNo);
+    }
+
 }

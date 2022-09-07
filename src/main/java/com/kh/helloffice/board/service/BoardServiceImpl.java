@@ -112,9 +112,18 @@ public class BoardServiceImpl implements BoardService{
 	public List<FileInfoDto> getFiles(long no) throws Exception {
 		return dao.getFiles(no);
 	}
-	
 
-	private List<PostDto> formatPost(List<PostDto> postList){
+    @Override
+    public FileInfoDto getFile(long fileNo) throws Exception {
+        return dao.getFile(fileNo);
+    }
+
+    @Override
+    public int increaseDownloadCnt(long fileNo) throws Exception {
+        return dao.increaseDownloadCnt(fileNo);
+    }
+
+    private List<PostDto> formatPost(List<PostDto> postList){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");

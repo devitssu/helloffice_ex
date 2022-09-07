@@ -1,13 +1,21 @@
 package com.kh.helloffice.board.controller;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +24,8 @@ import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
 import com.kh.helloffice.board.service.BoardService;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("board/{boardNo}")
@@ -147,6 +157,29 @@ public class BoardController {
 		int result = service.deleteReply(replyNo);
 		if(result > 0 ) return "200";
 		return null;
+	}
+
+	@GetMapping("{no}/file/{fileNo}")
+	@ResponseBody()
+	public ResponseEntity<Resource> downloadFile(@PathVariable long fileNo, HttpServletResponse response) throws Exception {
+		FileInfoDto file = service.getFile(fileNo);
+		if(file == null) throw new NotFoundException("첨부파일이 존재하지 않습니다.");
+
+		String filePath = file.getSavePath();
+		String fileName = file.getOriginName();
+		String mediaType = file.getFileExt();
+		File f =new File(filePath);
+		log.info("file={}", f);
+		if(!f.isFile()) throw new NotFoundException("첨부파일이 존재하지 않습니다.");
+
+		Resource resource = new FileSystemResource(f);
+
+		int result = service.increaseDownloadCnt(fileNo);
+		return ResponseEntity.ok()
+							 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + fileName + "\"")
+				.contentType(MediaType.parseMediaType(mediaType))
+				.contentLength(f.length())
+				.body(resource);
 	}
 
 }

@@ -34,5 +34,7 @@ public interface BoardService {
 
     List<FileInfoDto> getFiles(long no) throws Exception;
 
-    int downloadFile(long fileNo) throws Exception;
+    FileInfoDto getFile(long fileNo) throws Exception;
+
+	int increaseDownloadCnt(long fileNo) throws Exception;
 }

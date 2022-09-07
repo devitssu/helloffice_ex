@@ -36,4 +36,8 @@ public interface BoardDao {
     int uploadFiles(FileInfoDto file) throws Exception;
 
 	List<FileInfoDto> getFiles(long no) throws Exception;
+
+    FileInfoDto getFile(long fileNo) throws Exception;
+
+	int increaseDownloadCnt(long fileNo) throws Exception;
 }

@@ -94,7 +94,23 @@
 		WHERE POST_NO = #{no}
 		  AND FLAG_DEL = 'N'
 	</select>
-	
+
+	<select id="getFile" resultType="fileInfo">
+		SELECT ORIGIN_NAME,
+			   SAVE_PATH,
+			   FILE_SIZE,
+			   FILE_EXT
+		FROM FILE_INFO
+		WHERE SEQ = #{fileNo}
+		  AND FLAG_DEL = 'N'
+	</select>
+
+	<update id="increaseDownloadCnt">
+		UPDATE FILE_INFO
+		SET DOWNLOAD_CNT = DOWNLOAD_CNT + 1
+		WHERE SEQ = #{fileNo}
+	</update>
+
 	<update id="updatePost">
 		UPDATE POST
 		SET
