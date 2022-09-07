@@ -24,7 +24,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
 		</init-param>
-		
+
 		<!-- Handle 404 -->
 		<init-param>
 			<param-name>throwExceptionIfNoHandlerFound</param-name>
@@ -32,6 +32,7 @@
 		</init-param>
 		
 		<load-on-startup>1</load-on-startup>
+
 	</servlet>
 		
 	<servlet-mapping>

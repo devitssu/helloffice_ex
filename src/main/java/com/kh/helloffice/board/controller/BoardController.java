@@ -1,7 +1,10 @@
 package com.kh.helloffice.board.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
 import com.kh.helloffice.board.service.BoardService;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("board/{boardNo}")
@@ -48,8 +52,11 @@ public class BoardController {
                          @PathVariable long boardNo,
                          Model model) throws Exception {
 		PostDto post = service.getPost(no);
+		List<FileInfoDto> fileList = service.getFiles(no);
+
 		model.addAttribute("boardNo", boardNo);
 		model.addAttribute("post", post);
+		model.addAttribute("fileList",fileList);
 		return "board/post";
 	}
 	
@@ -61,15 +68,16 @@ public class BoardController {
 	
 	@PostMapping("post")
 	public String post(PostDto post,
-                       @PathVariable String boardNo) throws Exception {
-		
-		int result = service.post(post);
-		
+                       @PathVariable String boardNo,
+					   @RequestParam List<MultipartFile> fileList) throws Exception {
+
+		int result = service.post(post, fileList);
 		if(result > 0) {
 			return "redirect:/board/" + boardNo;
 		}else {
 			return "error";
 		}
+
 	}
 	
 	@GetMapping("post/{no}")
@@ -105,10 +113,8 @@ public class BoardController {
 	@PostMapping("{no}/reply")
 	@ResponseBody
 	public ReplyDto addReply(@PathVariable long no,
-                             @RequestBody ReplyDto reply) throws Exception {
-
+							 @RequestBody ReplyDto reply) throws Exception {
 		reply.setPostNo(no);
-		log.info("ReplyDto={}", reply);
 		int result = service.addReply(reply);
 		if(result > 0) {
 			return reply;

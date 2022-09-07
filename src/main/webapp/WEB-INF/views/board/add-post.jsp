@@ -7,7 +7,7 @@
 	<%@ include file="../common/header.jsp" %>
 
 	<main id="main" class="main">
-		<form action="" method="post">
+		<form action="" method="post" ENCTYPE="multipart/form-data">
          <div class="row mb-3">
            <div class="col-md-8">
            	  <div class="row">
@@ -39,6 +39,10 @@
             <textarea class="tinymce-editor" name="content">
                 
               </textarea><!-- End TinyMCE Editor -->
+         </div>
+         <div class="row mb-3">
+           <label class="col-sm-2 col-form-label">파일 첨부</label>
+             <input type="file" name="fileList" id="" multiple="multiple">
          </div>
          <div class="text-center">
            <button type="submit" class="btn btn-primary">Submit</button>

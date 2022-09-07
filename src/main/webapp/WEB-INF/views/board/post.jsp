@@ -2,6 +2,12 @@
     pageEncoding="UTF-8"%>
 
 <%@ include file="../common/head.jsp" %>
+<style>
+    #file-list li{
+        list-style: none;
+        float: left;
+    }
+</style>
 <body>
 	<%@ include file="../common/header.jsp" %>
 
@@ -46,6 +52,22 @@
            <div class="col-sm-8 col-form-label overflow-auto border border-1" style="height: 500px">
            		${post.content}
            </div>
+           <div class="col-sm-2"></div>
+         </div>
+         <div class="row mb-3">
+           <div class="col-sm-1"></div>
+           <label class="col-sm-1 col-form-label"><b>첨부파일</b></label>
+             <div class="col-sm-8 col-form-label ">
+                 <ul class="file-list">
+                      <c:forEach items="${fileList}" var="file">
+                          <li>
+                              <div class="file-info col-sm-2">
+                                  <a href="#" ><i class="bx bxs-file-blank"></i>${file.originName}</a>
+                              </div>
+                          </li>
+                      </c:forEach>
+                 </ul>
+             </div>
            <div class="col-sm-2"></div>
          </div>
          <div class="text-center">

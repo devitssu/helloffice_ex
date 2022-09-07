@@ -2,7 +2,9 @@ package com.kh.helloffice.board.dao;
 
 import java.util.List;
 
+import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,6 +13,7 @@ import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
 
 @Repository
+@Slf4j
 public class BoardDaoImpl implements BoardDao{
 
 	@Autowired
@@ -74,6 +77,16 @@ public class BoardDaoImpl implements BoardDao{
 	@Override
 	public int increaseViewCnt(long no) throws Exception {
 		return session.update("board.increaseViewCnt", no);
+	}
+
+	@Override
+	public int uploadFiles(FileInfoDto file) throws Exception {
+		return session.insert("board.insertFile", file);
+	}
+
+	@Override
+	public List<FileInfoDto> getFiles(long no) throws Exception {
+		return session.selectList("board.getFiles", no);
 	}
 
 }

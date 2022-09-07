@@ -51,6 +51,28 @@
 			#{category},
 			#{content}
 		)
+		<selectKey keyProperty="postNo" resultType="long" order="AFTER">
+			SELECT POST_SEQ.currval FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertFile">
+		INSERT INTO FILE_INFO(
+			SEQ,
+			POST_NO,
+			FILE_EXT,
+			FILE_SIZE,
+			ORIGIN_NAME,
+			SAVE_PATH
+		)
+		VALUES(
+			FILE_INFO_SEQ.NEXTVAL,
+			#{postNo},
+			#{fileExt},
+			#{fileSize},
+			#{originName},
+			#{savePath}
+		)
 	</insert>
 	
 	<select id="getPost" resultType="post">
@@ -63,6 +85,14 @@
 		INNER JOIN HR H
 			ON P.EMP_NO = H.EMP_NO
 		WHERE POST_NO = #{no} 
+	</select>
+
+	<select id="getFiles" resultType="fileInfo">
+		SELECT SEQ,
+			   ORIGIN_NAME
+		FROM FILE_INFO
+		WHERE POST_NO = #{no}
+		  AND FLAG_DEL = 'N'
 	</select>
 	
 	<update id="updatePost">
