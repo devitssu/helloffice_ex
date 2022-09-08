@@ -2,12 +2,11 @@
     pageEncoding="UTF-8"%>
 
 <%@ include file="../common/head.jsp" %>
-
 <body>
 	<%@ include file="../common/header.jsp" %>
 
 	<main id="main" class="main">
-		<form action="" method="post" ENCTYPE="multipart/form-data">
+		<form action="" method="post" ENCTYPE="multipart/form-data" accept-charset="UTF-8">
          <div class="row mb-3">
            <div class="col-md-8">
            	  <div class="row">
@@ -42,7 +41,10 @@
          </div>
          <div class="row mb-3">
            <label class="col-sm-2 col-form-label">파일 첨부</label>
-             <input type="file" name="fileList" id="" multiple="multiple">
+             <input type="file" name="fileList" id="uploadFile" multiple="multiple">
+         </div>
+         <div class="row mb-3">
+             <ul id="fileListPreview"></ul>
          </div>
          <div class="text-center">
            <button type="submit" class="btn btn-primary">Submit</button>
@@ -52,4 +54,39 @@
 	</main>
 	<%@ include file="../common/footer.jsp" %>
 </body>
+<script>
+
+    $('#uploadFile').change(function(){
+        renderFileList();
+    });
+
+    $(document).on('click', "#fileListPreview i", (el) => {
+        cancelFile(el);
+        renderFileList();
+    })
+
+    const renderFileList = () => {
+        let fileList = $('#uploadFile')[0].files;
+        let template = '';
+        $('#fileListPreview').empty();
+        Array.from(fileList).forEach(file => {
+            template += `<li>${ '${file.name}' }<i class="bx bx-x"></i></li>`;
+        });
+        $('#fileListPreview').append(template);
+    }
+
+    const cancelFile = (e) => {
+        const dataTransfer = new DataTransfer();
+        const targetLi = $(e.target).parent();
+        const index = targetLi.index();
+        const fileList = Array.from($('#uploadFile')[0].files);
+        fileList.filter((file,idx) => idx != index)
+                .forEach(file => {
+                    dataTransfer.items.add(file);
+                });
+        $('#uploadFile')[0].files = dataTransfer.files;
+        targetLi.remove();
+    }
+
+</script>
 </html>

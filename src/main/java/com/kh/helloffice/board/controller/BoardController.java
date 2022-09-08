@@ -1,7 +1,7 @@
 package com.kh.helloffice.board.controller;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.kh.helloffice.board.entity.FileInfoDto;
@@ -9,12 +9,9 @@ import com.kh.helloffice.board.entity.ReplyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -167,17 +164,15 @@ public class BoardController {
 
 		String filePath = file.getSavePath();
 		String fileName = file.getOriginName();
-		String mediaType = file.getFileExt();
+		fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 		File f =new File(filePath);
-		log.info("file={}", f);
 		if(!f.isFile()) throw new NotFoundException("첨부파일이 존재하지 않습니다.");
 
 		Resource resource = new FileSystemResource(f);
 
-		int result = service.increaseDownloadCnt(fileNo);
+		service.increaseDownloadCnt(fileNo);
 		return ResponseEntity.ok()
 							 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + fileName + "\"")
-				.contentType(MediaType.parseMediaType(mediaType))
 				.contentLength(f.length())
 				.body(resource);
 	}

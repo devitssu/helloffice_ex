@@ -1,6 +1,8 @@
 package com.kh.helloffice.board.service;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -39,18 +41,26 @@ public class BoardServiceImpl implements BoardService{
 		int postResult = dao.post(post);
         int uploadResult = 0;
 
+        Charset[] charset = {StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, Charset.forName("EUC-KR")};
+
 		if(postResult > 0){
 		    long postNo = post.getPostNo();
             for (MultipartFile file: fileList) {
                 String savePath = FILE_DIR + UUID.randomUUID().toString();
+
+                //String fileName = new String(file.getOriginalFilename().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+
+                String fileName = file.getOriginalFilename();
+                String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
                 FileInfoDto fileInfo = FileInfoDto.builder()
-                        .originName(file.getOriginalFilename())
+                        .originName(fileName)
                         .fileSize(file.getSize())
-                        .fileExt(file.getContentType())
+                        .fileExt(fileExt)
                         .postNo(postNo)
                         .savePath(savePath)
                         .build();
                 file.transferTo(new File(savePath));
+                log.info("file={}",fileInfo);
                 uploadResult += dao.uploadFiles(fileInfo);
             }
         }else return 0;

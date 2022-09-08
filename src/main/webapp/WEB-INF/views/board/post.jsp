@@ -55,7 +55,7 @@
                  <ul class="file-list" style="list-style-type: none">
                       <c:forEach items="${fileList}" var="file">
                           <li style="float: left">
-                              <div class="file-info col-sm-2">
+                              <div class="file-info">
                                   <a onclick="downloadFile(${file.seq})" ><i class="bx bxs-cloud-download"></i>${file.originName}</a>
                               </div>
                           </li>
@@ -80,7 +80,7 @@
          </div>
          </form>
             <div id="replyDiv">
-                <input type="text" class="border border-1" id="replyContent">
+              <textarea class="tinymce-editor" id="replyContent"></textarea>
                 <button type="button" class="btn btn-outline-primary" id="sendReply">댓글쓰기</button>
             </div>
 	</main>
@@ -93,7 +93,7 @@
     let empNo = ${loginEmp.empNo};
 
     $('#sendReply').click(function(){
-        let content = $('#replyContent').val();
+        let content = tinymce.get('replyContent').getContent();
         const data = {
             "replyFor":null,
             "empNo":empNo,
@@ -141,12 +141,12 @@
             template +=
             `</small></div>
             <div id="editDiv${ '${list[i].replyNo}' }" style="display:none">
-                <input type="text" class="border border-1" id="editContent">
+                <textarea class="tinymce-editor" id="editContent"></textarea>
                 <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="editReply">수정하기</button>
                 <button type="button" class="btn btn-outline-danger" onclick="cancelInput('edit',${ '${list[i].replyNo}' })">취소하기</button>
             </div>
             <div id="reDiv${ '${list[i].replyNo}' }" style="display:none">
-                <input type="text" class="border border-1" id="reContent">
+                <textarea class="tinymce-editor" id="reContent"></textarea>
                 <button type="button" class="btn btn-outline-primary" data-no="${ '${list[i].replyNo}' }" id="reReply">답글달기</button>
                 <button type="button" class="btn btn-outline-danger" onclick="cancelInput('re', ${ '${list[i].replyNo}' })">취소하기</button>
             </div></div>`;

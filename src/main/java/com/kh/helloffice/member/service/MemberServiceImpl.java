@@ -41,7 +41,6 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int join(MemberDto dto) throws Exception {
-		
 		int no = dao.getMemberSeq();
 		dto.setEmpNo(no);
 		dto.setEmpPwd(pe.encode(dto.getEmpPwd()));
