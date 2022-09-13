@@ -40,4 +40,6 @@ public interface BoardDao {
     FileInfoDto getFile(long fileNo) throws Exception;
 
 	int increaseDownloadCnt(long fileNo) throws Exception;
+
+    int deleteFile(Long fileNo) throws Exception;
 }

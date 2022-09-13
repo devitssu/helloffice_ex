@@ -105,6 +105,12 @@
 		  AND FLAG_DEL = 'N'
 	</select>
 
+	<update id="deleteFile">
+		UPDATE FILE_INFO
+		SET FLAG_DEL= 'Y'
+		WHERE SEQ = #{fileNo}
+	</update>
+
 	<update id="increaseDownloadCnt">
 		UPDATE FILE_INFO
 		SET DOWNLOAD_CNT = DOWNLOAD_CNT + 1

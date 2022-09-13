@@ -2,6 +2,7 @@ package com.kh.helloffice.board.controller;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -77,7 +80,7 @@ public class BoardController {
 	@PostMapping("post")
 	public String post(PostDto post,
                        @PathVariable String boardNo,
-					   @RequestParam List<MultipartFile> fileList) throws Exception {
+					   @RequestParam(required = false) List<MultipartFile> fileList) throws Exception {
 
 		int result = service.post(post, fileList);
 		if(result > 0) {
@@ -98,16 +101,31 @@ public class BoardController {
 		return "board/edit-post";
 	}
 	
-	@PutMapping("post/{no}")
+	@PostMapping("post/{no}")
 	public String update(@PathVariable String boardNo, 
-						 @PathVariable long no, 
+						 @PathVariable long no,
+						 @RequestParam(required = false) List<MultipartFile> fileList,
+						 @RequestParam(required = false) String delFileList,
 						 PostDto post) throws Exception {
-		int result = service.editPost(post);
-		if(result > 0) {
-			return "redirect:/board/" + boardNo + "/" + no;			
-		}else {
-			return "redirect:/board/" + boardNo + "/post/" + no;
-		}
+		int delResult = 0;
+		if(!delFileList.isEmpty()){
+			List<Long> delFileNo = new ArrayList<>();
+			ObjectMapper objectMapper = new ObjectMapper();
+			Map<Long, Long> delFileMap = objectMapper.readValue(delFileList, new TypeReference<Map<Long, Long>>(){});
+
+			for (Map.Entry<Long, Long> entry: delFileMap.entrySet()) {
+				delFileNo.add(entry.getValue());
+			}
+			delResult = service.deleteFiles(delFileNo);
+		}else delResult = 1;
+		if(delResult != 0){
+			int result = service.editPost(post, fileList);
+			if(result > 0) {
+				return "redirect:/board/" + boardNo + "/" + no;
+			}else {
+				return "redirect:/board/" + boardNo + "/post/" + no;
+			}
+		}else return "redirect:/board/" + boardNo + "/post/" + no;
 	}
 	
 	@DeleteMapping("{no}")

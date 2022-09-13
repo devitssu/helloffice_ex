@@ -17,7 +17,7 @@ public interface BoardService {
 
 	PostDto getPost(long no) throws Exception;
 
-	int editPost(PostDto post) throws Exception;
+	int editPost(PostDto post, List<MultipartFile> fileList) throws Exception;
 
 	int deletePost(long no) throws Exception;
 
@@ -40,4 +40,6 @@ public interface BoardService {
 	int increaseDownloadCnt(long fileNo) throws Exception;
 
     Map<Long, String> getFileMap(long no) throws Exception;
+
+    int deleteFiles(List<Long> delFileNo) throws Exception;
 }

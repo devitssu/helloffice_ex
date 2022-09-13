@@ -99,4 +99,9 @@ public class BoardDaoImpl implements BoardDao{
         return session.update("board.increaseDownloadCnt",fileNo);
     }
 
+	@Override
+	public int deleteFile(Long fileNo) throws Exception {
+		return session.update("board.deleteFile",fileNo);
+	}
+
 }

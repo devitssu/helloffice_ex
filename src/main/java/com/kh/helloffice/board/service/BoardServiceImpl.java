@@ -1,6 +1,7 @@
 package com.kh.helloffice.board.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -41,29 +42,9 @@ public class BoardServiceImpl implements BoardService{
 		int postResult = dao.post(post);
         int uploadResult = 0;
 
-        Charset[] charset = {StandardCharsets.ISO_8859_1, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, Charset.forName("EUC-KR")};
-
 		if(postResult > 0){
-		    long postNo = post.getPostNo();
-            for (MultipartFile file: fileList) {
-                String savePath = FILE_DIR + UUID.randomUUID().toString();
-
-                //String fileName = new String(file.getOriginalFilename().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-
-                String fileName = file.getOriginalFilename();
-                String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
-                FileInfoDto fileInfo = FileInfoDto.builder()
-                        .originName(fileName)
-                        .fileSize(file.getSize())
-                        .fileExt(fileExt)
-                        .postNo(postNo)
-                        .savePath(savePath)
-                        .build();
-                file.transferTo(new File(savePath));
-                log.info("file={}",fileInfo);
-                uploadResult += dao.uploadFiles(fileInfo);
-            }
-        }else return 0;
+			uploadResult = uploadFiles(post.getPostNo(), fileList);
+        }
 		return uploadResult;
 	}
 
@@ -75,8 +56,15 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int editPost(PostDto post) throws Exception {
-		return dao.editPost(post);
+	public int editPost(PostDto post, List<MultipartFile> fileList) throws Exception {
+		if(fileList == null) return dao.editPost(post);
+		int editResult = dao.editPost(post);
+		int uploadResult = 0;
+
+		if(editResult != 0){
+			uploadResult = uploadFiles(post.getPostNo(), fileList);
+		}
+		return uploadResult;
 	}
 
 	@Override
@@ -143,6 +131,15 @@ public class BoardServiceImpl implements BoardService{
 		return fileMap;
 	}
 
+	@Override
+	public int deleteFiles(List<Long> delFileNo) throws Exception {
+		int result = 0;
+		for (Long fileNo: delFileNo) {
+			result += dao.deleteFile(fileNo);
+		}
+		return result;
+	}
+
 	private List<PostDto> formatPost(List<PostDto> postList){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
@@ -155,6 +152,26 @@ public class BoardServiceImpl implements BoardService{
 		}
 		
 		return postList;
+	}
+
+	private int uploadFiles(long postNo, List<MultipartFile> fileList) throws Exception {
+		int result = 0;
+		for (MultipartFile file: fileList) {
+			String savePath = FILE_DIR + UUID.randomUUID().toString();
+
+			String fileName = file.getOriginalFilename();
+			String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
+			FileInfoDto fileInfo = FileInfoDto.builder()
+					.originName(fileName)
+					.fileSize(file.getSize())
+					.fileExt(fileExt)
+					.postNo(postNo)
+					.savePath(savePath)
+					.build();
+			file.transferTo(new File(savePath));
+			result += dao.uploadFiles(fileInfo);
+		}
+		return result;
 	}
 
 }
