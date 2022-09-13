@@ -69,6 +69,16 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int deletePost(long no) throws Exception {
+		List<FileInfoDto> files = getFiles(no);
+		if(!files.isEmpty()){
+			List<Long> seqList = new ArrayList<>();
+			for (FileInfoDto file: files) {
+				seqList.add(file.getSeq());
+			}
+			int delResult = deleteFiles(seqList);
+			if(seqList.size() == delResult) return dao.deletePost(no);
+			else return 0;
+		}
 		return dao.deletePost(no);
 	}
 
