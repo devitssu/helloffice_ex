@@ -133,7 +133,17 @@ public class BoardServiceImpl implements BoardService{
         return dao.increaseDownloadCnt(fileNo);
     }
 
-    private List<PostDto> formatPost(List<PostDto> postList){
+	@Override
+	public Map<Long, String> getFileMap(long no) throws Exception{
+		List<FileInfoDto> fileList = getFiles(no);
+		Map<Long, String> fileMap= new HashMap<>();
+		for (FileInfoDto file: fileList) {
+			fileMap.put(file.getSeq(), file.getOriginName());
+		}
+		return fileMap;
+	}
+
+	private List<PostDto> formatPost(List<PostDto> postList){
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
 		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");

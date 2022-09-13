@@ -3,6 +3,7 @@ package com.kh.helloffice.board.controller;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
@@ -90,7 +91,10 @@ public class BoardController {
 	@GetMapping("post/{no}")
 	public String editPost(@PathVariable long no, Model model) throws Exception {
 		PostDto post = service.getPost(no);
+        Map<Long, String> fileMap = service.getFileMap(no);
+
 		model.addAttribute("post", post);
+		model.addAttribute("fileMap", fileMap);
 		return "board/edit-post";
 	}
 	

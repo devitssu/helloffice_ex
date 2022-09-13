@@ -7,7 +7,7 @@
 	<%@ include file="../common/header.jsp" %>
 
 	<main id="main" class="main">
-		<form action="${post.postNo}" method="POST">
+		<form action="${post.postNo}" method="POST" ENCTYPE="multipart/form-data" accept-charset="UTF-8">
 		<input type="hidden" name="_method" value="PUT">
 		<input type="hidden" name="postNo" value="${post.postNo}">
          <div class="row mb-3">
@@ -42,6 +42,16 @@
                 ${post.content}
               </textarea><!-- End TinyMCE Editor -->
          </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">파일 첨부</label>
+            <input type="file" name="fileList" id="uploadFile" multiple="multiple">
+            <ul>
+                <label class="col-sm-2 col-form-label">첨부 목록</label>
+                <c:forEach items="${fileMap}" var="f">
+                    <li data-no="${f.key}">${f.value}<i class="bx bx-x"></i></li>
+                </c:forEach>
+            </ul>
+        </div>
          <div class="text-center">
            <button type="submit" class="btn btn-primary">수정하기</button>
            <a href="${root}/board/${post.boardNo}/${post.postNo}"><button type="button" class="btn btn-secondary">취소하기</button></a>

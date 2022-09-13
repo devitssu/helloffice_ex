@@ -1,6 +1,7 @@
 package com.kh.helloffice.board.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.PageVo;
@@ -37,4 +38,6 @@ public interface BoardService {
     FileInfoDto getFile(long fileNo) throws Exception;
 
 	int increaseDownloadCnt(long fileNo) throws Exception;
+
+    Map<Long, String> getFileMap(long no) throws Exception;
 }
