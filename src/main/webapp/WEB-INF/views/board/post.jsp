@@ -65,10 +65,11 @@
            <div class="col-sm-2"></div>
          </div>
          <div class="text-center">
+               <a href="post/${post.postNo}/re"><button type="button" class="btn btn-outline-warning">답글쓰기</button></a>
            <c:if test="${post.empNo eq loginEmp.empNo}">
 	           <a href="post/${post.postNo}"><button type="button" class="btn btn-outline-primary">수정하기</button></a>
            </c:if>
-           <a href="${root}/board/${boardNo}"><button type="button" class="btn btn-outline-secondary">목록으로</button></a>
+               <a href="${root}/board/${boardNo}"><button type="button" class="btn btn-outline-secondary">목록으로</button></a>
            <c:if test="${post.empNo eq loginEmp.empNo}">
 	           <button type="submit" class="btn btn-outline-danger">삭제하기</button>
            </c:if>

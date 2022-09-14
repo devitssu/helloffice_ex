@@ -62,7 +62,17 @@
 	                <c:forEach items="${list}" var="l">
 	                  <tr onClick="postDetail(${l.postNo})">
 	                    <td>${l.category}</td>
-	                    <td>${l.title}</td>
+	                    <td>
+							<c:if test="${l.depth > 0}">
+								<c:forEach begin="1" end="${l.depth}">
+									<i class="bx bx-subdirectory-right"></i>
+								</c:forEach>
+								${l.title}
+							</c:if>
+							<c:if test="${l.depth == 0}">
+								${l.title}
+							</c:if>
+						</td>
 	                    <td>${l.empName}</td>
 	                    <td>${l.dateString}</td>
 	                    <td>${l.viewCnt}</td>

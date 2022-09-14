@@ -42,4 +42,6 @@ public interface BoardDao {
 	int increaseDownloadCnt(long fileNo) throws Exception;
 
     int deleteFile(Long fileNo) throws Exception;
+
+	int postReply(PostDto post) throws Exception;
 }

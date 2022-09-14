@@ -38,13 +38,25 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int post(PostDto post, List<MultipartFile> fileList) throws Exception {
-		if(fileList == null) return dao.post(post);
+		if(fileList.get(0).getSize() == 0) return dao.post(post);
 		int postResult = dao.post(post);
         int uploadResult = 0;
 
 		if(postResult > 0){
 			uploadResult = uploadFiles(post.getPostNo(), fileList);
         }
+		return uploadResult;
+	}
+
+	@Override
+	public int postReply(PostDto post, List<MultipartFile> fileList) throws Exception {
+		if(fileList.get(0).getSize() == 0) return dao.postReply(post);
+		int postResult = dao.postReply(post);
+		int uploadResult = 0;
+
+		if(postResult > 0){
+			uploadResult = uploadFiles(post.getPostNo(), fileList);
+		}
 		return uploadResult;
 	}
 
@@ -57,7 +69,7 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int editPost(PostDto post, List<MultipartFile> fileList) throws Exception {
-		if(fileList == null) return dao.editPost(post);
+		if(fileList.get(0).getSize() == 0) return dao.editPost(post);
 		int editResult = dao.editPost(post);
 		int uploadResult = 0;
 

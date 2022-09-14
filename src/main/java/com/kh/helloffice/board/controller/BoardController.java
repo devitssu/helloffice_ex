@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.ReplyDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -30,12 +31,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("board/{boardNo}")
+@RequiredArgsConstructor
 @Slf4j
 public class BoardController {
-	
-	@Autowired
-	private BoardService service;
-	
+	private final BoardService service;
 	@GetMapping
 	public String board(@PathVariable long boardNo, 
 						@RequestParam(defaultValue = "전체") String category, 
@@ -81,7 +80,6 @@ public class BoardController {
 	public String post(PostDto post,
                        @PathVariable String boardNo,
 					   @RequestParam(required = false) List<MultipartFile> fileList) throws Exception {
-
 		int result = service.post(post, fileList);
 		if(result > 0) {
 			return "redirect:/board/" + boardNo;
@@ -197,6 +195,28 @@ public class BoardController {
 							 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + fileName + "\"")
 				.contentLength(f.length())
 				.body(resource);
+	}
+
+	@GetMapping("post/{no}/re")
+	public String replyPage(@PathVariable long no, Model model) throws Exception {
+		PostDto refPost = service.getPost(no);
+		model.addAttribute("refPost",refPost);
+		return "board/reply";
+	}
+
+	@PostMapping("post/{no}/re")
+	public String postReply(@PathVariable long boardNo,
+							@PathVariable long no,
+							@RequestParam(required = false) List<MultipartFile> fileList,
+							PostDto post) throws Exception{
+		post.setRef(no);
+		post.setDepth(post.getDepth() + 1);
+		int result = service.postReply(post, fileList);
+		if(result > 0) {
+			return "redirect:/board/" + boardNo;
+		}else {
+			return "error";
+		}
 	}
 
 }

@@ -13,7 +13,13 @@
 				SELECT  P.*,
 						H.EMP_NAME,
 						D.DEP_NAME
-				FROM POST P
+				FROM (
+					SELECT *
+					FROM POST
+					START WITH DEPTH = 0
+					CONNECT BY PRIOR POST_NO = REF
+					ORDER SIBLINGS BY ROOT DESC
+				) P
 				INNER JOIN DEPARTMENT D
 					ON P.BOARD_NO = D.DEP_NO
 				INNER JOIN HR H
@@ -26,8 +32,6 @@
 				<if test='search != null and search neq ""'>
 				AND P.TITLE LIKE '%' || #{search} || '%'
 				</if>
-				ORDER BY P.CREATED_TIME DESC
-			
 			) T
 		)
 		WHERE RN BETWEEN #{startRow} AND #{endRow}
@@ -35,25 +39,55 @@
 	</select>
 	
 	<insert id="insertPost">
+		<selectKey keyProperty="postNo" order="BEFORE" resultType="long">
+			SELECT POST_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
 		INSERT INTO POST(
 			POST_NO,
 			EMP_NO,
 			BOARD_NO,
 			TITLE,
 			CATEGORY,
-			CONTENT
+			CONTENT,
+		    ROOT
 		)
 		VALUES(
-			POST_SEQ.NEXTVAL,
+			#{postNo},
 			#{empNo},
 			#{boardNo},
 			#{title},
 			#{category},
-			#{content}
+			#{content},
+			#{postNo}
 		)
-		<selectKey keyProperty="postNo" resultType="long" order="AFTER">
-			SELECT POST_SEQ.currval FROM DUAL
+	</insert>
+
+	<insert id="insertReplyPost">
+		<selectKey keyProperty="postNo" order="BEFORE" resultType="long">
+			SELECT POST_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
+		INSERT INTO POST(
+			POST_NO,
+			EMP_NO,
+			BOARD_NO,
+			TITLE,
+			CATEGORY,
+			CONTENT,
+			ROOT,
+		    REF,
+		    DEPTH
+		)
+		VALUES(
+			  #{postNo},
+			  #{empNo},
+			  #{boardNo},
+			  #{title},
+			  #{category},
+			  #{content},
+			  #{root},
+			  #{ref},
+		      #{depth}
+		  )
 	</insert>
 
 	<insert id="insertFile">
@@ -107,7 +141,7 @@
 
 	<update id="deleteFile">
 		UPDATE FILE_INFO
-		SET FLAG_DEL= 'Y'
+		SET FLAG_DEL = 'Y'
 		WHERE SEQ = #{fileNo}
 	</update>
 
@@ -126,10 +160,16 @@
 		WHERE POST_NO = #{postNo}
 	</update>
 	
-	<delete id="deletePost">
-		DELETE FROM POST
-		WHERE POST_NO = #{postNo}
-	</delete>
+	<update id="deletePost">
+		UPDATE POST
+		SET IS_DELETED = 'Y'
+		WHERE POST_NO IN (
+		    SELECT POST_NO
+		    FROM POST
+		    START WITH POST_NO = #{postNo}
+		    CONNECT BY PRIOR POST_NO = REF
+			)
+	</update>
 	
 	<select id="getTotalPostNum" resultType="int">
 		SELECT COUNT(*)

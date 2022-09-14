@@ -104,4 +104,9 @@ public class BoardDaoImpl implements BoardDao{
 		return session.update("board.deleteFile",fileNo);
 	}
 
+	@Override
+	public int postReply(PostDto post) throws Exception {
+		return session.insert("board.insertReplyPost", post);
+	}
+
 }

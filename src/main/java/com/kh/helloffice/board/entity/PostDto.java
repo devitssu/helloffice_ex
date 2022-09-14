@@ -20,6 +20,8 @@ public class PostDto {
 	private String timeString;
 	private String dateString;
 	private long viewCnt;
-	
+	private long ref;
+	private long root;
+	private long depth;
 
 }

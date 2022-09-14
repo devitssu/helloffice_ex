@@ -42,4 +42,6 @@ public interface BoardService {
     Map<Long, String> getFileMap(long no) throws Exception;
 
     int deleteFiles(List<Long> delFileNo) throws Exception;
+
+    int postReply(PostDto post, List<MultipartFile> fileList) throws Exception;
 }
