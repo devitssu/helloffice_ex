@@ -198,6 +198,40 @@
 				<span>일정</span>
 		</a></li>
 		<!-- End 일정 Page Nav -->
+
+		<c:if test="${loginEmp.adminLevel == 3}">
+			<li class="nav-item">
+				<a class="nav-link collapsed" data-bs-target="#adminNav" data-bs-toggle="collapse" href="#">
+					<i class="bi bi-gear"></i> <span>관리</span>
+					<i class="bi bi-chevron-down ms-auto"></i>
+				</a>
+				<ul id="adminNav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+					<li>
+						<a href="${root}/admin/emp"> <i class="bi bi-circle"></i>
+							<span>사용자 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="${root}/admin/dept"> <i class="bi bi-circle"></i>
+							<span>부서 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="${root}/admin/board"> <i class="bi bi-circle"></i>
+							<span>게시판 관리</span>
+						</a>
+					</li>
+					<li>
+						<a href="${root}/admin/file"> <i class="bi bi-circle"></i>
+							<span>첨부파일 관리</span>
+						</a>
+					</li>
+
+				</ul>
+			</li>
+			<!-- End Admin Page Nav -->
+		</c:if>
+
 	</ul>
 
 </aside>
