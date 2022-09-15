@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+    <select id="getDeptList" resultType="deptDto">
+        SELECT DEP_NO, DEP_NAME
+        FROM DEPARTMENT
+    </select>
+
+    <insert id="insertEmp">
+        INSERT INTO HR(
+               EMP_NO,
+               DEP_NO,
+               ADMIN_LEVEL,
+               EMP_RANK,
+               EMP_POSITION,
+               EMP_NAME,
+               EMAIL,
+               EMP_PWD,
+               ENTRY_DATE
+        )
+        VALUES(
+               HR_SEQ.nextval,
+               #{depNo},
+               #{adminLevel},
+               #{empRank},
+               #{empPosition},
+               #{empName},
+               #{email},
+               #{empPwd},
+               #{entryDate}
+        )
+    </insert>
+
+    <select id="getEmpList" resultType="memberDto">
+        SELECT EMP_NO, D.DEP_NAME, EMP_RANK, EMP_POSITION, EMP_NAME, ENTRY_DATE
+        FROM HR
+        INNER JOIN DEPARTMENT D on D.DEP_NO = HR.DEP_NO
+        WHERE RESIGN_YN = 'N'
+    </select>
+
+    <select id="getEmp" resultType="memberDto">
+        SELECT EMP_NO, DEP_NO, EMP_RANK, EMP_POSITION, EMP_NAME, ENTRY_DATE, EMAIL
+        FROM HR
+        WHERE EMP_NO = #{empNo}
+    </select>
+
+    <update id="editEmp">
+        UPDATE HR
+        SET
+            EMP_NAME = #{empName},
+            EMAIL = #{email},
+            ENTRY_DATE = #{entryDate},
+            DEP_NO = #{depNo},
+            EMP_POSITION = #{empPosition},
+            EMP_RANK = #{empRank},
+            ADMIN_LEVEL = #{adminLevel}
+        WHERE EMP_NO = #{empNo}
+    </update>
+</mapper>
