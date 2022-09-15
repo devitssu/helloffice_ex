@@ -2,9 +2,9 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ include file="../common/head.jsp" %>
+<%@ include file="../../common/head.jsp" %>
 <body>
-  <%@ include file="../common/header.jsp" %>
+  <%@ include file="../../common/header.jsp" %>
   <%
     String url = request.getAttribute("javax.servlet.forward.request_uri").toString();
     request.setAttribute("url", url);
@@ -40,7 +40,7 @@
       </tbody>
     </table>
   </main>
-  <%@ include file="../common/footer.jsp" %>
+  <%@ include file="../../common/footer.jsp" %>
 </body>
 <script>
   function empDetail(no){
