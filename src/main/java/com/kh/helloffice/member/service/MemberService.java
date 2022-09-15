@@ -1,12 +1,12 @@
 package com.kh.helloffice.member.service;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 public interface MemberService {
 
-	MemberDto login(MemberDto dto) throws Exception; 
+	DeptEmp login(DeptEmp dto) throws Exception;
 	
 	int emailCheck(String email) throws Exception;
 
-	int join(MemberDto dto) throws Exception;
+	int join(DeptEmp dto) throws Exception;
 }

@@ -1,8 +1,8 @@
 package com.kh.helloffice.admin.controller;
 
-import com.kh.helloffice.admin.service.AdminService;
+import com.kh.helloffice.admin.service.AdminEmpService;
 import com.kh.helloffice.hr.entity.DeptDto;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -24,13 +24,13 @@ import java.util.List;
 @Slf4j
 public class AdminEmpController {
 
-    private final AdminService service;
+    private final AdminEmpService service;
 
     @GetMapping
-    public String adminPage(Model model) throws Exception{
-        List<MemberDto> empList = service.getEmpList();
+    public String empAdminPage(Model model) throws Exception{
+        List<DeptEmp> empList = service.getEmpList();
         model.addAttribute("empList", empList);
-        return "admin/emp/emp";
+        return "admin/emp/main";
     }
 
     @GetMapping("/new")
@@ -41,7 +41,7 @@ public class AdminEmpController {
     }
 
     @PostMapping("/new")
-    public String addNewEmp(@RequestParam MemberDto member) throws Exception {
+    public String addNewEmp(@ModelAttribute DeptEmp member) throws Exception {
         int result = service.addNewEmp(member);
         if(result > 0) return "redirect:/admin/emp";
         else return "redirect:/admin/emp/new";
@@ -49,7 +49,7 @@ public class AdminEmpController {
 
     @GetMapping("/{empNo}")
     public String empDetail(@PathVariable long empNo, Model model) throws Exception {
-        MemberDto emp = service.getEmp(empNo);
+        DeptEmp emp = service.getEmp(empNo);
         List<DeptDto> deptList = service.getDeptList();
 
         model.addAttribute("deptList", deptList);
@@ -58,7 +58,7 @@ public class AdminEmpController {
     }
 
     @PatchMapping("/{empNo}")
-    public String editEmp(@PathVariable long empNo, MemberDto member) throws Exception {
+    public String editEmp(@PathVariable long empNo, DeptEmp member) throws Exception {
         member.setEmpNo(empNo);
         int result = service.editEmp(member);
         if(result > 0)return "redirect:/admin/emp";
@@ -67,7 +67,7 @@ public class AdminEmpController {
 
     @GetMapping("/exel-download")
     public void exelDownload(HttpServletResponse response) throws Exception {
-        List<MemberDto> empList = service.getEmpList();
+        List<DeptEmp> empList = service.getEmpList();
 
         XSSFWorkbook wb= new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("사용자_목록");
@@ -116,7 +116,7 @@ public class AdminEmpController {
         contentStyle.setBorderBottom(BorderStyle.THIN);
         contentStyle.setBorderRight(BorderStyle.THIN);
 
-        for (MemberDto m: empList) {
+        for (DeptEmp m: empList) {
             cellCount=0;
             row = sheet.createRow(rowNum++);
 

@@ -1,7 +1,7 @@
 package com.kh.helloffice.admin.dao;
 
 import com.kh.helloffice.hr.entity.DeptDto;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 @AllArgsConstructor
-public class AdminDaoImpl implements AdminDao{
+public class AdminEmpDaoImpl implements AdminEmpDao {
 
     private final SqlSession session;
     @Override
@@ -19,22 +19,22 @@ public class AdminDaoImpl implements AdminDao{
     }
 
     @Override
-    public int addNewEmp(MemberDto member) throws Exception {
+    public int addNewEmp(DeptEmp member) throws Exception {
         return session.insert("admin.insertEmp", member);
     }
 
     @Override
-    public List<MemberDto> getEmpList() throws Exception {
+    public List<DeptEmp> getEmpList() throws Exception {
         return session.selectList("admin.getEmpList");
     }
 
     @Override
-    public MemberDto getEmp(long empNo) throws Exception {
+    public DeptEmp getEmp(long empNo) throws Exception {
         return session.selectOne("admin.getEmp",empNo);
     }
 
     @Override
-    public int editEmp(MemberDto member) throws Exception {
+    public int editEmp(DeptEmp member) throws Exception {
         return session.update("admin.editEmp", member);
     }
 }

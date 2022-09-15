@@ -504,7 +504,7 @@
 			$.ajax({
 				type: 'PUT',
 				url: currentUrl + "/" + $('#assetModal #assetNo').val(),
-				contentType: 'application/json; charset=utf-8',
+				contentType: 'application/json; charset=UTF-8',
 				data: JSON.stringify(updateData)
 			}).done(function(data){
 				if(data === "ok"){

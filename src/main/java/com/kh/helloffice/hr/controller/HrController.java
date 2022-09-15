@@ -1,12 +1,7 @@
 package com.kh.helloffice.hr.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -17,22 +12,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.kh.helloffice.hr.entity.AcademicDto;
 import com.kh.helloffice.hr.entity.AllDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.hr.entity.InsaNoteDto;
 import com.kh.helloffice.hr.service.HrService;
-import com.kh.helloffice.member.entity.MemberDto;
-import com.kh.helloffice.work.entity.OffDto;
-import com.kh.helloffice.work.entity.UrgeDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.work.service.OffService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +43,7 @@ public class HrController {
 //	-- 팀 리스트 가져오기, 전체 사원 리스트 가져오기
 	@GetMapping("teamList")
 	public String getDeptList(Model model, HttpSession session) throws Exception {
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		
 		if(loginEmp != null) {
 			String depName = loginEmp.getDepName();
@@ -65,14 +53,14 @@ public class HrController {
 			List<DeptDto> deptList = service.getDeptList();
 			model.addAttribute("deptList", deptList);
 			
-			List<MemberDto> myTeamList = service.getMyTeamList(depName);
+			List<DeptEmp> myTeamList = service.getMyTeamList(depName);
 			model.addAttribute("myTeamList", myTeamList);
 			
 		}else {
 			List<DeptDto> deptList = service.getDeptList();
 			model.addAttribute("deptList", deptList);
 			
-			List<MemberDto> myTeamList = service.getTeamList();
+			List<DeptEmp> myTeamList = service.getTeamList();
 			model.addAttribute("myTeamList", myTeamList);
 		}
 		
@@ -82,10 +70,10 @@ public class HrController {
 //  -- 부서이름으로 멤버리스트 가져오기 
 	@GetMapping("teamList/getMemberByDept")
 	@ResponseBody
-	public List<MemberDto> getMemberByDept(Model model, String deptName) throws Exception{
+	public List<DeptEmp> getMemberByDept(Model model, String deptName) throws Exception{
 		List<DeptDto> deptList = service.getDeptList();
 		model.addAttribute("deptList", deptList);
-		List<MemberDto> memberListByDept;
+		List<DeptEmp> memberListByDept;
 		if(deptName.equals("전체")) {
 			memberListByDept = service.getTeamList();
 		}else {
@@ -200,12 +188,12 @@ public class HrController {
 	// 팀 리스트 검색기능 
 	@GetMapping("hr/teamList")
 	@ResponseBody
-	public List<MemberDto> getSearchList(@RequestParam("keyword") String keyword, Model model) throws Exception {
+	public List<DeptEmp> getSearchList(@RequestParam("keyword") String keyword, Model model) throws Exception {
 		System.out.println("keyword:::" + keyword);
-		MemberDto memberDto = new MemberDto();
+		DeptEmp memberDto = new DeptEmp();
 		memberDto.setKeyword(keyword);
 		
-		List<MemberDto> searchList = service.getSearchList(memberDto);
+		List<DeptEmp> searchList = service.getSearchList(memberDto);
 		model.addAttribute("searchList", searchList);
 		return searchList;
 	}
@@ -213,17 +201,17 @@ public class HrController {
 	
 	@GetMapping("teamReport")
 	public String teamListForRreport(Model model, HttpSession session) throws Exception {
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		
 		if(loginEmp != null) {
 			String depName = loginEmp.getDepName();
 			System.out.println("로그인 한 사람의 depName =:::" + depName);
 			
-			List<MemberDto> teamList = service.getMyTeamList(depName);
+			List<DeptEmp> teamList = service.getMyTeamList(depName);
 			model.addAttribute("teamList", teamList);
 			
 		}else {
-			List<MemberDto> teamList = service.getTeamList();
+			List<DeptEmp> teamList = service.getTeamList();
 			model.addAttribute("teamList", teamList);
 		}
 		return "hr/teamReport";

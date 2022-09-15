@@ -1,15 +1,12 @@
 package com.kh.helloffice.member.service;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.helloffice.member.dao.MemberDao;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 @Service
 @Transactional
@@ -22,9 +19,9 @@ public class MemberServiceImpl implements MemberService{
 	private PasswordEncoder pe;
 
 	@Override
-	public MemberDto login(MemberDto dto) throws Exception {
+	public DeptEmp login(DeptEmp dto) throws Exception {
 		
-		MemberDto dbEmp = dao.getMember(dto);
+		DeptEmp dbEmp = dao.getMember(dto);
 		
 		if(pe.matches(dto.getEmpPwd(), dbEmp.getEmpPwd())) {
 			return dbEmp;
@@ -40,7 +37,7 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int join(MemberDto dto) throws Exception {
+	public int join(DeptEmp dto) throws Exception {
 		int no = dao.getMemberSeq();
 		dto.setEmpNo(no);
 		dto.setEmpPwd(pe.encode(dto.getEmpPwd()));

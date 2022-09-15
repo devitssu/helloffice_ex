@@ -5,13 +5,11 @@ import java.util.List;
 import com.kh.helloffice.hr.entity.AllDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.hr.entity.InsaNoteDto;
-import com.kh.helloffice.hr.entity.PageVo;
-import com.kh.helloffice.member.entity.MemberDto;
-import com.kh.helloffice.reservation.entity.AssetDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 public interface HrService {
 
-	List<MemberDto> getTeamList() throws Exception;
+	List<DeptEmp> getTeamList() throws Exception;
 
 	List<DeptDto> getDeptList() throws Exception;
 
@@ -23,13 +21,13 @@ public interface HrService {
 
 	int delDeptName(String depName) throws Exception;
 
-	List<MemberDto> getMemberListByDept(String deptName) throws Exception;
+	List<DeptEmp> getMemberListByDept(String deptName) throws Exception;
 
-	List<MemberDto> getMyTeamList(String depName) throws Exception;
+	List<DeptEmp> getMyTeamList(String depName) throws Exception;
 
 	AllDto getMemberInfo(int empNo) throws Exception;
 
-	List<MemberDto> getSearchList(MemberDto memberDto) throws Exception;
+	List<DeptEmp> getSearchList(DeptEmp memberDto) throws Exception;
 
 	List<InsaNoteDto> getInsanote(int empNo) throws Exception;
 

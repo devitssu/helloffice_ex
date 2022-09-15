@@ -6,14 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 public class UserInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		MemberDto user = (MemberDto) request.getSession().getAttribute("loginEmp");
+		DeptEmp user = (DeptEmp) request.getSession().getAttribute("loginEmp");
 		if(user == null) {
 			response.sendRedirect("/helloffice/member/login");
 			return false;

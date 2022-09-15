@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.helloffice.hr.entity.AllDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.hr.entity.InsaNoteDto;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ public class HrDaoImpl implements HrDao{
 	public SqlSession ss;
 
 	@Override
-	public List<MemberDto> getTeamList() throws Exception {
+	public List<DeptEmp> getTeamList() throws Exception {
 		return ss.selectList("hr.getTeamList");
 	}
 
@@ -56,12 +56,12 @@ public class HrDaoImpl implements HrDao{
 	}
 
 	@Override
-	public List<MemberDto> getMemberListByDept(String deptName) throws Exception {
+	public List<DeptEmp> getMemberListByDept(String deptName) throws Exception {
 		return ss.selectList("hr.getMemberListByDept", deptName);
 	}
 
 	@Override
-	public List<MemberDto> getMyTeamList(String depName) throws Exception {
+	public List<DeptEmp> getMyTeamList(String depName) throws Exception {
 		return ss.selectList("hr.getMyTeamList", depName);
 	}
 
@@ -73,7 +73,7 @@ public class HrDaoImpl implements HrDao{
 	}
 
 	@Override
-	public List<MemberDto> getSearchList(MemberDto memberDto) {
+	public List<DeptEmp> getSearchList(DeptEmp memberDto) {
 		return ss.selectList("hr.getListBySearch", memberDto);
 	}
 

@@ -1,7 +1,5 @@
 package com.kh.helloffice.member.controller;
 
-import java.io.File;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,9 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.member.service.MemberService;
 
 @Controller
@@ -30,8 +27,8 @@ public class MemberContoller {
 	}
 	
 	@PostMapping("login")
-	public String login(MemberDto dto, HttpSession session) throws Exception {
-		MemberDto loginEmp = service.login(dto);
+	public String login(DeptEmp dto, HttpSession session) throws Exception {
+		DeptEmp loginEmp = service.login(dto);
 		
 		if(loginEmp != null) {
 			session.setAttribute("loginEmp", loginEmp);
@@ -56,7 +53,7 @@ public class MemberContoller {
 	}
 	
 	@PostMapping("join")
-	public String join(MemberDto dto) throws Exception {
+	public String join(DeptEmp dto) throws Exception {
 		
 		System.out.println(dto);
 		
@@ -76,7 +73,7 @@ public class MemberContoller {
 	}
 	
 	@PostMapping("")
-	public String emailCheck(MemberDto dto, String email) throws Exception {
+	public String emailCheck(DeptEmp dto, String email) throws Exception {
 		int emailResult = service.emailCheck(email);
 		
 		if (emailResult == 1) {

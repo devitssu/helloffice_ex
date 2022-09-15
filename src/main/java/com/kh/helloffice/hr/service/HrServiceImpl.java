@@ -9,7 +9,7 @@ import com.kh.helloffice.hr.entity.AllDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.hr.entity.InsaNoteDto;
 import com.kh.helloffice.hr.dao.HrDao;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 @Service
 public class HrServiceImpl implements HrService {
@@ -18,7 +18,7 @@ public class HrServiceImpl implements HrService {
 	public HrDao dao;
 
 	@Override
-	public List<MemberDto> getTeamList() throws Exception {
+	public List<DeptEmp> getTeamList() throws Exception {
 		return dao.getTeamList();
 	}
 
@@ -48,12 +48,12 @@ public class HrServiceImpl implements HrService {
 	}
 
 	@Override
-	public List<MemberDto> getMemberListByDept(String deptName) throws Exception {
+	public List<DeptEmp> getMemberListByDept(String deptName) throws Exception {
 		return dao.getMemberListByDept(deptName);
 	}
 
 	@Override
-	public List<MemberDto> getMyTeamList(String depName) throws Exception {
+	public List<DeptEmp> getMyTeamList(String depName) throws Exception {
 		return dao.getMyTeamList(depName);
 	}
 
@@ -63,7 +63,7 @@ public class HrServiceImpl implements HrService {
 	}
 
 	@Override
-	public List<MemberDto> getSearchList(MemberDto memberDto) throws Exception {
+	public List<DeptEmp> getSearchList(DeptEmp memberDto) throws Exception {
 		return dao.getSearchList(memberDto);
 	}
 

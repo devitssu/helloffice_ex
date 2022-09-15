@@ -2,8 +2,6 @@ package com.kh.helloffice.workflow.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.workflow.entity.WfDocDto;
 import com.kh.helloffice.workflow.entity.WfFormDto;
 import com.kh.helloffice.workflow.service.DocService;
@@ -36,7 +34,7 @@ public class DocController {
 
 	//내문서함
 	@GetMapping("/myWf")
-	public String myDoc(@SessionAttribute("loginEmp") MemberDto loginEmp,  Model model) throws Exception {
+	public String myDoc(@SessionAttribute("loginEmp") DeptEmp loginEmp, Model model) throws Exception {
 		//받은 문서함
 		List<WfDocDto> mySendList = service.mySendList(loginEmp.getEmpNo());
 		System.out.println(mySendList);

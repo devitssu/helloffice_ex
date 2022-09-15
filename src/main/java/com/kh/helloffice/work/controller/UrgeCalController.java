@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.work.entity.CalDto;
-import com.kh.helloffice.work.entity.OffDto;
 import com.kh.helloffice.work.entity.UrgeDto;
 import com.kh.helloffice.work.entity.WorkPageVo;
 import com.kh.helloffice.work.service.UrgeCalService;
@@ -124,7 +123,7 @@ public class UrgeCalController {
 		
 		//세션 가져오기(empNo)
 		session = request.getSession();
-		MemberDto loginEmp = (MemberDto)session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp)session.getAttribute("loginEmp");
 		int empNo = (int) loginEmp.getEmpNo();
 		
 		dto.setEmpNo(empNo);

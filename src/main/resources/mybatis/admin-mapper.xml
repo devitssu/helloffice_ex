@@ -59,4 +59,32 @@
             ADMIN_LEVEL = #{adminLevel}
         WHERE EMP_NO = #{empNo}
     </update>
+
+    <insert id="addDept">
+        INSERT INTO DEPARTMENT(DEP_NO, DEP_NAME)
+        VALUES (SEQ_DEPARTMENT_DEP_NO.nextval, #{name})
+    </insert>
+
+    <select id="getDeptDetail" resultType="deptDetail">
+        SELECT DEP_NAME, TOTAL_NUM
+        FROM (
+            SELECT DEP_NO, COUNT(EMP_NO) AS TOTAL_NUM
+            FROM HR
+            GROUP BY DEP_NO
+        ) A
+        INNER JOIN DEPARTMENT D on D.DEP_NO = A.DEP_NO
+        WHERE D.DEP_NO = #{depNo}
+    </select>
+
+    <select id="getDeptEmpList" resultType="deptEmp">
+        SELECT EMP_NO, EMP_NAME, EMP_RANK, EMP_POSITION
+        FROM HR
+        WHERE DEP_NO = #{depNo}
+    </select>
+
+    <update id="changeDept">
+        UPDATE DEPARTMENT
+        SET DEP_NAME = #{depName}
+        WHERE DEP_NO = #{depNo}
+    </update>
 </mapper>

@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 @Repository
 public class MemberDaoImpl implements MemberDao{
@@ -13,7 +13,7 @@ public class MemberDaoImpl implements MemberDao{
 	private SqlSession ss;
 
 	@Override
-	public MemberDto getMember(MemberDto dto) throws Exception {
+	public DeptEmp getMember(DeptEmp dto) throws Exception {
 		return ss.selectOne("member.getMember", dto);
 	}
 
@@ -28,12 +28,12 @@ public class MemberDaoImpl implements MemberDao{
 	}
 
 	@Override
-	public int insertMember(MemberDto dto) throws Exception{
+	public int insertMember(DeptEmp dto) throws Exception{
 		return ss.insert("member.insertMember", dto);
 	}
 
 	@Override
-	public void insertProfile(MemberDto dto) throws Exception {
+	public void insertProfile(DeptEmp dto) throws Exception {
 		ss.insert("member.insertProfile", dto);
 	}
 

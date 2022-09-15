@@ -9,7 +9,7 @@ import com.kh.helloffice.hr.dao.HrMyPageDao;
 import com.kh.helloffice.hr.entity.AcademicDto;
 import com.kh.helloffice.hr.entity.CareerDto;
 import com.kh.helloffice.hr.entity.DeptDto;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 @Service
 public class HrMyPageServiceImpl implements HrMyPageService{
@@ -19,10 +19,10 @@ public class HrMyPageServiceImpl implements HrMyPageService{
 	
 
 	@Override
-	public MemberDto editInsaPage(MemberDto dto) throws Exception {
+	public DeptEmp editInsaPage(DeptEmp dto) throws Exception {
 		int result = dao.editInsaPage(dto);
 		
-		MemberDto updatedMember = null;
+		DeptEmp updatedMember = null;
 		if(result > 0) {
 			updatedMember = dao.getMember(dto);
 		}
@@ -31,10 +31,10 @@ public class HrMyPageServiceImpl implements HrMyPageService{
 
 
 	@Override
-	public MemberDto editBasicPage(MemberDto dto) throws Exception {
+	public DeptEmp editBasicPage(DeptEmp dto) throws Exception {
 		int result = dao.editBasicPage(dto);
 		
-		MemberDto updatedMember = null;
+		DeptEmp updatedMember = null;
 		if(result > 0) {
 			updatedMember = dao.getMember(dto);
 		}
@@ -49,13 +49,13 @@ public class HrMyPageServiceImpl implements HrMyPageService{
 
 
 	@Override
-	public List<MemberDto> getInsaPageInfo(int empNo) throws Exception {
+	public List<DeptEmp> getInsaPageInfo(int empNo) throws Exception {
 		return dao.getInsaPageInfo(empNo);
 	}
 
 
 	@Override
-	public List<MemberDto> getBasicPageInfo(int empNo) throws Exception {
+	public List<DeptEmp> getBasicPageInfo(int empNo) throws Exception {
 		return dao.getBasicPageInfo(empNo);
 	}
 

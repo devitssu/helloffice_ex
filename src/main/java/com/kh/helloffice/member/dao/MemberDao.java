@@ -1,17 +1,17 @@
 package com.kh.helloffice.member.dao;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 public interface MemberDao {
 
-	MemberDto getMember(MemberDto dto) throws Exception;
+	DeptEmp getMember(DeptEmp dto) throws Exception;
 	
 	int emailCheck(String email) throws Exception;
 
 	int getMemberSeq() throws Exception;
 
-	int insertMember(MemberDto dto) throws Exception;
+	int insertMember(DeptEmp dto) throws Exception;
 
-	void insertProfile(MemberDto dto) throws Exception;
+	void insertProfile(DeptEmp dto) throws Exception;
 
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.helloffice.hr.entity.AcademicDto;
 import com.kh.helloffice.hr.entity.CareerDto;
 import com.kh.helloffice.hr.entity.DeptDto;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 @Repository
 public class HrMyPageDaoImpl implements HrMyPageDao{
@@ -18,7 +18,7 @@ public class HrMyPageDaoImpl implements HrMyPageDao{
 	private SqlSession ss;
 
 	@Override
-	public int editInsaPage(MemberDto dto) throws Exception {
+	public int editInsaPage(DeptEmp dto) throws Exception {
 		int x = ss.update("hr.editInsaPage", dto);
 		System.out.println(x);
 		
@@ -26,14 +26,14 @@ public class HrMyPageDaoImpl implements HrMyPageDao{
 	}
 
 	@Override
-	public MemberDto getMember(MemberDto dto) throws Exception {
-		MemberDto result =  ss.selectOne("hr.getMember", dto);
+	public DeptEmp getMember(DeptEmp dto) throws Exception {
+		DeptEmp result =  ss.selectOne("hr.getMember", dto);
 		System.out.println(result);
 		return result;
 	}
 
 	@Override
-	public int editBasicPage(MemberDto dto) throws Exception {
+	public int editBasicPage(DeptEmp dto) throws Exception {
 		int x = ss.update("hr.editBasicPage", dto);
 		System.out.println("dao editBasicPage ::::" + x);
 		
@@ -46,12 +46,12 @@ public class HrMyPageDaoImpl implements HrMyPageDao{
 	}
 
 	@Override
-	public List<MemberDto> getInsaPageInfo(int empNo) throws Exception {
+	public List<DeptEmp> getInsaPageInfo(int empNo) throws Exception {
 		return ss.selectList("hr.getInsaPageInfo", empNo);
 	}
 
 	@Override
-	public List<MemberDto> getBasicPageInfo(int empNo) throws Exception {
+	public List<DeptEmp> getBasicPageInfo(int empNo) throws Exception {
 		return ss.selectList("hr.getBasicPageInfo", empNo);
 	}
 

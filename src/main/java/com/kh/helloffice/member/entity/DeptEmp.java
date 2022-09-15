@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 @Data
-public class MemberDto {
+public class DeptEmp {
 	
 	private long empNo; // 사원번호
 	private String depNo; // 부서번호

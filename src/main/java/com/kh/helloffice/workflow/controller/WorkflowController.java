@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.helloffice.hr.service.HrService;
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.workflow.entity.TagDto;
 import com.kh.helloffice.workflow.entity.WfFormDto;
 import com.kh.helloffice.workflow.service.WorkflowService;
@@ -91,8 +91,8 @@ public class WorkflowController {
 	//승인대상을 선택하기 위해 사원 전체 조회
 	@GetMapping("/getHrList")
 	@ResponseBody
-	public List<MemberDto> getHrList(Model model) throws Exception{
-		List<MemberDto> memList = hrService.getTeamList();
+	public List<DeptEmp> getHrList(Model model) throws Exception{
+		List<DeptEmp> memList = hrService.getTeamList();
 		System.out.println(memList);
 		model.addAttribute("memList", memList);
 		return memList;

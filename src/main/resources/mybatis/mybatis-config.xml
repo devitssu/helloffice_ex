@@ -12,7 +12,7 @@
 	</settings>
   
   	<typeAliases>
-  		<typeAlias type="com.kh.helloffice.member.entity.MemberDto" alias="memberDto"/>
+  		<typeAlias type="com.kh.helloffice.member.entity.DeptEmp" alias="memberDto"/>
   		<typeAlias type="com.kh.helloffice.board.entity.BoardDto" alias="board"/>
   		<typeAlias type="com.kh.helloffice.board.entity.PostDto" alias="post"/>
   		<typeAlias type="com.kh.helloffice.board.entity.ReplyDto" alias="reply"/>
@@ -35,6 +35,8 @@
   		<typeAlias type="com.kh.helloffice.todo.entity.ToDoDto" alias="todo"/>
   		<typeAlias type="com.kh.helloffice.calendar.entity.EventDto" alias="event"/>
 		<typeAlias type="com.kh.helloffice.workflow.entity.WfDocDto" alias="wfDocDto"/>
+		<typeAlias type="com.kh.helloffice.admin.entity.DeptDetail" alias="deptDetail"/>
+		<typeAlias type="com.kh.helloffice.admin.entity.DeptEmp" alias="deptEmp"/>
 
   	</typeAliases>
   

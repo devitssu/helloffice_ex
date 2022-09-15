@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kh.helloffice.member.entity.MemberDto;
+import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.reservation.entity.AssetDto;
 import com.kh.helloffice.reservation.entity.ReservationDto;
 import com.kh.helloffice.reservation.entity.ReservManagerDto;
@@ -44,7 +44,7 @@ public class ReservationManagementController {
 						 HttpSession session,
 						 HttpServletResponse response) throws IOException {
 		
-		MemberDto user = (MemberDto)session.getAttribute("loginEmp");
+		DeptEmp user = (DeptEmp)session.getAttribute("loginEmp");
 		int adminLevel = user.getAdminLevel();
 		if(adminLevel == 3) return "reservation/management";
 		else {			
@@ -70,7 +70,7 @@ public class ReservationManagementController {
 	public Map<Long, AssetDto> assetList(@PathVariable String type,
 										 HttpSession session,
 										 HttpServletResponse response) throws Exception {
-		MemberDto user = (MemberDto)session.getAttribute("loginEmp");
+		DeptEmp user = (DeptEmp)session.getAttribute("loginEmp");
 		long empNo = user.getEmpNo();
 		if(checkPermission(type, empNo, 2)) {			
 			List<AssetDto> assetList = service.getAssetList(type);
@@ -147,7 +147,7 @@ public class ReservationManagementController {
 	public Map<Long, ReservManagerDto> getManagerList(@PathVariable String type,
 													  HttpSession session,
 													  HttpServletResponse response) throws Exception{
-		MemberDto user = (MemberDto)session.getAttribute("loginEmp");
+		DeptEmp user = (DeptEmp)session.getAttribute("loginEmp");
 		long empNo = user.getEmpNo();
 		if(checkPermission(type, empNo, 3)) {			
 			List<ReservManagerDto> list = service.getManagerList(type);

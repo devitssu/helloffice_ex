@@ -1,41 +1,22 @@
 package com.kh.helloffice.hr.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.helloffice.hr.entity.AcademicDto;
 import com.kh.helloffice.hr.entity.CareerDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.hr.service.HrMyPageService;
-import com.kh.helloffice.member.entity.MemberDto;
-import com.kh.helloffice.work.entity.OffDto;
-import com.kh.helloffice.work.entity.UrgeDto;
-import com.kh.helloffice.work.service.OffService;
+import com.kh.helloffice.member.entity.DeptEmp;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,7 +31,7 @@ public class MyPageController {
 	@GetMapping("myPage")
 	public String mypage(HttpSession session, Model model) throws Exception {
 		//로그인 한 경우에만 보여주기
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		System.out.println("loginEmp" + loginEmp);
 		
 		if(loginEmp != null) {
@@ -75,7 +56,7 @@ public class MyPageController {
 	// 나의 인사정보 수정 페이지
 	@GetMapping("myPage/editInsaPageM")
 	public String getInsaPage(HttpSession session, Model model) throws Exception{
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		List<DeptDto> deptList = service.getDeptList();
 		model.addAttribute("deptList", deptList);
 		if(loginEmp == null) {
@@ -86,8 +67,8 @@ public class MyPageController {
 	
 	// 나의 인사정보 수정 로직 처리
 	@PostMapping("myPage/editInsaPageM")
-	public String editInsaPage(MemberDto dto, HttpSession session) throws Exception {
-		MemberDto updatedMember = service.editInsaPage(dto);
+	public String editInsaPage(DeptEmp dto, HttpSession session) throws Exception {
+		DeptEmp updatedMember = service.editInsaPage(dto);
 		if(updatedMember != null) {
 			session.setAttribute("loginEmp", updatedMember);
 			return "redirect:/hr/myPage";
@@ -99,7 +80,7 @@ public class MyPageController {
 	// 나의 기본정보 수정 페이지 
 	@GetMapping("myPage/editBasicPageM")
 	public String getBasicPage(HttpSession session, Model model) throws Exception{
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		if(loginEmp == null) {
 			return "error/errorPage";
 		}
@@ -108,8 +89,8 @@ public class MyPageController {
 	
 	// 나의 기본정보 수정 로직 처리
 	@PostMapping("myPage/editBasicPageM")
-	public String editBasicPage(MemberDto dto, HttpSession session) throws Exception {
-		MemberDto basicPage = service.editBasicPage(dto);
+	public String editBasicPage(DeptEmp dto, HttpSession session) throws Exception {
+		DeptEmp basicPage = service.editBasicPage(dto);
 		if(basicPage != null) {
 			session.setAttribute("loginEmp", basicPage);
 			return "redirect:/hr/myPage";
@@ -121,12 +102,12 @@ public class MyPageController {
 	// 멤버 인사정보 수정 페이지
 	@GetMapping("teamList/memberPage/editInsaPage/{empNo}")
 	public String getInsaPage(HttpSession session, Model model, @PathVariable int empNo) throws Exception {
-		MemberDto loginEmp = (MemberDto) session.getAttribute("loginEmp");
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 		
 		List<DeptDto> deptList = service.getDeptList();
 		model.addAttribute("deptList", deptList); // 부서 수정 시 필요.
 		
-		List<MemberDto> insaPageInfo = service.getInsaPageInfo(empNo);
+		List<DeptEmp> insaPageInfo = service.getInsaPageInfo(empNo);
 		model.addAttribute("insaPageInfo", insaPageInfo); // 사원번호로 정보 불러오기
 		System.out.println(insaPageInfo);
 		
@@ -135,8 +116,8 @@ public class MyPageController {
 	
 	// 멤버 인사정보 수정 로직 처리
 	@PostMapping("/teamList/memberPage/editInsaPage/{empNo}")
-	public String editInsaPage(MemberDto dto, Model model, @PathVariable int empNo) throws Exception {
-		MemberDto updatedMember = service.editInsaPage(dto);
+	public String editInsaPage(DeptEmp dto, Model model, @PathVariable int empNo) throws Exception {
+		DeptEmp updatedMember = service.editInsaPage(dto);
 		System.out.println(updatedMember);
 		if(updatedMember != null) {
 			model.addAttribute("insaPageInfo", updatedMember);
@@ -150,7 +131,7 @@ public class MyPageController {
 	@GetMapping("teamList/memberPage/editBasicPage/{empNo}")
 	public String getBasicPage(HttpSession session, Model model, @PathVariable int empNo) throws Exception {
 
-		List<MemberDto> basicPageInfo = service.getBasicPageInfo(empNo);
+		List<DeptEmp> basicPageInfo = service.getBasicPageInfo(empNo);
 		model.addAttribute("basicPageInfo", basicPageInfo);
 		System.out.println(basicPageInfo);
 		
@@ -159,8 +140,8 @@ public class MyPageController {
 	
 	// 멤버 기본정보 수정 로직 처리
 	@PostMapping("/teamList/memberPage/editBasicPage/{empNo}")
-	public String editBasicPage(MemberDto dto, Model model, @PathVariable int empNo) throws Exception {
-		MemberDto basicPage = service.editBasicPage(dto);
+	public String editBasicPage(DeptEmp dto, Model model, @PathVariable int empNo) throws Exception {
+		DeptEmp basicPage = service.editBasicPage(dto);
 		System.out.println("basicPage edited:::::" + basicPage);
 		if(basicPage != null) {
 			model.addAttribute("basicPageInfo", basicPage);
