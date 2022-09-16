@@ -23,5 +23,8 @@ public class PostDto {
 	private long ref;
 	private long root;
 	private long depth;
+	private char isNotice;
+	private String startTime;
+	private String endTime;
 
 }

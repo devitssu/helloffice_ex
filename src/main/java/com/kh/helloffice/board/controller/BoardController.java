@@ -51,9 +51,11 @@ public class BoardController {
 		pageVo.setSearch(search);
 		
 		List<PostDto> list =  service.getList(pageVo, category);
-		
+		List<PostDto> noticeList = service.getNoticeList();
+
 		model.addAttribute("page", pageVo);
 		model.addAttribute("list", list);
+		model.addAttribute("noticeList", noticeList);
 		return "board/board";
 	}
 

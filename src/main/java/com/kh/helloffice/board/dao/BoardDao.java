@@ -44,4 +44,6 @@ public interface BoardDao {
     int deleteFile(Long fileNo) throws Exception;
 
 	int postReply(PostDto post) throws Exception;
+
+    List<PostDto> getNoticeList() throws Exception;
 }

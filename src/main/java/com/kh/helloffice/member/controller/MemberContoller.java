@@ -3,6 +3,7 @@ package com.kh.helloffice.member.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import com.kh.helloffice.member.service.MemberService;
 
 @Controller
 @RequestMapping("member")
+@Slf4j
 public class MemberContoller {
 	
 	@Autowired
@@ -29,6 +31,7 @@ public class MemberContoller {
 	@PostMapping("login")
 	public String login(DeptEmp dto, HttpSession session) throws Exception {
 		DeptEmp loginEmp = service.login(dto);
+		log.info("member={}", loginEmp.toString());
 		
 		if(loginEmp != null) {
 			session.setAttribute("loginEmp", loginEmp);

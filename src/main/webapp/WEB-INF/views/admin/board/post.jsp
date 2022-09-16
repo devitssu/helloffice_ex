@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<%@ include file="../common/head.jsp" %>
+<%@ include file="../../common/head.jsp" %>
 <body>
-	<%@ include file="../common/header.jsp" %>
+	<%@ include file="../../common/header.jsp" %>
 
 	<main id="main" class="main">
 		<form action="" method="POST">
@@ -65,17 +65,10 @@
            <div class="col-sm-2"></div>
          </div>
          <div class="text-center">
-             <c:if test="${loginEmp.adminLevel eq 3}">
-                <a href="/helloffice/admin/board/${boardNo}/post/${post.postNo}"><button type="button" class="btn btn-outline-warning">관리페이지</button></a>
-             </c:if>
-               <a href="post/${post.postNo}/re"><button type="button" class="btn btn-outline-warning">답글쓰기</button></a>
-           <c:if test="${post.empNo eq loginEmp.empNo}">
+               <a href="${post.postNo}/re"><button type="button" class="btn btn-outline-warning">답글쓰기</button></a>
 	           <a href="post/${post.postNo}"><button type="button" class="btn btn-outline-primary">수정하기</button></a>
-           </c:if>
-               <a href="${root}/board/${boardNo}"><button type="button" class="btn btn-outline-secondary">목록으로</button></a>
-           <c:if test="${post.empNo eq loginEmp.empNo}">
+               <a href="${root}/admin/board/${boardNo}"><button type="button" class="btn btn-outline-secondary">목록으로</button></a>
 	           <button type="submit" class="btn btn-outline-danger">삭제하기</button>
-           </c:if>
          </div>
          <div class="row mb-3">
              <div class="card-body pb-0">
@@ -83,12 +76,8 @@
              </div>
          </div>
          </form>
-            <div id="replyDiv">
-              <textarea class="tinymce-editor" id="replyContent"></textarea>
-                <button type="button" class="btn btn-outline-primary" id="sendReply">댓글쓰기</button>
-            </div>
 	</main>
-	<%@ include file="../common/footer.jsp" %>
+	<%@ include file="../../common/footer.jsp" %>
 </body>
 <script>
     let currentUrl = document.location.pathname;
@@ -139,9 +128,7 @@
             </div>
             <div class="d-flex w-70 justify-content-between">
                 <small>${ '${list[i].empName}' }</small><small><a onclick="showInput('re',${ '${list[i].replyNo}' })">답글</a>`;
-            if(empNo == reEmpNo){
-                template += ` | <a onclick="showInput('edit',${ '${list[i].replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${list[i].replyNo}' })">삭제</a>`
-            };
+            template += ` | <a onclick="showInput('edit',${ '${list[i].replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${list[i].replyNo}' })">삭제</a>`
             template +=
             `</small></div>
             <div id="editDiv${ '${list[i].replyNo}' }" style="display:none">
@@ -171,9 +158,7 @@
             </div>
             <div class="d-flex w-70 justify-content-between">
             <small>${ '${re.empName}' }</small>`;
-            if(empNo == reEmpNo){
-                template += `<small><a onclick="showInput('edit',${ '${re.replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${re.replyNo}' })">삭제</a></small>`;
-            }
+            template += `<small><a onclick="showInput('edit',${ '${re.replyNo}' })">수정</a> | <a onclick="deleteReply(${ '${re.replyNo}' })">삭제</a></small>`;
 
             template += `</div>
             <div id="editDiv${ '${re.replyNo}' }" style="display:none">
@@ -188,7 +173,7 @@
     $(document).ready(function () {
         $.ajax({
             type:'GET',
-            url: currentUrl + '/reply',
+            url: '/helloffice/board/' + boardNo + "/" + postNo + "/reply",
             dataType: 'json'
         }).done(function(data){
             renderReplyList(data);
@@ -225,7 +210,7 @@
         };
         $.ajax({
             type: 'POST',
-            url: currentUrl + '/reply',
+            url: '/helloffice/board/' + boardNo + "/" + postNo + '/reply',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(){
@@ -246,7 +231,7 @@
         };
         $.ajax({
             type: 'PATCH',
-            url: currentUrl + '/reply/' + no,
+            url: '/helloffice/board/' + boardNo + "/" + postNo + "/reply/" + no,
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(){
@@ -262,7 +247,7 @@
         if(confirm('댓글을 삭제하시겠습니까?')){
             $.ajax({
                 type: 'DELETE',
-                url: currentUrl + '/reply/' + no
+                url: '/helloffice/board/' + boardNo + "/" + postNo + "/reply/" + no
             }).done(function () {
                 alert('댓글이 삭제되었습니다.');
                 history.go(0);
@@ -274,7 +259,7 @@
 
     const downloadFile = (fileNo)  => {
         if(confirm('파일을 다운로드하시겠습니까?')){
-            location.href = currentUrl + "/file/" + fileNo;
+            location.href = '/helloffice/board/' + boardNo + "/" + postNo + "/file/" + fileNo;
         }else return false;
     }
 

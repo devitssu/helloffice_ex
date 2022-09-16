@@ -5,8 +5,9 @@
   
 <mapper namespace="member">
 	<select id="getMember" parameterType="memberDto" resultType="memberDto">
-		SELECT *
-		FROM HR
+		SELECT H.*, D.DEP_NAME
+		FROM HR H
+		INNER JOIN DEPARTMENT D on D.DEP_NO = H.DEP_NO
 		WHERE EMAIL = #{email}
 	</select>
 	

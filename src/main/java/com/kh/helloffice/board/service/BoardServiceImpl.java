@@ -61,6 +61,12 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
+	public List<PostDto> getNoticeList() throws Exception {
+		List<PostDto> noticeList = dao.getNoticeList();
+		return formatPost(noticeList);
+	}
+
+	@Override
 	public PostDto getPost(long no) throws Exception {
 	    int result = dao.increaseViewCnt(no);
 	    if(result > 0) return dao.getPost(no);

@@ -44,4 +44,6 @@ public interface BoardService {
     int deleteFiles(List<Long> delFileNo) throws Exception;
 
     int postReply(PostDto post, List<MultipartFile> fileList) throws Exception;
+
+    List<PostDto> getNoticeList() throws Exception;
 }

@@ -87,4 +87,60 @@
         SET DEP_NAME = #{depName}
         WHERE DEP_NO = #{depNo}
     </update>
+
+    <update id="editPost">
+        UPDATE POST
+        SET TITLE = #{title},
+            CONTENT = #{content}
+        WHERE POST_NO = #{postNo}
+    </update>
+
+    <insert id="insertNotice">
+        <selectKey keyProperty="postNo" order="BEFORE" resultType="long">
+            SELECT POST_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO POST(
+             POST_NO,
+             EMP_NO,
+             BOARD_NO,
+             TITLE,
+             CATEGORY,
+             CONTENT,
+             ROOT,
+             IS_NOTICE,
+             START_TIME,
+             END_TIME
+        )
+        VALUES(
+               #{postNo},
+               #{empNo},
+               1,
+               #{title},
+               '공지',
+               #{content},
+               #{postNo},
+               'Y',
+               TO_DATE(#{startTime}, 'YYYY-MM-DD"T"HH24:MI:SS'),
+               TO_DATE(#{endTime}, 'YYYY-MM-DD"T"HH24:MI:SS')
+       )
+    </insert>
+
+    <insert id="insertFile">
+        INSERT INTO FILE_INFO(
+            SEQ,
+            POST_NO,
+            FILE_EXT,
+            FILE_SIZE,
+            ORIGIN_NAME,
+            SAVE_PATH
+        )
+        VALUES(
+          FILE_INFO_SEQ.NEXTVAL,
+          #{postNo},
+          #{fileExt},
+          #{fileSize},
+          #{originName},
+          #{savePath}
+      )
+    </insert>
 </mapper>

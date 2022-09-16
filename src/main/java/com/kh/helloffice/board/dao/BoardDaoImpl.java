@@ -109,4 +109,9 @@ public class BoardDaoImpl implements BoardDao{
 		return session.insert("board.insertReplyPost", post);
 	}
 
+	@Override
+	public List<PostDto> getNoticeList() throws Exception {
+		return session.selectList("board.getNoticeList");
+	}
+
 }

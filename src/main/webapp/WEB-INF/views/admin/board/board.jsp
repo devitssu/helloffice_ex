@@ -2,21 +2,22 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ include file="../common/head.jsp" %>		
+<%@ include file="../../common/head.jsp" %>
 
 <body>
-	<%@ include file="../common/header.jsp" %>
+	<%@ include file="../../common/header.jsp" %>
 	<% 
 		String url = request.getAttribute("javax.servlet.forward.request_uri").toString();
 		request.setAttribute("url", url);
 	%>	
-<%--TODO: 공지 최상단에 보여주기--%>
+
 	<main id="main" class="main">
+	<h2>게시판 관리</h2>
 	<c:if test="${list[0].depName eq '대표'}">
-		<h2>전체 게시판</h2>
+		<h3>전체 게시판</h3>
 	</c:if>
 	<c:if test="${list[0].depName ne '대표'}">
-		<h2>${list[0].depName} 게시판</h2>
+		<h3>${list[0].depName} 게시판</h3>
 	</c:if>
 		<form action="" method="GET">
 		<div class="row mb-3">
@@ -45,7 +46,7 @@
 			</div>
 			<div class="col-md-3"></div>
 			<div class="col-md-2">
-				<a href="${url}/post"><button type="button" class="btn btn-outline-secondary">게시글 등록</button></a>
+				<a href="post"><button type="button" class="btn btn-outline-secondary">공지 등록</button></a>
 			</div>
 		</div>
 	              <table class="table table-hover">
@@ -121,7 +122,7 @@
 		</form>
 		
 	</main>
-	<%@ include file="../common/footer.jsp" %>
+	<%@ include file="../../common/footer.jsp" %>
 	
 	<script type="text/javascript">
 		function postDetail(no){
