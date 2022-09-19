@@ -9,4 +9,6 @@ public interface MemberService {
 	int emailCheck(String email) throws Exception;
 
 	int join(DeptEmp dto) throws Exception;
+
+    int editPwd(DeptEmp editEmp) throws Exception;
 }

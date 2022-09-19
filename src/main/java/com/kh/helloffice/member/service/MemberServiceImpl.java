@@ -24,6 +24,9 @@ public class MemberServiceImpl implements MemberService{
 		DeptEmp dbEmp = dao.getMember(dto);
 		
 		if(pe.matches(dto.getEmpPwd(), dbEmp.getEmpPwd())) {
+			if(pe.matches("12345", dbEmp.getEmpPwd())){
+				dbEmp.setFirst(true);
+			}
 			return dbEmp;
 		} else {
 			return null;
@@ -44,6 +47,12 @@ public class MemberServiceImpl implements MemberService{
 		int result = dao.insertMember(dto);
 		
 		return result;
+	}
+
+	@Override
+	public int editPwd(DeptEmp editEmp) throws Exception {
+		editEmp.setEmpPwd(pe.encode(editEmp.getEmpPwd()));
+		return dao.editPwd(editEmp);
 	}
 
 }

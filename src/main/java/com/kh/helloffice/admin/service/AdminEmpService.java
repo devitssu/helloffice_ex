@@ -2,6 +2,7 @@ package com.kh.helloffice.admin.service;
 
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.member.entity.DeptEmp;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface AdminEmpService {
     DeptEmp getEmp(long empNo) throws Exception;
 
     int editEmp(DeptEmp member) throws Exception;
+
+    int addByExcel(MultipartFile file) throws Exception;
 }

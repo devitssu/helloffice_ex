@@ -12,8 +12,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.List;
 public class AdminEmpController {
 
     private final AdminEmpService service;
+    private final String FILE_DIR = "C:/test/upload/temp/";
 
     @GetMapping
     public String empAdminPage(Model model) throws Exception{
@@ -65,7 +69,7 @@ public class AdminEmpController {
         else return "redirect:/admin/emp/" + empNo;
     }
 
-    @GetMapping("/exel-download")
+    @GetMapping("/excel")
     public void exelDownload(HttpServletResponse response) throws Exception {
         List<DeptEmp> empList = service.getEmpList();
 
@@ -154,6 +158,18 @@ public class AdminEmpController {
         //response OutputStream에 엑셀 작성
         wb.write(response.getOutputStream());
         wb.close();
+    }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public String addByExcel(@RequestParam MultipartFile excelFile) throws Exception {
+        if(excelFile == null || excelFile.isEmpty()){
+            throw new RuntimeException("파일이 존재하지 않습니다.");
+        }
+        log.info("before service");
+        int result = service.addByExcel(excelFile);
+
+        return "redirect:/admin/emp";
     }
 
 }

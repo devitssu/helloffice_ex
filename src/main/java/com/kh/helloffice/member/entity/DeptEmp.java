@@ -33,4 +33,6 @@ public class DeptEmp {
 	
 	// 멤버 검색
 	private String keyword;
+
+	private boolean isFirst = false;
 }

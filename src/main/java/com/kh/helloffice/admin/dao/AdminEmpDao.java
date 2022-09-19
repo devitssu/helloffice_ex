@@ -1,5 +1,6 @@
 package com.kh.helloffice.admin.dao;
 
+import com.kh.helloffice.admin.entity.ExcelEmpDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.member.entity.DeptEmp;
 
@@ -15,4 +16,6 @@ public interface AdminEmpDao {
     DeptEmp getEmp(long empNo) throws Exception;
 
     int editEmp(DeptEmp member) throws Exception;
+
+    int addNewEmpList(List<ExcelEmpDto> newEmpList) throws Exception;
 }

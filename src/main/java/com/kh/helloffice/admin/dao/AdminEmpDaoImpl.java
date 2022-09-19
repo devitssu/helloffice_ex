@@ -1,5 +1,6 @@
 package com.kh.helloffice.admin.dao;
 
+import com.kh.helloffice.admin.entity.ExcelEmpDto;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.member.entity.DeptEmp;
 import lombok.AllArgsConstructor;
@@ -36,5 +37,14 @@ public class AdminEmpDaoImpl implements AdminEmpDao {
     @Override
     public int editEmp(DeptEmp member) throws Exception {
         return session.update("admin.editEmp", member);
+    }
+
+    @Override
+    public int addNewEmpList(List<ExcelEmpDto> newEmpList) throws Exception {
+        int result = 0;
+        for (ExcelEmpDto emp: newEmpList) {
+            result += session.insert("admin.insertEmpByExcel", emp);
+        }
+        return result;
     }
 }

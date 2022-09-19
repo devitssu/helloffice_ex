@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	private BoardDao dao;
 
-	private static final String FILE_DIR = "C:/test/upload/";
+	private final String FILE_DIR = "C:/test/upload/";
 
 	@Override
 	public List<PostDto> getList(PageVo pageVo, String category) throws Exception {

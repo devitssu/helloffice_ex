@@ -7,10 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.member.service.MemberService;
@@ -31,15 +28,25 @@ public class MemberContoller {
 	@PostMapping("login")
 	public String login(DeptEmp dto, HttpSession session) throws Exception {
 		DeptEmp loginEmp = service.login(dto);
-		log.info("member={}", loginEmp.toString());
-		
+
 		if(loginEmp != null) {
 			session.setAttribute("loginEmp", loginEmp);
+			if(loginEmp.isFirst()) return "member/editPwd";
 			return "redirect:/";
 		} else {
 			System.out.println("null controller");
 			return "member/login";
 		}
+	}
+
+	@PatchMapping("/login")
+	public String editPwd(DeptEmp editEmp, HttpSession session) throws Exception {
+		int result = service.editPwd(editEmp);
+		//TODO: 비밀번호 변경 뒤 세션 만료 후 로그인 화면으로
+		if(result > 0){
+			session.removeAttribute("loginEmp");
+			return "redirect:/";
+		}else return "redirect:member/login";
 	}
 	
 	@GetMapping("join")

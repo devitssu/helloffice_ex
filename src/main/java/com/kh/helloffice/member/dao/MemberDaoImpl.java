@@ -37,4 +37,9 @@ public class MemberDaoImpl implements MemberDao{
 		ss.insert("member.insertProfile", dto);
 	}
 
+	@Override
+	public int editPwd(DeptEmp editEmp) throws Exception {
+		return ss.insert("member.editPwd", editEmp);
+	}
+
 }

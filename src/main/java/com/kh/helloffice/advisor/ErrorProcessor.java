@@ -19,4 +19,9 @@ public class ErrorProcessor {
 		return "error/exception404";
 	}
 
+	@ExceptionHandler(Exception.class)
+	public void printException(Exception e){
+		e.printStackTrace();
+	}
+
 }

@@ -155,4 +155,39 @@
         SET FLAG_DEL = 'Y'
         WHERE SEQ = #{fileNo}
     </update>
+
+    <insert id="insertEmpByExcel">
+        INSERT INTO HR_TEST
+        (
+            EMP_NO,
+            DEP_NO,
+            ADMIN_LEVEL,
+            EMP_RANK,
+            EMP_POSITION,
+            EMP_NAME,
+            EMAIL,
+            EMP_PWD,
+            PHONE,
+            RESI_NO,
+            ADDRESS,
+            BANK,
+            BANK_ACC
+        )
+        VALUES
+        (
+            HR_TEST_SEQ.nextval,
+            #{depNo},
+            #{adminLevel},
+            #{empRank},
+            #{empPosition},
+            #{empName},
+            #{email},
+            #{empPwd},
+            #{phone},
+            #{resiNo},
+            #{address},
+            #{bank},
+            #{bankAcc}
+        )
+    </insert>
 </mapper>

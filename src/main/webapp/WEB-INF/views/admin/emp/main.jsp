@@ -12,9 +12,15 @@
   <main id="main" class="main">
     <h2>사용자 관리</h2>
     <a href="${url}/new"><button type="button" class="btn btn-outline-primary">신규 추가</button></a>
+    <button type="button" class="btn btn-outline-success" id="excelUpload">엑셀로 신규 추가</button>
+    <form action="excel" method="post" enctype="multipart/form-data" style="display: none" id="uploadForm">
+      <input type="file" id="fileInput" name="excelFile">
+      <button type="button" class="btn btn-primary" id="excelSubmit">제출</button>
+      <button type="reset" class="btn btn-secondary">취소</button>
+    </form>
 
     <h3>사용자 목록</h3>
-    <a href="${url}/exel-download"><button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button></a>
+    <a href="${url}/excel"><button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button></a>
     <table class="table table-hover">
       <thead>
       <tr>
@@ -46,5 +52,50 @@
   function empDetail(no){
     location.href = "emp/" + no;
   }
+
+  $('#excelUpload').on('click',  function (){
+    $('#uploadForm').toggle();
+  });
+
+  $('#excelSubmit').on('click', function (){
+    if(checkFile()){
+      if(confirm('제출하시겠습니까?')){
+        const data = new FormData($('#uploadForm')[0]);
+        $.ajax({
+          type: 'POST',
+          url: '/helloffice/admin/emp/upload',
+          enctype: 'multipart/form-data',
+          data: data,
+          contentType: false,
+          processData: false
+        }).done(function(){
+          alert('업로드한 사용자가 등록되었습니다.')
+          history.go(0);
+        }).fail(function (){
+          alert('업로드중 오류가 발생했습니다.')
+        });
+      }
+    }else{
+      $('#fileInput').val("");
+    }
+  });
+
+  const checkFile = () => {
+    const file = $('#fileInput').val();
+    if(file == "" || file == null){
+      alert('파일을 선택해주세요.');
+      return false;
+    }else if(!checkExt(file)){
+      alert('엑셀 파일만 업로드할 수 있습니다.');
+      return false;
+    }else return true;
+  }
+
+  const checkExt = (file) => {
+    let ext = file.split('.').pop();
+    if(ext == 'xls' || ext == 'xlsx') return true;
+    else return false;
+  }
+
 </script>
 </html>
