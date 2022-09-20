@@ -1,5 +1,7 @@
 package com.kh.helloffice.admin.controller;
 
+import com.kh.helloffice.AdminLevel;
+import com.kh.helloffice.Level;
 import com.kh.helloffice.admin.service.AdminBoardService;
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.PageVo;
@@ -20,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/admin/board")
+@Level(adminLevel = AdminLevel.ADMIN)
 public class AdminBoardController {
 
     private final AdminBoardService adminService;

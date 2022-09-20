@@ -1,5 +1,7 @@
 package com.kh.helloffice.admin.controller;
 
+import com.kh.helloffice.AdminLevel;
+import com.kh.helloffice.Level;
 import com.kh.helloffice.admin.service.AdminEmpService;
 import com.kh.helloffice.hr.entity.DeptDto;
 import com.kh.helloffice.member.entity.DeptEmp;
@@ -25,6 +27,7 @@ import java.util.List;
 @RequestMapping("/admin/emp")
 @RequiredArgsConstructor
 @Slf4j
+@Level(adminLevel = AdminLevel.ADMIN)
 public class AdminEmpController {
 
     private final AdminEmpService service;

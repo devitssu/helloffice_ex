@@ -1,5 +1,7 @@
 package com.kh.helloffice.admin.controller;
 
+import com.kh.helloffice.AdminLevel;
+import com.kh.helloffice.Level;
 import com.kh.helloffice.admin.service.AdminFileService;
 import com.kh.helloffice.board.entity.FileInfoDto;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/admin/file")
+@Level(adminLevel = AdminLevel.ADMIN)
 public class AdminFileController {
 
     private final AdminFileService service;

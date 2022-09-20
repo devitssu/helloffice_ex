@@ -1,5 +1,6 @@
 package com.kh.helloffice.advisor;
 
+import com.kh.helloffice.NoAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,12 @@ public class ErrorProcessor {
 	@ExceptionHandler(Exception.class)
 	public void printException(Exception e){
 		e.printStackTrace();
+	}
+
+	@ExceptionHandler(NoAccessException.class)
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	public String noAccess(Exception e) {
+		return "error/no-access";
 	}
 
 }

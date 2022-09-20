@@ -3,6 +3,7 @@ package com.kh.helloffice.member.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.kh.helloffice.AdminLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,12 @@ public class MemberContoller {
 		DeptEmp loginEmp = service.login(dto);
 
 		if(loginEmp != null) {
+
+			if(loginEmp.getAdminLevel() == 3){
+				session.setAttribute("adminLevel", AdminLevel.ADMIN.name());
+			}else {
+				session.setAttribute("adminLevel", AdminLevel.USER.name());
+			}
 			session.setAttribute("loginEmp", loginEmp);
 			if(loginEmp.isFirst()) return "member/editPwd";
 			return "redirect:/";
