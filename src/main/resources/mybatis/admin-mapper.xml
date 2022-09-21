@@ -190,4 +190,60 @@
             #{bankAcc}
         )
     </insert>
+
+    <select id="getAlarmList" resultType="alarm">
+        SELECT *
+        FROM ALARM
+        WHERE EXPIRED = 'N'
+    </select>
+
+    <insert id="insertAlarm">
+        INSERT INTO ALARM(
+            SEQ,
+            START_TIME,
+            END_TIME,
+            MESSAGE
+        )
+        VALUES
+        (
+            ALARM_SEQ.nextval,
+            #{startTime},
+            #{endTime},
+            #{message}
+        )
+    </insert>
+
+    <select id="getAlarm" resultType="alarm">
+        SELECT * FROM ALARM
+        WHERE SEQ = #{no}
+    </select>
+
+    <update id="editAlarm">
+        UPDATE ALARM
+        SET
+            MESSAGE = #{message},
+            START_TIME = #{startTime},
+            END_TIME = #{endTime}
+        WHERE SEQ = #{seq}
+    </update>
+
+    <select id="getValidAlarms" resultType="String">
+        SELECT MESSAGE
+        FROM ALARM
+        WHERE
+            TO_CHAR((SELECT LAST_LOGIN FROM HR WHERE EMP_NO = #{empNo}),'yyyy-mm-dd') <![CDATA[<]]> TO_CHAR(SYSDATE,'yyyy-mm-dd')
+        AND SYSDATE BETWEEN START_TIME AND END_TIME
+    </select>
+
+    <update id="updateLogin">
+        UPDATE HR
+        SET LAST_LOGIN = SYSDATE
+        WHERE EMP_NO = #{empNo}
+    </update>
+
+    <update id="expireAlarm">
+        UPDATE ALARM
+        SET EXPIRED = 'Y'
+        WHERE END_TIME <![CDATA[<]]> SYSDATE
+    </update>
 </mapper>

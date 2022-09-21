@@ -10,6 +10,12 @@
 		INNER JOIN DEPARTMENT D on D.DEP_NO = H.DEP_NO
 		WHERE EMAIL = #{email}
 	</select>
+
+    <update id="lastLogin">
+        UPDATE HR
+        SET LAST_LOGIN = SYSDATE
+        WHERE EMP_NO = #{empNo}
+    </update>
 	
 	<select id="emailCheck" parameterType="memberDto" resultType="int">
 		SELECT COUNT(*)

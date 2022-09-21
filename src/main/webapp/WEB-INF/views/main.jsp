@@ -483,8 +483,33 @@
   
       calendar.render();
     }
-        
-    $(document).ready(getEventList);   
+    const getAlarm = (no) => {
+      $.ajax({
+        type: 'GET',
+        url: '/helloffice/alarm',
+        dataType: 'json'
+      }).done(function(data){
+        alarm(data);
+        updateLogin(no);
+      });
+    }
+
+    $(document).ready(getEventList);
+    $(document).ready(getAlarm(empNo));
+
+    const alarm = (list) => {
+       list.forEach(s => alert(s));
+    }
+
+    const updateLogin = (no) => {
+      $.ajax({
+        type: 'PATCH',
+        url: '/helloffice/' + no,
+      }).done(function(data){
+
+      });
+    }
+
     </script>
 
     </section>

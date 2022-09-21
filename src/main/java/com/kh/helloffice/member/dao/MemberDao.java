@@ -15,4 +15,6 @@ public interface MemberDao {
 	void insertProfile(DeptEmp dto) throws Exception;
 
     int editPwd(DeptEmp editEmp) throws Exception;
+
+	int lastLogin(long empNo) throws Exception;
 }

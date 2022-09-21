@@ -226,6 +226,11 @@
 							<span>첨부파일 관리</span>
 						</a>
 					</li>
+					<li>
+						<a href="${root}/admin/alarm"> <i class="bi bi-circle"></i>
+							<span>알림 관리</span>
+						</a>
+					</li>
 
 				</ul>
 			</li>

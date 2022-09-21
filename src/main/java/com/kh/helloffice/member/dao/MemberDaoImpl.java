@@ -42,4 +42,9 @@ public class MemberDaoImpl implements MemberDao{
 		return ss.insert("member.editPwd", editEmp);
 	}
 
+	@Override
+	public int lastLogin(long empNo) throws Exception {
+		return ss.update("member.lastLogin", empNo);
+	}
+
 }
