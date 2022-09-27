@@ -10,7 +10,7 @@ import lombok.Data;
 public class DeptEmp {
 	
 	private long empNo; // 사원번호
-	private String depNo; // 부서번호
+	private long depNo; // 부서번호
 	private String depName; // 부서이름 
 	private int adminLevel; // 관리 레벨
 	private String empRank; // 직급

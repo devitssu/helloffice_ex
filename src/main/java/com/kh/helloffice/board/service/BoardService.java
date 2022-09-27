@@ -3,10 +3,7 @@ package com.kh.helloffice.board.service;
 import java.util.List;
 import java.util.Map;
 
-import com.kh.helloffice.board.entity.FileInfoDto;
-import com.kh.helloffice.board.entity.PageVo;
-import com.kh.helloffice.board.entity.PostDto;
-import com.kh.helloffice.board.entity.ReplyDto;
+import com.kh.helloffice.board.entity.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardService {
@@ -46,4 +43,8 @@ public interface BoardService {
     int postReply(PostDto post, List<MultipartFile> fileList) throws Exception;
 
     List<PostDto> getNoticeList() throws Exception;
+
+    List<BoardDto> getCategoryList(long boardNo, long empNo) throws Exception;
+
+	List<BoardDto> getCategoryList(long boardNo) throws Exception;
 }

@@ -42,7 +42,7 @@
     </select>
 
     <select id="getEmp" resultType="memberDto">
-        SELECT EMP_NO, DEP_NO, EMP_RANK, EMP_POSITION, EMP_NAME, ENTRY_DATE, EMAIL
+        SELECT EMP_NO, DEP_NO, EMP_RANK, EMP_POSITION, EMP_NAME, ENTRY_DATE, EMAIL, ADMIN_LEVEL
         FROM HR
         WHERE EMP_NO = #{empNo}
     </select>
@@ -61,8 +61,11 @@
     </update>
 
     <insert id="addDept">
+        <selectKey keyProperty="depNo" order="BEFORE" resultType="int">
+            SELECT SEQ_DEPARTMENT_DEP_NO.nextval FROM DUAL
+        </selectKey>
         INSERT INTO DEPARTMENT(DEP_NO, DEP_NAME)
-        VALUES (SEQ_DEPARTMENT_DEP_NO.nextval, #{name})
+        VALUES (#{depNo}, #{depName})
     </insert>
 
     <select id="getDeptDetail" resultType="deptDetail">
@@ -246,4 +249,108 @@
         SET EXPIRED = 'Y'
         WHERE END_TIME <![CDATA[<]]> SYSDATE
     </update>
+
+    <select id="getAdminList" resultType="deptEmp">
+        SELECT EMP_NO, EMP_NAME, EMP_RANK, EMP_POSITION
+        FROM HR
+        WHERE DEP_NO = #{deptNo}
+          AND ADMIN_LEVEL &gt;= 2
+    </select>
+
+    <update id="downLevel">
+        UPDATE HR
+        SET ADMIN_LEVEL = 1
+        WHERE EMP_NO = #{empNo}
+    </update>
+
+    <insert id="insertBoard">
+        INSERT INTO BOARD(SEQ, NAME, DEP_NO, ROOT)
+        VALUES (BOARD_SEQ.NEXTVAL, #{depName}, #{depNo}, BOARD_SEQ.CURRVAL)
+    </insert>
+
+    <update id="editBoardName">
+        UPDATE BOARD
+        SET NAME = #{depName}
+        WHERE DEP_NO = #{depNo}
+          AND REF = 0
+    </update>
+
+    <select id="getEmpListByDepNo" resultType="deptEmp">
+        SELECT EMP_NO, EMP_NAME, EMP_RANK, EMP_POSITION
+        FROM HR
+        WHERE DEP_NO = #{depNo}
+          AND ADMIN_LEVEL = 1
+    </select>
+    
+    <insert id="insertCategory">
+        <selectKey keyProperty="seq" order="BEFORE" resultType="long">
+            SELECT BOARD_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO BOARD(SEQ, NAME, DEP_NO, ROOT, REF)
+        VALUES (
+        #{seq},
+        #{name},
+        #{depNo},
+        #{boardNo},
+        #{boardNo}
+       )
+    </insert>
+
+    <insert id="insertCategoryUser">
+        <foreach collection="empNoList" item="no" separator=" " open="INSERT ALL" close="SELECT * FROM DUAL">
+        INTO BOARD_USER(BOARD_SEQ, EMP_NO)
+        VALUES
+            (
+                #{seq},
+                #{no}
+            )
+        </foreach>
+    </insert>
+
+    <select id="getCategoryDetail" resultMap="categoryMap">
+        SELECT B.SEQ, B.NAME
+        FROM BOARD B
+        WHERE SEQ = #{seq}
+    </select>
+
+    <select id="selectEmpNo" resultType="long">
+        SELECT EMP_NO
+        FROM BOARD_USER
+        WHERE BOARD_SEQ = #{seq}
+    </select>
+
+    <resultMap id="categoryMap" type="category">
+        <id column="seq" property="seq"></id>
+        <result column="name" property="name"></result>
+        <collection column="seq" property="empNoList" select="selectEmpNo"/>
+    </resultMap>
+
+    <select id="getCategoryUser" resultType="long">
+        SELECT EMP_NO FROM BOARD_USER WHERE BOARD_SEQ = #{seq}
+    </select>
+
+    <delete id="deleteCategoryUser">
+        DELETE BOARD_USER
+        WHERE BOARD_SEQ = #{seq}
+        AND EMP_NO IN
+            <foreach collection="empNoList" item="a" open="(" close=")" separator=",">
+                #{a}
+            </foreach>
+    </delete>
+
+    <update id="editCategoryName">
+        UPDATE BOARD
+        SET NAME = #{name}
+        WHERE SEQ = #{seq}
+    </update>
+
+    <delete id="deleteCategoryUserAll">
+        DELETE BOARD_USER
+        WHERE BOARD_SEQ = #{seq}
+    </delete>
+
+    <delete id="deleteCategory">
+        DELETE BOARD
+        WHERE SEQ = #{seq}
+    </delete>
 </mapper>

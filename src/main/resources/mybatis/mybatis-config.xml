@@ -38,6 +38,7 @@
 		<typeAlias type="com.kh.helloffice.admin.entity.DeptDetail" alias="deptDetail"/>
 		<typeAlias type="com.kh.helloffice.admin.entity.DeptEmp" alias="deptEmp"/>
 		<typeAlias type="com.kh.helloffice.admin.entity.AlarmDto" alias="alarm"/>
+		<typeAlias type="com.kh.helloffice.admin.entity.CategoryDto" alias="category"/>
 
   	</typeAliases>
   

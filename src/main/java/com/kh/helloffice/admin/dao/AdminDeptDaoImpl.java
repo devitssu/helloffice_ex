@@ -23,8 +23,8 @@ public class AdminDeptDaoImpl implements AdminDeptDao{
     }
 
     @Override
-    public int addNewDept(String name) throws Exception {
-        return session.insert("admin.addDept", name);
+    public int addNewDept(DeptDto newDept) throws Exception {
+        return session.insert("admin.addDept", newDept);
     }
 
     @Override
@@ -40,5 +40,15 @@ public class AdminDeptDaoImpl implements AdminDeptDao{
     @Override
     public int editDeptName(DeptDto changeDept) throws Exception {
         return session.update("admin.changeDept", changeDept);
+    }
+
+    @Override
+    public int addBoard(DeptDto newDept) throws Exception {
+        return session.insert("admin.insertBoard", newDept);
+    }
+
+    @Override
+    public int editBoardName(DeptDto changeDept) throws Exception {
+        return session.update("admin.editBoardName", changeDept);
     }
 }

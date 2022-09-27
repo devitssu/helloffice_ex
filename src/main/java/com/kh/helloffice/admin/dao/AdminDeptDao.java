@@ -9,11 +9,15 @@ import java.util.List;
 public interface AdminDeptDao {
     List<DeptDto> getDeptList() throws Exception;
 
-    int addNewDept(String name) throws Exception;
+    int addNewDept(DeptDto newDept) throws Exception;
 
     DeptDetail getDeptDetail(long depNo) throws Exception;
 
     List<DeptEmp> getDeptEmpList(long depNo) throws Exception;
 
     int editDeptName(DeptDto changeDept) throws Exception;
+
+    int addBoard(DeptDto newDept) throws Exception;
+
+    int editBoardName(DeptDto changeDept) throws Exception;
 }

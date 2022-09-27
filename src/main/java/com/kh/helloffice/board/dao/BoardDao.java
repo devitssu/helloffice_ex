@@ -1,11 +1,9 @@
 package com.kh.helloffice.board.dao;
 
 import java.util.List;
+import java.util.Map;
 
-import com.kh.helloffice.board.entity.FileInfoDto;
-import com.kh.helloffice.board.entity.PageVo;
-import com.kh.helloffice.board.entity.PostDto;
-import com.kh.helloffice.board.entity.ReplyDto;
+import com.kh.helloffice.board.entity.*;
 
 public interface BoardDao {
 
@@ -46,4 +44,10 @@ public interface BoardDao {
 	int postReply(PostDto post) throws Exception;
 
     List<PostDto> getNoticeList() throws Exception;
+
+    List<BoardDto> getCategoryList(long boardNo) throws Exception;
+
+    long getDepNo(long boardNo) throws Exception;
+
+    List<BoardDto> getCategoryListForUser(Map<String, Long> map);
 }

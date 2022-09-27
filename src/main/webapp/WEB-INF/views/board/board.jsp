@@ -10,14 +10,43 @@
 		String url = request.getAttribute("javax.servlet.forward.request_uri").toString();
 		request.setAttribute("url", url);
 	%>	
-<%--TODO: 공지 최상단에 보여주기--%>
 	<main id="main" class="main">
 	<c:if test="${list[0].depName eq '대표'}">
 		<h2>전체 게시판</h2>
+		<c:if test="${loginEmp.adminLevel eq 3}">
+			<small><a href="${url}/categories"><button>게시판관리</button></a></small>
+		</c:if>
 	</c:if>
-	<c:if test="${list[0].depName ne '대표'}">
-		<h2>${list[0].depName} 게시판</h2>
-	</c:if>
+		<c:forEach items="${categories}" var="c">
+			<c:if test="${c.ref eq 0}">
+				<h2>
+					<c:if test="${c.name eq '전체'}">
+						${c.name}
+						<c:if test="${loginEmp.adminLevel eq 3}">
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+						</c:if>
+					</c:if>
+					<c:if test="${c.name ne '전체'}">
+						${c.name}
+						<c:if test="${loginEmp.adminLevel >= 2}">
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+						</c:if>
+					</c:if>
+				</h2>
+			</c:if>
+		</c:forEach>
+		<nav class="navbar navbar-expand-lg bg-light">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<c:forEach items="${categories}" var="c">
+							<c:if test="${c.seq eq page.boardNo}"><a class="nav-link disabled" href='#'>${c.name}</a></c:if>
+							<c:if test="${c.seq ne page.boardNo}"><a class="nav-link" href="/helloffice/board/${c.seq}">${c.name}</a></c:if>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+		</nav>
 		<form action="" method="GET">
 		<div class="row mb-3">
 			<div class="col-md-1">

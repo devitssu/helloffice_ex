@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.kh.helloffice.board.entity.FileInfoDto;
-import com.kh.helloffice.board.entity.ReplyDto;
+import com.kh.helloffice.board.entity.*;
+import com.kh.helloffice.member.entity.DeptEmp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
@@ -22,12 +22,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.kh.helloffice.board.entity.PageVo;
-import com.kh.helloffice.board.entity.PostDto;
 import com.kh.helloffice.board.service.BoardService;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("board/{boardNo}")
@@ -36,26 +35,37 @@ import javax.servlet.http.HttpServletResponse;
 public class BoardController {
 	private final BoardService service;
 	@GetMapping
-	public String board(@PathVariable long boardNo, 
-						@RequestParam(defaultValue = "전체") String category, 
-						@RequestParam(defaultValue = "") String search, 
-						@RequestParam(defaultValue = "1") String page, 
-						@RequestParam(defaultValue = "10") String count, 
-						Model model) throws Exception {
+	public String board(@PathVariable long boardNo,
+						@RequestParam(defaultValue = "전체") String category,
+						@RequestParam(defaultValue = "") String search,
+						@RequestParam(defaultValue = "1") String page,
+						@RequestParam(defaultValue = "10") String count,
+						Model model,
+						HttpSession session) throws Exception {
 		int pageNum = 5;
 		int totalRow = service.getTotalPostNum(boardNo);
-		
+		DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
+
 		PageVo pageVo = new PageVo(page, count, pageNum, totalRow);
 		pageVo.setBoardNo(boardNo);
 		pageVo.setCategory(category);
 		pageVo.setSearch(search);
-		
+
+		List<BoardDto> categories = null;
+		if(loginEmp.getAdminLevel() > 1){
+			categories = service.getCategoryList(boardNo);
+		}else{
+			categories = service.getCategoryList(boardNo, loginEmp.getEmpNo());
+		}
 		List<PostDto> list =  service.getList(pageVo, category);
 		List<PostDto> noticeList = service.getNoticeList();
+
+		System.out.println(pageVo);
 
 		model.addAttribute("page", pageVo);
 		model.addAttribute("list", list);
 		model.addAttribute("noticeList", noticeList);
+		model.addAttribute("categories", categories);
 		return "board/board";
 	}
 

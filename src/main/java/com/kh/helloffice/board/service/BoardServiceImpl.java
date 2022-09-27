@@ -1,21 +1,15 @@
 package com.kh.helloffice.board.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import com.kh.helloffice.board.entity.FileInfoDto;
-import com.kh.helloffice.board.entity.ReplyDto;
+import com.kh.helloffice.board.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.helloffice.board.dao.BoardDao;
-import com.kh.helloffice.board.entity.PageVo;
-import com.kh.helloffice.board.entity.PostDto;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -64,6 +58,21 @@ public class BoardServiceImpl implements BoardService{
 	public List<PostDto> getNoticeList() throws Exception {
 		List<PostDto> noticeList = dao.getNoticeList();
 		return formatPost(noticeList);
+	}
+
+	@Override
+	public List<BoardDto> getCategoryList(long boardNo, long empNo) throws Exception {
+		long depNo = dao.getDepNo(boardNo);
+		Map<String, Long> map = new HashMap<>();
+		map.put("depNo", depNo);
+		map.put("empNo", empNo);
+		return dao.getCategoryListForUser(map);
+	}
+
+	@Override
+	public List<BoardDto> getCategoryList(long boardNo) throws Exception {
+		long depNo = dao.getDepNo(boardNo);
+		return dao.getCategoryList(depNo);
 	}
 
 	@Override

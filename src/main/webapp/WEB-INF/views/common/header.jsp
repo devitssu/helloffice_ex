@@ -217,6 +217,11 @@
 						</a>
 					</li>
 					<li>
+						<a href="${root}/admin/dept-admin"> <i class="bi bi-circle"></i>
+							<span>부서 관리자</span>
+						</a>
+					</li>
+					<li>
 						<a href="${root}/admin/board"> <i class="bi bi-circle"></i>
 							<span>게시판 관리</span>
 						</a>

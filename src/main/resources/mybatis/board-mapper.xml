@@ -11,8 +11,7 @@
 			FROM (
 			
 				SELECT  P.*,
-						H.EMP_NAME,
-						D.DEP_NAME
+						H.EMP_NAME
 				FROM (
 					SELECT *
 					FROM POST
@@ -20,8 +19,6 @@
 					CONNECT BY PRIOR POST_NO = REF
 					ORDER SIBLINGS BY ROOT DESC
 				) P
-				INNER JOIN DEPARTMENT D
-					ON P.BOARD_NO = D.DEP_NO
 				INNER JOIN HR H
 					ON P.EMP_NO = H.EMP_NO
 				WHERE P.BOARD_NO = #{boardNo} 
@@ -261,4 +258,31 @@
 		SET VIEW_CNT = VIEW_CNT + 1
 		WHERE POST_NO= #{no}
 	</update>
+
+	<select id="getCategoryList" resultType="board">
+		SELECT *
+		FROM BOARD
+		WHERE DEP_NO = #{depNo}
+	</select>
+
+	<select id="getBoardDepNo" resultType="long">
+		SELECT DEP_NO
+		FROM BOARD
+		WHERE SEQ = #{boardNo}
+	</select>
+
+	<select id="getCategoryListForUser" resultType="board">
+		SELECT B.*
+		FROM BOARD B
+		JOIN BOARD_USER U ON B.SEQ = U.BOARD_SEQ
+		WHERE B.DEP_NO = #{depNo}
+		AND U.EMP_NO = #{empNo}
+
+		UNION
+
+		SELECT *
+		FROM BOARD
+		WHERE DEP_NO = #{depNo}
+		AND REF = 0
+	</select>
 </mapper>

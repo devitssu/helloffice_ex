@@ -24,7 +24,11 @@ public class AdminDeptServiceImpl implements AdminDeptService{
 
     @Override
     public int addNewDept(String name) throws Exception {
-        return dao.addNewDept(name);
+        DeptDto newDept = new DeptDto();;
+        newDept.setDepName(name);
+        int result = dao.addNewDept(newDept);
+        if(result > 0) return dao.addBoard(newDept);
+        return 0;
     }
 
     @Override
@@ -39,6 +43,8 @@ public class AdminDeptServiceImpl implements AdminDeptService{
 
     @Override
     public int editDeptName(DeptDto changeDept) throws Exception {
-        return dao.editDeptName(changeDept);
+        int result = dao.editDeptName(changeDept);
+        if(result > 0) return dao.editBoardName(changeDept);
+        return 0;
     }
 }

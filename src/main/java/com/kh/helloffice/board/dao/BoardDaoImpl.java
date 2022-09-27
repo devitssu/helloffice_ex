@@ -1,16 +1,13 @@
 package com.kh.helloffice.board.dao;
 
 import java.util.List;
+import java.util.Map;
 
-import com.kh.helloffice.board.entity.FileInfoDto;
-import com.kh.helloffice.board.entity.ReplyDto;
+import com.kh.helloffice.board.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.kh.helloffice.board.entity.PageVo;
-import com.kh.helloffice.board.entity.PostDto;
 
 @Repository
 @Slf4j
@@ -114,4 +111,18 @@ public class BoardDaoImpl implements BoardDao{
 		return session.selectList("board.getNoticeList");
 	}
 
+	@Override
+	public List<BoardDto> getCategoryList(long depNo) throws Exception {
+		return session.selectList("board.getCategoryList", depNo);
+	}
+
+	@Override
+	public long getDepNo(long boardNo) throws Exception {
+		return session.selectOne("board.getBoardDepNo", boardNo);
+	}
+
+	@Override
+	public List<BoardDto> getCategoryListForUser(Map<String, Long> map) {
+		return session.selectList("board.getCategoryListForUser", map);
+	}
 }
