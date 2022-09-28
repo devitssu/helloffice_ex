@@ -26,5 +26,6 @@ public class PostDto {
 	private char isNotice;
 	private String startTime;
 	private String endTime;
+	private String thumbnailPath;
 
 }

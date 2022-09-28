@@ -9,7 +9,7 @@
 		<form action="" method="POST">
 		<input type="hidden" name="_method" value="DELETE">
 		<div class="row mb-3">
-			<h1>${post.depName}</h1>
+
 		</div>
          <div class="row mb-3">
            <div class="col-md-6">
@@ -92,7 +92,7 @@
 </body>
 <script>
     let currentUrl = document.location.pathname;
-    let boardNo = ${post.boardNo};
+    let boardNo = ${boardNo};
     let postNo = ${post.postNo};
     let empNo = ${loginEmp.empNo};
 

@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +39,7 @@ public class BoardController {
 						@RequestParam(defaultValue = "") String search,
 						@RequestParam(defaultValue = "1") String page,
 						@RequestParam(defaultValue = "10") String count,
+						@RequestParam(defaultValue = "list") String viewType,
 						Model model,
 						HttpSession session) throws Exception {
 		int pageNum = 5;
@@ -60,12 +60,11 @@ public class BoardController {
 		List<PostDto> list =  service.getList(pageVo, category);
 		List<PostDto> noticeList = service.getNoticeList();
 
-		System.out.println(pageVo);
-
 		model.addAttribute("page", pageVo);
 		model.addAttribute("list", list);
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("categories", categories);
+		if(viewType.equals("gallery")) return "board/gallery";
 		return "board/board";
 	}
 
@@ -92,13 +91,14 @@ public class BoardController {
 	public String post(PostDto post,
                        @PathVariable String boardNo,
 					   @RequestParam(required = false) List<MultipartFile> fileList) throws Exception {
+		post = makeThumbnailPath(post);
+
 		int result = service.post(post, fileList);
 		if(result > 0) {
 			return "redirect:/board/" + boardNo;
 		}else {
 			return "error";
 		}
-
 	}
 	
 	@GetMapping("post/{no}")
@@ -117,6 +117,7 @@ public class BoardController {
 						 @RequestParam(required = false) List<MultipartFile> fileList,
 						 @RequestParam(required = false) String delFileList,
 						 PostDto post) throws Exception {
+		post = makeThumbnailPath(post);
 		int delResult = 0;
 		if(!delFileList.isEmpty()){
 			List<Long> delFileNo = new ArrayList<>();
@@ -137,7 +138,19 @@ public class BoardController {
 			}
 		}else return "redirect:/board/" + boardNo + "/post/" + no;
 	}
-	
+
+	private PostDto makeThumbnailPath(PostDto post) {
+		String content = post.getContent();
+		String pathRef = "<img src=\"http://localhost:8000/helloffice/image?path=C:/test/image/";
+		if(content.contains(pathRef)){
+			int idx = content.indexOf(pathRef);
+			String[] fullPathArr = content.substring(idx).split("\"")[1].split("/");
+			String path = fullPathArr[fullPathArr.length-1];
+			post.setThumbnailPath("s_" + path);
+		}
+		return post;
+	}
+
 	@DeleteMapping("{no}")
 	public String delete(@PathVariable String boardNo,
                          @PathVariable long no) throws Exception {

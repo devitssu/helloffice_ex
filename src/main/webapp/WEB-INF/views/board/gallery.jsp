@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@ include file="../common/head.jsp" %>		
-
+<%@ include file="../common/head.jsp" %>
 <body>
 	<%@ include file="../common/header.jsp" %>
 	<% 
@@ -79,48 +78,30 @@
 				<a href="${url}/post"><button type="button" class="btn btn-outline-secondary">게시글 등록</button></a>
 			</div>
 		</div>
-	              <table class="table table-hover">
-	                <thead>
-	                  <tr>
-	                    <th scope="col">카테고리</th>
-	                    <th scope="col">제목</th>
-	                    <th scope="col">작성자</th>
-	                    <th scope="col">등록일</th>
-	                    <th scope="col">조회수</th>
-	                  </tr>
-	                </thead>
-	                <tbody>
-					<c:forEach items="${noticeList}" var="n">
-						<tr class="table-primary" onClick="postDetail(${n.postNo})">
-							<td>공지</td>
-							<td>${n.title}</td>
-							<td>${n.empName}</td>
-							<td>${n.dateString}</td>
-							<td>${n.viewCnt}</td>
-						</tr>
-					</c:forEach>
-	                <c:forEach items="${list}" var="l">
-	                  <tr onClick="postDetail(${l.postNo})">
-	                    <td>${l.category}</td>
-	                    <td>
-							<c:if test="${l.depth > 0}">
-								<c:forEach begin="1" end="${l.depth}">
-									<i class="bx bx-subdirectory-right"></i>
-								</c:forEach>
-								${l.title}
-							</c:if>
-							<c:if test="${l.depth == 0}">
-								${l.title}
-							</c:if>
-						</td>
-	                    <td>${l.empName}</td>
-	                    <td>${l.dateString}</td>
-	                    <td>${l.viewCnt}</td>
-	                  </tr>
-	                </c:forEach>
-	                </tbody>
-	              </table>	
-	              
+			<div class="row align-items-top">
+				<c:forEach items="${noticeList}" var="n">
+					<div class="col-lg-2">
+						<div class="card" onClick="postDetail(${n.postNo})">
+							<img src='${root}/resources/assets/img/favicon.png'>
+							<div class="card-body">
+								<h5 class="card-title">[공지]${n.title}</h5>
+								<p class="card-text">${n.empName}</p>
+							</div>
+						</div><!-- End Card with an image on top -->
+					</div>
+				</c:forEach>
+				<c:forEach items="${list}" var="l">
+					<div class="col-lg-2">
+						<div class="card" onClick="postDetail(${l.postNo})">
+							<img src='http://localhost:8000/helloffice/thumbnail?path=${l.thumbnailPath}' onerror="this.onerror=null; this.src='${root}/resources/assets/img/noimage.png';" class="card-img-top" alt="...">
+							<div class="card-body">
+								<h5 class="card-title">${l.title}</h5>
+								<p class="card-text">${l.empName}</p>
+							</div>
+						</div><!-- End Card with an image on top -->
+					</div>
+				</c:forEach>
+			</div>
               <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                   <li class="page-item">
@@ -128,19 +109,19 @@
                     <span aria-hidden="true">&laquo;</span>
                   </button>
                   </li>
-                  
+
                   <c:if test="${page.page > 1}">
 	                  <li class="page-item"><button type="submit" class="page-link" name="page" value="${page.page - 1}">이전</button></li>
                   </c:if>
-                  
+
                   <c:forEach begin="${page.startPage}" end="${page.endPage}" var="i">
 	                  <li class="page-item"><button type="submit" class="page-link page" name="page" value="${i}">${i}</button></li>
                   </c:forEach>
-                  
+
                   <c:if test="${page.page < page.last}">
 	                  <li class="page-item"><button type="submit" class="page-link" name="page" value="${page.page + 1}">다음</button></li>
                   </c:if>
-                  
+
                   <li class="page-item">
                   <button class="page-link" aria-label="Next" name="page" value="${page.last}">
                     <span aria-hidden="true">&raquo;</span>
@@ -148,9 +129,9 @@
                   </li>
                 </ul>
               </nav>
-	              
+
 		</form>
-		
+
 	</main>
 	<%@ include file="../common/footer.jsp" %>
 	
