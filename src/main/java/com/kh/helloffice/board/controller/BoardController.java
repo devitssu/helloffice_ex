@@ -234,6 +234,7 @@ public class BoardController {
 							@PathVariable long no,
 							@RequestParam(required = false) List<MultipartFile> fileList,
 							PostDto post) throws Exception{
+		post = makeThumbnailPath(post);
 		post.setRef(no);
 		post.setDepth(post.getDepth() + 1);
 		int result = service.postReply(post, fileList);

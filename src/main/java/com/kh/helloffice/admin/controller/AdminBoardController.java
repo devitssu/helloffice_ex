@@ -2,7 +2,9 @@ package com.kh.helloffice.admin.controller;
 
 import com.kh.helloffice.AdminLevel;
 import com.kh.helloffice.Level;
+import com.kh.helloffice.admin.entity.CategoryDto;
 import com.kh.helloffice.admin.service.AdminBoardService;
+import com.kh.helloffice.board.entity.BoardDto;
 import com.kh.helloffice.board.entity.FileInfoDto;
 import com.kh.helloffice.board.entity.PageVo;
 import com.kh.helloffice.board.entity.PostDto;
@@ -53,10 +55,12 @@ public class AdminBoardController {
 
         List<PostDto> list =  boardService.getList(pageVo, category);
         List<PostDto> noticeList = boardService.getNoticeList();
+        List<BoardDto> categories = boardService.getCategoryList(boardNo);
 
         model.addAttribute("page", pageVo);
         model.addAttribute("list", list);
         model.addAttribute("noticeList", noticeList);
+        model.addAttribute("categories", categories);
 
         return "admin/board/board";
     }

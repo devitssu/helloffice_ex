@@ -182,7 +182,7 @@
 		<!-- End Reserv Page Nav -->
 
 		<li class="nav-item"><a class="nav-link collapsed"
-			href="${root}/workflow/myWf"> <i class="bi bi-file-earmark-text"></i>
+			href="${root}/workflow"> <i class="bi bi-file-earmark-text"></i>
 				<span>워크플로우</span>
 		</a></li>
 		<!-- End Register Page Nav -->

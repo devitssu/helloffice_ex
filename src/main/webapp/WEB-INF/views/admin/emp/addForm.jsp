@@ -80,7 +80,7 @@
 														<div class="clearfix"></div>
 													</div>
 													<div class="d-grid gap-2 mt-3 mb-5">
-                                                        <button class="btn btn-primary" type="submit">전송하기</button>
+                                                        <button class="btn btn-primary" type="submit">등록하기</button>
                                                     </div>
                                                 </form>
                                             </div> <span style="color:red;">${message}</span>

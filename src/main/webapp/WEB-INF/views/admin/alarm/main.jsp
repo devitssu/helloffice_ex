@@ -30,7 +30,7 @@
           <td>${l.message}</td>
           <td>${l.startTime}</td>
           <td>${l.endTime}</td>
-          <td><button onclick="edit(${l.seq})">수정</button></td>
+          <td><button class="btn btn-secondary btn-sm" onclick="edit(${l.seq})">수정</button></td>
         </tr>
       </c:forEach>
       </tbody>

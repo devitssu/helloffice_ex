@@ -92,7 +92,7 @@
                   <td>${ '${emp.empName}' }</td>
                   <td>${ '${emp.empRank}' }</td>
                   <td>${ '${emp.empPosition}' }</td>
-                  <td><button  onClick="downLevel(${ '${emp.empNo}' })">해제</button></td>
+                  <td><button class="btn btn-secondary"  onClick="downLevel(${ '${emp.empNo}' })">해제</button></td>
                 </tr>`;
       $('#empList').append(template);
     });

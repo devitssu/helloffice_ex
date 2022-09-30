@@ -13,12 +13,23 @@
 
 	<main id="main" class="main">
 	<h2>게시판 관리</h2>
-	<c:if test="${list[0].depName eq '대표'}">
-		<h3>전체 게시판</h3>
-	</c:if>
-	<c:if test="${list[0].depName ne '대표'}">
-		<h3>${list[0].depName} 게시판</h3>
-	</c:if>
+		<c:forEach items="${categories}" var="c">
+			<c:if test="${c.ref eq 0}">
+				<h3>${c.name} 게시판</h3>
+			</c:if>
+		</c:forEach>
+		<nav class="navbar navbar-expand-lg bg-light">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<c:forEach items="${categories}" var="c">
+							<c:if test="${c.seq eq page.boardNo}"><a class="nav-link disabled" href='#'>${c.name}</a></c:if>
+							<c:if test="${c.seq ne page.boardNo}"><a class="nav-link" href="/helloffice/admin/board/${c.seq}">${c.name}</a></c:if>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+		</nav>
 		<form action="" method="GET">
 		<div class="row mb-3">
 			<div class="col-md-1">

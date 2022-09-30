@@ -23,13 +23,13 @@
 					<c:if test="${c.name eq '전체'}">
 						${c.name}
 						<c:if test="${loginEmp.adminLevel eq 3}">
-							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button class="btn btn-outline-secondary">게시판관리</button></a></small>
 						</c:if>
 					</c:if>
 					<c:if test="${c.name ne '전체'}">
 						${c.name}
 						<c:if test="${loginEmp.adminLevel >= 2}">
-							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button class="btn btn-outline-secondary">게시판관리</button></a></small>
 						</c:if>
 					</c:if>
 				</h2>

@@ -27,7 +27,6 @@
 								<div class="invite_wrapper">
                                     <div style="margin: auto; width: 55vw;">
                                         <div class="invite_contents">
-                                            <div class="title_mid"> 필수정보 </div>
                                             <div class="col-sm-12">
 												<form method="post" action="${emp.empNo}">
 													<input type="hidden" name="_method" value="PATCH">

@@ -49,8 +49,8 @@ public class CategoryController {
     public String addCategory(@PathVariable long boardNo, CategoryDto category) throws Exception {
         category.setBoardNo(boardNo);
         int result = service.addCategory(category);
-        if(result > 0) return "redirect:/board/" + boardNo + "/categories";
-        return "redirect:/board/" + boardNo + "/category";
+        if(result > 0) return "redirect:/admin/board/" + boardNo + "/categories";
+        return "redirect:/admin/board/" + boardNo + "/category";
     }
 
     @GetMapping("/category/{seq}")
@@ -74,8 +74,8 @@ public class CategoryController {
                                CategoryDto category) throws Exception {
         category.setSeq(seq);
         int result = service.editCategory(category);
-        if(result > 0) return "redirect:/board/" + boardNo + "/categories";
-        return "redirect:/board/" + boardNo + "/category/" + seq;
+        if(result > 0) return "redirect:/admin/board/" + boardNo + "/categories";
+        return "redirect:/admin/board/" + boardNo + "/category/" + seq;
     }
 
     @DeleteMapping("/category/{seq}")

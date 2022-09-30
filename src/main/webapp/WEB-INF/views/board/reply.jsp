@@ -36,10 +36,11 @@
          </div>
         <input type="hidden" name="depth" value="${refPost.depth}">
         <input type="hidden" name="root" value="${refPost.root}">
-         <div class="row mb-3">
-           <label class="col-sm-2 col-form-label">내용</label>
-            <textarea class="tinymce-editor" name="content"></textarea>
-         </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">내용</label>
+            <div id="quill" style="height: 500px"></div>
+            <input type="hidden" name="content" id="content">
+        </div>
         <div class="row mb-3">
             <label class="col-sm-2 col-form-label">파일 첨부</label>
             <input type="file" name="fileList" id="uploadFile" multiple="multiple">
@@ -56,6 +57,57 @@
 	<%@ include file="../common/footer.jsp" %>
 </body>
 <script>
+    const option = {
+        modules: {
+            toolbar: [
+                [{header: [1,2,false] }],
+                ['bold', 'italic', 'underline'],
+                ['image', 'code-block'],
+                [{ list: 'ordered' }, { list: 'bullet' }]
+            ]
+        },
+        placeholder: '자세한 내용을 입력해 주세요!',
+        theme: 'snow'
+    };
+
+    const quill = new Quill('#quill',option);
+    quill.on('text-change', function () {
+        $('#content').val(quill.root.innerHTML);
+    });
+
+    quill.getModule('toolbar').addHandler('image', function () {
+        selectLocalImage();
+    });
+
+    const selectLocalImage = () => {
+        const fileInput = document.createElement('input');
+        fileInput.setAttribute('type', 'file');
+
+        fileInput.click();
+
+        fileInput.addEventListener("change", function () {  // change 이벤트로 input 값이 바뀌면 실행
+            const formData = new FormData();
+            const file = fileInput.files[0];
+            formData.append('image', file);
+            $.ajax({
+                type: 'post',
+                enctype: 'multipart/form-data',
+                url: '/helloffice/image',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    const range = quill.getSelection(); // 사용자가 선택한 에디터 범위
+                    quill.insertEmbed(range.index,'image','http://localhost:8000/helloffice/image?path=' + data);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+
+        });
+    }
+
     $('#uploadFile').change(function(){
         renderFileList();
     });

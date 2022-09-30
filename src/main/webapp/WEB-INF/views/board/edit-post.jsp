@@ -83,6 +83,9 @@
 	<%@ include file="../common/footer.jsp" %>
 </body>
 <script>
+    $(document).ready(function () {
+        $('#content').val(quill.root.innerHTML);
+    })
 
     const option = {
         modules: {

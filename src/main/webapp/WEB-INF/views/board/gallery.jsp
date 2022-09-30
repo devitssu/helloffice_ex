@@ -22,13 +22,13 @@
 					<c:if test="${c.name eq '전체'}">
 						${c.name}
 						<c:if test="${loginEmp.adminLevel eq 3}">
-							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button class="btn btn-outline-secondary">게시판관리</button></a></small>
 						</c:if>
 					</c:if>
 					<c:if test="${c.name ne '전체'}">
 						${c.name}
 						<c:if test="${loginEmp.adminLevel >= 2}">
-							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button>게시판관리</button></a></small>
+							<small><a href="/helloffice/admin/board/${page.boardNo}/categories"><button class="btn btn-outline-secondary">게시판관리</button></a></small>
 						</c:if>
 					</c:if>
 				</h2>
@@ -78,18 +78,29 @@
 				<a href="${url}/post"><button type="button" class="btn btn-outline-secondary">게시글 등록</button></a>
 			</div>
 		</div>
-			<div class="row align-items-top">
+			<table class="table table-hover">
+				<thead>
+				<tr>
+					<th scope="col">카테고리</th>
+					<th scope="col">제목</th>
+					<th scope="col">작성자</th>
+					<th scope="col">등록일</th>
+					<th scope="col">조회수</th>
+				</tr>
+				</thead>
+				<tbody>
 				<c:forEach items="${noticeList}" var="n">
-					<div class="col-lg-2">
-						<div class="card" onClick="postDetail(${n.postNo})">
-							<img src='${root}/resources/assets/img/favicon.png'>
-							<div class="card-body">
-								<h5 class="card-title">[공지]${n.title}</h5>
-								<p class="card-text">${n.empName}</p>
-							</div>
-						</div><!-- End Card with an image on top -->
-					</div>
+				<tr class="table-primary" onClick="postDetail(${n.postNo})">
+					<td>공지</td>
+					<td>${n.title}</td>
+					<td>${n.empName}</td>
+					<td>${n.dateString}</td>
+					<td>${n.viewCnt}</td>
+				</tr>
 				</c:forEach>
+				</tbody>
+			</table>
+			<div class="row align-items-top">
 				<c:forEach items="${list}" var="l">
 					<div class="col-lg-2">
 						<div class="card" onClick="postDetail(${l.postNo})">
