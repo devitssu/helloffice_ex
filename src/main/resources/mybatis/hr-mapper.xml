@@ -108,18 +108,15 @@
 		SELECT 
 			EMP_NO,
 			EMP_NAME,
-			DEP_NO,
-			DEP_NAME,
+			H.DEP_NO,
 			EMP_RANK,
-			EMP_POSITION,
-			PHONE
-		FROM HR
+			D.DEP_NAME
+		FROM HR H
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
 		WHERE RESIGN_YN ='N'
 		<if test='keyword != null and keyword neq ""'>
 		AND EMP_NAME LIKE '%' || #{keyword} || '%'
 		OR EMP_RANK LIKE '%' || #{keyword} || '%'
-		OR EMP_POSITION LIKE '%' || #{keyword} || '%'
-		OR PHONE LIKE '%' || #{keyword} || '%'
 		</if>
 		ORDER BY EMP_NO DESC
 	</select>
