@@ -10,7 +10,7 @@
 		request.setAttribute("url", url);
 	%>	
 	<main id="main" class="main">
-		<h2>결재</h2>
+		<h2>워크플로우 - 새문서</h2>
 		<h3>서식 목록</h3>
 			<div class="row align-items-top">
 					<div class="col-lg-3">
@@ -36,7 +36,7 @@
 	
 	<script type="text/javascript">
 		function postDetail(no){
-			location.href= 'workflow/form/'+ no;
+			location.href= 'form/'+ no;
 		}
 		
 		let urlParams = new URL(document.location.href).searchParams;

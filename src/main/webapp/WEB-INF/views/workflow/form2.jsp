@@ -41,9 +41,9 @@
                 <div class="card-header text-center">기안</div>
                 <div class="card-body text-secondary">
                     <p class="card-text text-center">
-                        개발팀<br>
-                        <b>이수진</b><br>
-                        사원
+                        ${loginEmp.depName}<br>
+                        <b>${loginEmp.empName}</b><br>
+                        ${loginEmp.empRank}
                     </p>
                 </div>
             </div>
@@ -59,11 +59,11 @@
                 </div>
                 <label class="col-sm-1 col-form-label">부서명</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" readonly>
+                    <input type="text" class="form-control" value="${loginEmp.depName}" readonly>
                 </div>
                 <label class="col-sm-1 col-form-label">작성자</label>
                 <div class="col-sm-2">
-                    <input type="text" class="form-control" readonly>
+                    <input type="text" class="form-control" value="${loginEmp.empName}" readonly>
                 </div>
             </div>
             <div class="row mb-3">
@@ -102,7 +102,7 @@
             </div>
          <div class="text-center">
            <button type="button" id="submitDoc" class="btn btn-primary">기안하기</button>
-           <button type="reset" class="btn btn-secondary">취소하기</button>
+           <button type="button" id="cancelDoc" class="btn btn-secondary">취소하기</button>
          </div>
        </form><!-- End Horizontal Form -->
 
@@ -125,7 +125,7 @@
                             <tbody id="approvalBody">
                             <tr>
                                 <td>기안</td>
-                                <td>이수진</td>
+                                <td>${loginEmp.empName}[${loginEmp.depName}]</td>
                                 <td>
                                     <button type="button" class="btn btn-light" onclick="addRow(this)">+</button>
                                     <button type="button" class="btn btn-light" disabled>-</button>
@@ -406,6 +406,12 @@
         if(!$('textarea[name=content2]').val().trim()) return false;
         return true;
     }
+
+    $('#cancelDoc').on('click', function () {
+        if(confirm('작성 내용이 저장되지 않습니다. 정말 취소하시겠습니까?')){
+            history.back();
+        }
+    });
 
 </script>
 </html>

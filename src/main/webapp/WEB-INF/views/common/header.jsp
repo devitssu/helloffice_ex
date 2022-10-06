@@ -182,10 +182,36 @@
 		<!-- End Reserv Page Nav -->
 
 		<li class="nav-item"><a class="nav-link collapsed"
-			href="${root}/workflow"> <i class="bi bi-file-earmark-text"></i>
-				<span>워크플로우</span>
-		</a></li>
-		<!-- End Register Page Nav -->
+								data-bs-target="#workflow-nav" data-bs-toggle="collapse" href="#"> <i
+				class="bi bi-file-earmark-text"></i><span>워크플로우</span><i
+				class="bi bi-chevron-down ms-auto"></i>
+		</a>
+			<ul id="workflow-nav" class="nav-content collapse "
+				data-bs-parent="#sidebar-nav">
+				<li>
+					<a href="${root}/workflow/form"> <i class="bi bi-circle"></i>
+						<span>새문서</span>
+					</a>
+				</li>
+				<li>
+					<a href="${root}/workflow/doc"> <i class="bi bi-circle"></i>
+						<span>기안함</span>
+					</a>
+				</li>
+				<li>
+					<a href="${root}/workflow/approval/doc"> <i class="bi bi-circle"></i>
+						<span>결재함</span>
+					</a>
+				</li>
+				<li>
+					<a href="${root}/workflow/reference/doc"> <i class="bi bi-circle"></i>
+						<span>수신함</span>
+					</a>
+				</li>
+
+			</ul>
+		</li>
+		<!-- End workflow Page Nav -->
 
 <%--		<li class="nav-item"><a class="nav-link collapsed"--%>
 <%--			href="${root}/chat"> <i class="bi bi-chat"></i>--%>
