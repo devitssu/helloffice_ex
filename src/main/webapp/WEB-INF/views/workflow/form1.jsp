@@ -115,7 +115,7 @@
                 </div>
             </div>
          <div class="text-center">
-           <button type="submit" class="btn btn-primary">기안하기</button>
+           <button type="button" class="btn btn-primary" id="submitDoc">기안하기</button>
            <button type="reset" class="btn btn-secondary">취소하기</button>
          </div>
        </form><!-- End Horizontal Form -->
@@ -166,6 +166,7 @@
 </body>
 <script>
     const today = new Date();
+    const currentUrl = document.location.pathname;
 
     function formatDay(date){
         let year = date.getFullYear();
@@ -326,7 +327,6 @@
             target.html($(this).html());
         }else{
             $('.search').val("");
-            console.log($(this).html());
             const element = `<div class="d-inline-flex ref-item m-2">${'${$(this).html()}'} <span onclick="delRef(this)">X<span><div>`;
             $('.ref-list').append(element);
         }
@@ -375,7 +375,7 @@
         const template =`
             <div class="card border-success mb-3 me-3 addedApproval" style="max-width: 12rem;">
                 <div class="card-header text-success text-center">결재</div>
-                <div class="card-body text-success approvalData" data-step="${ '${index + 1}' }">
+                <div class="card-body text-success approval-data" data-step="${ '${index + 1}' }" data-no="${ '${item.empNo}' }">
                     <p class="card-text text-center">
                         ${ '${item.dept}' }<br>
                         <b>${ '${item.name}' }</b><br>
@@ -406,11 +406,65 @@
     };
 
     const renderRef = (item) => {
-        const template = `<span class="float-start ref-item me-1 pe-2" data-no="${ '${item.empNo}' }">${ '${item.name}' } [${ '${item.dept}' }]</span>`;
+        const template = `<span class="float-start ref-item ref-result me-1 pe-2" data-no="${ '${item.empNo}' }">${ '${item.name}' } [${ '${item.dept}' }]</span>`;
         $('#refList').append(template);
     }
-    //TODO Modal 부분 따로 빼기
-    //TODO json으로 값보내기..?
+
+    $('#submitDoc').on('click', function (){
+        const data = makeData();
+
+        $.ajax({
+            type: 'POST',
+            url: currentUrl,
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8'
+        }).done(function(data){
+            alert('제출이 완료되었습니다.')
+            history.back();
+        }).fail(function(data){
+            alert('제출 중 문제가 발생했습니다.')
+        });
+
+    });
+
+    const makeData = () => {
+        const offDoc = {
+            "empNo" : ${loginEmp.empNo},
+            "title" : $('input[name=title]').val(),
+            "offType" : $('select[name=offType] option:selected').val(),
+            "startTime" : $('input[name=startDate]').val() + $('input[name=startTime]').val(),
+            "endTime" : $('input[name=endDate]').val() + $('input[name=endTime]').val(),
+            "reason" : $('textarea[name=reason]').val(),
+        };
+
+        //Approvals
+        const approvals = [];
+        $('.approval-data').each(function() {
+            const empNo = $(this).data("no");
+            const step = $(this).data("step");
+            const approval = {
+                "empNo": empNo,
+                "step": step
+            };
+            approvals.push(approval);
+        });
+
+        //References
+        const references = [];
+        $('.ref-result').each(function (){
+            const empNo = $(this).data("no");
+            const reference = {
+                "empNo" : empNo
+            };
+            references.push(reference);
+        });
+
+        return {
+            "offDoc" : offDoc,
+            "approvals" : approvals,
+            "references" : references
+        };
+    }
 
 </script>
 </html>

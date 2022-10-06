@@ -189,7 +189,6 @@ public class HrController {
 	@GetMapping("hr/teamList")
 	@ResponseBody
 	public List<DeptEmp> getSearchList(@RequestParam("keyword") String keyword, Model model) throws Exception {
-		System.out.println("keyword:::" + keyword);
 		DeptEmp memberDto = new DeptEmp();
 		memberDto.setKeyword(keyword);
 		

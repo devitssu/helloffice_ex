@@ -55,7 +55,7 @@
             <div class="row mb-3">
                 <label class="col-sm-1 col-form-label">작성일</label>
                 <div class="col-sm-2">
-                    <input type="date" class="form-control">
+                    <input type="date" class="form-control" name="createDate">
                 </div>
                 <label class="col-sm-1 col-form-label">부서명</label>
                 <div class="col-sm-2">
@@ -69,46 +69,39 @@
             <div class="row mb-3">
                 <label class="col-sm-1 col-form-label">수습기간</label>
                 <div class="col-sm-2">
-                    <input type="date" class="form-control">
+                    <input type="date" class="form-control" name="startDate">
                 </div>
                 ~
                 <div class="col-sm-2">
-                    <input type="date" class="form-control">
+                    <input type="date" class="form-control" name="endDate">
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="row mb-3">담당 업무 수행에 대한 소감</label>
+                <label class="row mb-3">담당 업무 수행에 대한 소감 (필수)</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"></textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"  name="content1"></textarea>
                 </div>
             </div>
             <div class="row mb-3">
-                <label class="row mb-3">회사에 대한 소감</label>
+                <label class="row mb-3">회사에 대한 소감 (필수)</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"></textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content2"></textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">담당 업무에 대한 본인의 적성 여부</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"></textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content3"></textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">기타 건의 사항</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"></textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content4"></textarea>
                 </div>
             </div>
-            <div class="row mb-3">
-                <label class="col-sm-1 col-form-label">희망 연봉</label>
-                <div class="col-sm-2">
-                    <input type="number" class="form-control">
-                </div>
-            </div>
-
          <div class="text-center">
-           <button type="submit" class="btn btn-primary">기안하기</button>
+           <button type="button" id="submitDoc" class="btn btn-primary">기안하기</button>
            <button type="reset" class="btn btn-secondary">취소하기</button>
          </div>
        </form><!-- End Horizontal Form -->
@@ -158,6 +151,20 @@
 	<%@ include file="../common/footer.jsp" %>
 </body>
 <script>
+    const today = new Date();
+    const currentUrl = document.location.pathname;
+
+    function formatDay(date){
+        let year = date.getFullYear();
+        let month = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        let dayFormat = year + '-' + month  + '-' + day;
+        return dayFormat;
+    };
+
+    $(document).ready(function () {
+       $('input[name=createDate]').val(formatDay(today));
+    });
 
     const addRow = (el) => {
         const num = checkNum();
@@ -248,7 +255,6 @@
             target.html($(this).html());
         }else{
             $('.search').val("");
-            console.log($(this).html());
             const element = `<div class="d-inline-flex ref-item m-2">${'${$(this).html()}'} <span onclick="delRef(this)">X<span><div>`;
             $('.ref-list').append(element);
         }
@@ -297,7 +303,7 @@
         const template =`
             <div class="card border-success mb-3 me-3 addedApproval" style="max-width: 12rem;">
                 <div class="card-header text-success text-center">결재</div>
-                <div class="card-body text-success approvalData" data-step="${ '${index + 1}' }">
+                <div class="card-body text-success approval-data" data-step="${ '${index + 1}' }" data-no="${ '${item.empNo}' }">
                     <p class="card-text text-center">
                         ${ '${item.dept}' }<br>
                         <b>${ '${item.name}' }</b><br>
@@ -328,8 +334,77 @@
     };
 
     const renderRef = (item) => {
-        const template = `<span class="float-start ref-item me-1 pe-2" data-no="${ '${item.empNo}' }">${ '${item.name}' } [${ '${item.dept}' }]</span>`;
+        const template = `<span class="float-start ref-item ref-result me-1 pe-2" data-no="${ '${item.empNo}' }">${ '${item.name}' } [${ '${item.dept}' }]</span>`;
         $('#refList').append(template);
+    }
+
+    $('#submitDoc').on('click', function (){
+        if(!checkRequired()){
+            alert('필수 조건을 작성해주세요.')
+            return false;
+        }
+        const data = makeData();
+        $.ajax({
+            type: 'POST',
+            url: currentUrl,
+            data: JSON.stringify(data),
+            contentType: 'application/json; charset=utf-8'
+        }).done(function(data){
+            alert('제출이 완료되었습니다.')
+            history.back();
+        }).fail(function(data){
+            alert('제출 중 문제가 발생했습니다.')
+        });
+    });
+
+    const makeData = () => {
+        const selfEvalDoc = {
+            "empNo" : ${loginEmp.empNo},
+            "title" : $('input[name=title]').val(),
+            "createDate" : $('input[name=createDate]').val(),
+            "startDate" : $('input[name=startDate]').val(),
+            "endDate" : $('input[name=endDate]').val(),
+            "content1" : $('textarea[name=content1]').val(),
+            "content2" : $('textarea[name=content2]').val(),
+            "content3" : $('textarea[name=content3]').val(),
+            "content4" : $('textarea[name=content4]').val(),
+        };
+
+        //Approvals
+        const approvals = [];
+        $('.approval-data').each(function() {
+            const empNo = $(this).data("no");
+            const step = $(this).data("step");
+            const approval = {
+                "empNo": empNo,
+                "step": step
+            };
+            approvals.push(approval);
+        });
+
+        //References
+        const references = [];
+        $('.ref-result').each(function (){
+            const empNo = $(this).data("no");
+            const reference = {
+                "empNo" : empNo
+            };
+            references.push(reference);
+        });
+
+        return {
+            "selfEvalDoc" : selfEvalDoc,
+            "approvals" : approvals,
+            "references" : references
+        };
+    }
+
+    const checkRequired = () => {
+        if(!$('input[name=startDate]').val()) return false;
+        if(!$('input[name=endDate]').val()) return false;
+        if(!$('textarea[name=content1]').val().trim()) return false;
+        if(!$('textarea[name=content2]').val().trim()) return false;
+        return true;
     }
 
 </script>

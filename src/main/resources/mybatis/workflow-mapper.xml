@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="workflow">
+	<insert id="insertOffDoc">
+		INSERT INTO FORM_1(
+			SEQ,
+			EMP_NO,
+			TITLE,
+			OFF_TYPE,
+			START_TIME,
+			END_TIME,
+			REASON
+		)
+		VALUES(
+			FORM_1_SEQ.nextval,
+			#{empNo},
+		    #{title},
+		    #{offType},
+			TO_DATE(#{startTime}, 'YYYY-MM-DDHH24:MI'),
+			TO_DATE(#{endTime}, 'YYYY-MM-DDHH24:MI'),
+		    #{reason}
+		)
+		<selectKey keyProperty="seq" order="AFTER" resultType="long">
+			SELECT FORM_1_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertSelfEvalDoc">
+		INSERT INTO FORM_2(
+			SEQ,
+			EMP_NO,
+			TITLE,
+			CREATE_DATE,
+			START_DATE,
+		    END_DATE,
+		    CONTENT1,
+		    CONTENT2,
+		    CONTENT3,
+		    CONTENT4
+		)
+		VALUES(
+			FORM_2_SEQ.nextval,
+			#{empNo},
+		    #{title},
+			TO_DATE(#{createDate}, 'YYYY-MM-DD'),
+			TO_DATE(#{startDate}, 'YYYY-MM-DD'),
+			TO_DATE(#{endDate}, 'YYYY-MM-DD'),
+		    #{content1},
+		    #{content2},
+		    #{content3},
+		    #{content4}
+		)
+		<selectKey keyProperty="seq" order="AFTER" resultType="long">
+			SELECT FORM_2_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertApproval">
+		INSERT INTO WORKFLOW_APPROVAL(
+		    SEQ,
+		    FORM_SEQ,
+		    DOC_SEQ,
+		    EMP_NO,
+		    STEP
+		)
+		VALUES (
+			WORKFLOW_APPROVAL_SEQ.NEXTVAL,
+			#{formSeq},
+			#{docSeq},
+			#{empNo},
+			#{step}
+	    )
+	</insert>
+
+	<insert id="insertReference">
+		INSERT INTO WORKFLOW_REF(
+		    SEQ,
+		    FORM_SEQ,
+		    DOC_SEQ,
+		    EMP_NO
+		)
+		VALUES (
+			WORKFLOW_REF_SEQ.NEXTVAL,
+			#{formSeq},
+			#{docSeq},
+			#{empNo}
+	    )
+	</insert>
+	
+</mapper>
