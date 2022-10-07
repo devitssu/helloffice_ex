@@ -264,4 +264,41 @@
 		  AND DOC_SEQ = #{docSeq}
 		  AND STEP = (SELECT STEP FROM WORKFLOW_APPROVAL WHERE SEQ = #{seq}) + 1
 	</update>
+
+	<select id="getRefDocList" resultType="docVo">
+
+	SELECT * FROM
+	 (
+		 SELECT F.SEQ as DOC_SEQ,
+				F.FORM_SEQ,
+				F.TITLE,
+				F.CREATE_TIME,
+				H.EMP_NAME as WRITER_NAME,
+				D.DEP_NAME as WRITER_DEP
+		 FROM FORM_1 F
+				  JOIN WORKFLOW_REF R
+					   ON F.SEQ = R.DOC_SEQ AND F.FORM_SEQ = R.FORM_SEQ
+				  JOIN HR H
+					   ON F.EMP_NO = H.EMP_NO
+				  JOIN DEPARTMENT D
+					   ON H.DEP_NO = D.DEP_NO
+		 WHERE R.EMP_NO = #{empNo}
+		 UNION
+		 SELECT F.SEQ as DOC_SEQ,
+				F.FORM_SEQ,
+				F.TITLE,
+				F.CREATE_TIME,
+				H.EMP_NAME as WRITER_NAME,
+				D.DEP_NAME as WRITER_DEP
+		 FROM FORM_2 F
+				  JOIN WORKFLOW_REF R
+					   ON F.SEQ = R.DOC_SEQ AND F.FORM_SEQ = R.FORM_SEQ
+				  JOIN HR H
+					   ON F.EMP_NO = H.EMP_NO
+				  JOIN DEPARTMENT D
+					   ON H.DEP_NO = D.DEP_NO
+		 WHERE R.EMP_NO = #{empNo}
+	 )
+	ORDER BY CREATE_TIME DESC
+	</select>
 </mapper>

@@ -19,4 +19,6 @@ public interface WorkflowService {
     List<ApprovalBox> getDocToApproveList(Long empNo) throws Exception;
 
     void approve(Approval vo) throws Exception;
+
+    List<DocVo> getRefDocList(Long empNo) throws Exception;
 }

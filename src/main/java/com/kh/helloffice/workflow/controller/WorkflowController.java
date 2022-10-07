@@ -87,7 +87,10 @@ public class WorkflowController {
     }
 
     @GetMapping("/reference/doc")
-    public String referenceDocList() throws Exception {
+    public String referenceDocList(HttpSession session, Model model) throws Exception {
+        Long empNo = getEmpNoFromSession(session);
+        List<DocVo> list = service.getRefDocList(empNo);
+        model.addAttribute("list", list);
         return "workflow/reference-list";
     }
 
@@ -99,12 +102,22 @@ public class WorkflowController {
         model.addAttribute("type", "doc");
         return "workflow/doc-detail" + formNo;
     }
+
     @GetMapping("/approval/form/{formNo}/doc/{docNo}")
     public String approvalDocDetail(@PathVariable Long formNo,
                                     @PathVariable Long docNo,
                                     Model model) throws Exception {
         sendDocDetail(formNo, docNo, model);
         model.addAttribute("type", "approval");
+        return "workflow/doc-detail" + formNo;
+    }
+
+    @GetMapping("/reference/form/{formNo}/doc/{docNo}")
+    public String refDocDetail(@PathVariable Long formNo,
+                               @PathVariable Long docNo,
+                               Model model) throws Exception {
+        sendDocDetail(formNo, docNo, model);
+        model.addAttribute("type", "ref");
         return "workflow/doc-detail" + formNo;
     }
 

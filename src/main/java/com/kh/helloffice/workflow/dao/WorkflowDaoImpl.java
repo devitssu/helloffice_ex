@@ -80,6 +80,11 @@ public class WorkflowDaoImpl implements WorkflowDao{
     }
 
     @Override
+    public List<DocVo> getRefDocList(Long empNo) throws Exception {
+        return session.selectList("workflow.getRefDocList", empNo);
+    }
+
+    @Override
     public List<Approval> getApprovals(DocVo vo) throws Exception {
         return session.selectList("workflow.getApprovals", vo);
     }

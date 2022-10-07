@@ -127,7 +127,7 @@
                     <button type="button" class="btn btn-secondary" id="deleteDoc">삭제하기</button>
                 </div>
             </c:if>
-            <c:if test="${type eq 'approval'}">
+            <c:if test="${type ne 'doc'}">
                 <div class="text-center">
                     <a href="${root}/workflow/approval/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
                 </div>

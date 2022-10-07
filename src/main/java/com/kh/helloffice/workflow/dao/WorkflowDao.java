@@ -30,4 +30,6 @@ public interface WorkflowDao {
     int updateFormApprovalData(Approval vo) throws Exception;
 
     void updateActivate(Approval vo) throws Exception;
+
+    List<DocVo> getRefDocList(Long empNo) throws Exception;
 }

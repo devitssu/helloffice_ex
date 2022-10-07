@@ -78,6 +78,11 @@ public class WorkflowServiceImpl implements WorkflowService{
         System.out.println("result = " + i);
     }
 
+    @Override
+    public List<DocVo> getRefDocList(Long empNo) throws Exception {
+        return dao.getRefDocList(empNo);
+    }
+
     private List<Approval> setSeqForApprovals(List<Approval> list, Long docSeq, Long formSeq){
         for (Approval a: list) {
             a.setDocSeq(docSeq);
