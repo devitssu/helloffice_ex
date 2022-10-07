@@ -9,4 +9,7 @@ public class Reference {
     private Long formSeq;
     private Long docSeq;
     private Long empNo;
+
+    private String empName;
+    private String depName;
 }

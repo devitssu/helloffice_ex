@@ -1,9 +1,6 @@
 package com.kh.helloffice.workflow.dao;
 
-import com.kh.helloffice.workflow.entity.Approval;
-import com.kh.helloffice.workflow.entity.OffDoc;
-import com.kh.helloffice.workflow.entity.Reference;
-import com.kh.helloffice.workflow.entity.SelfEvalDoc;
+import com.kh.helloffice.workflow.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSession;
@@ -40,5 +37,36 @@ public class WorkflowDaoImpl implements WorkflowDao{
     @Override
     public int submitSelfEvalDoc(SelfEvalDoc selfEvalDoc) throws Exception {
         return session.insert("workflow.insertSelfEvalDoc", selfEvalDoc);
+    }
+
+    @Override
+    public List<DocVo> getDocList(Long empNo) throws Exception {
+        return session.selectList("workflow.getDocList", empNo);
+    }
+
+    //TODO 쿼리짜기
+    @Override
+    public OffDoc getOffDoc(DocVo vo) throws Exception {
+        return session.selectOne("workflow.getOffDoc", vo);
+    }
+
+    @Override
+    public SelfEvalDoc getSelfEvalDoc(DocVo vo) throws Exception {
+        return session.selectOne("workflow.getSelfEvalDoc", vo);
+    }
+
+    @Override
+    public List<ApprovalBox> getDocToApproveList(Long empNo) throws Exception {
+        return session.selectList("workflow.getDocToApproveList", empNo);
+    }
+
+    @Override
+    public List<Approval> getApprovals(DocVo vo) throws Exception {
+        return session.selectList("workflow.getApprovals", vo);
+    }
+
+    @Override
+    public List<Reference> getReferences(DocVo vo) throws Exception {
+        return session.selectList("workflow.getReferences", vo);
     }
 }

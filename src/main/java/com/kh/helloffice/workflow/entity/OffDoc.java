@@ -12,4 +12,8 @@ public class OffDoc {
     private String startTime;
     private String endTime;
     private String reason;
+
+    private String writer;
+    private String writerDep;
+    private String writerRank;
 }

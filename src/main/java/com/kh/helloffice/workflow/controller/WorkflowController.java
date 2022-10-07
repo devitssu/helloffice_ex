@@ -1,14 +1,22 @@
 package com.kh.helloffice.workflow.controller;
 
+import com.kh.helloffice.member.entity.DeptEmp;
+import com.kh.helloffice.workflow.entity.ApprovalBox;
+import com.kh.helloffice.workflow.entity.DocVo;
 import com.kh.helloffice.workflow.entity.Form;
-import com.kh.helloffice.workflow.entity.RequestDto;
+import com.kh.helloffice.workflow.entity.Document;
 import com.kh.helloffice.workflow.service.WorkflowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,9 +26,9 @@ public class WorkflowController {
 
     private final WorkflowService service;
 
-    @GetMapping
-    public String main() throws Exception {
-        return "workflow/main";
+    @GetMapping("form")
+    public String formList() throws Exception {
+        return "workflow/form-list";
     }
 
     @GetMapping("/form/{formNo}")
@@ -28,26 +36,81 @@ public class WorkflowController {
         return "workflow/form" + formNo;
     }
 
-    @PostMapping("/form/1")
+    @PostMapping("/form/{formNo}")
     @ResponseBody
-    public ResponseEntity<Object> submitOffDoc(@RequestBody RequestDto data) {
-        data.setFormType(Form.OFF);
-        try {
-            service.submitOffDoc(data);
-        } catch (Exception e) {
+    public ResponseEntity<Object> submitDoc(@PathVariable Long formNo,
+                                            @RequestBody Document data) {
+        try{
+            if(formNo.equals(1L)){
+                data.setFormType(Form.OFF);
+                service.submitOffDoc(data);
+            }else if(formNo.equals(2L)){
+                data.setFormType(Form.SELF_EVAL);
+                service.submitSelfEval(data);
+            }
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @PostMapping("/form/2")
-    @ResponseBody
-    public ResponseEntity<Object> submitSelfEval(@RequestBody RequestDto data) {
-        data.setFormType(Form.SELF_EVAL);
-        try {
-            service.submitSelfEval(data);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    @GetMapping("/doc")
+    public String docList(HttpSession session, Model model) throws Exception {
+        Long empNo = getEmpNoFromSession(session);
+        List<DocVo> docList = service.getDocList(empNo);
+
+        List<DocVo> progressList = docList.stream()
+                                    .filter(docDto -> docDto.getIsComplete().equals('N'))
+                                    .collect(Collectors.toList());
+        List<DocVo> completeList = docList.stream()
+                                    .filter(docDto -> docDto.getIsComplete().equals('Y'))
+                                    .collect(Collectors.toList());
+
+        model.addAttribute("progressList", progressList);
+        model.addAttribute("completeList", completeList);
+        return "workflow/doc-list";
+    }
+
+    @GetMapping("/approval/doc")
+    public String approvalDocList(HttpSession session, Model model) throws Exception {
+        Long empNo = getEmpNoFromSession(session);
+        List<ApprovalBox> list = service.getDocToApproveList(empNo);
+
+        List<ApprovalBox> readyList = list.stream()
+                                        .filter(doc -> doc.getActivate().equals('Y'))
+                                        .collect(Collectors.toList());
+
+        List<ApprovalBox> approvedList = list.stream()
+                                            .filter(doc -> doc.getIsApprove().equals('Y'))
+                                            .collect(Collectors.toList());
+
+        model.addAttribute("readyList", readyList);
+        model.addAttribute("approvedList", approvedList);
+        return "workflow/approval-list";
+    }
+
+    @GetMapping("/reference/doc")
+    public String referenceDocList() throws Exception {
+        return "workflow/reference-list";
+    }
+
+    @GetMapping("/form/{formNo}/doc/{docNo}")
+    public String docDetail(@PathVariable Long formNo,
+                            @PathVariable Long docNo,
+                            Model model) throws Exception {
+        DocVo vo = new DocVo();
+        vo.setDocSeq(docNo);
+        vo.setFormSeq(formNo);
+
+        Document doc = service.getDoc(vo);
+        model.addAttribute("doc", doc);
+
+        return "workflow/doc-detail" + formNo;
+    }
+
+
+    private static Long getEmpNoFromSession(HttpSession session) {
+        DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
+        return loginEmp.getEmpNo();
     }
 }

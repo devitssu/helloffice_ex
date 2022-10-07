@@ -14,4 +14,8 @@ public class SelfEvalDoc {
     private String content2;
     private String content3;
     private String content4;
+
+    private String writer;
+    private String writerDep;
+    private String writerRank;
 }

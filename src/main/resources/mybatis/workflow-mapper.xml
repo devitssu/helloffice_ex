@@ -64,14 +64,17 @@
 		    FORM_SEQ,
 		    DOC_SEQ,
 		    EMP_NO,
-		    STEP
+		    STEP,
+		    ACTIVATE
 		)
 		VALUES (
 			WORKFLOW_APPROVAL_SEQ.NEXTVAL,
 			#{formSeq},
 			#{docSeq},
 			#{empNo},
-			#{step}
+			#{step},
+			<if test="step == 1">'Y'</if>
+			<if test="step != 1">'N'</if>
 	    )
 	</insert>
 
@@ -89,5 +92,131 @@
 			#{empNo}
 	    )
 	</insert>
-	
+
+	<select id="getDocList" resultType="docVo">
+		SELECT X.*
+		FROM
+			(SELECT F.SEQ as DOC_SEQ,
+					F.FORM_SEQ,
+					F.TITLE,
+					A.MAX_APPROVAL,
+					A.APPROVAL_CNT,
+					F.LAST_APPROVAL_TIME,
+					F.LAST_APPROVAL_EMP,
+					F.CREATE_TIME,
+					F.IS_COMPLETE
+			 FROM (SELECT F.SEQ                                           as SEQ,
+						  COUNT(WA.SEQ)                                   as MAX_APPROVAL,
+						  MAX(APPROVE_TIME)                               as LAST_APPROVAL_TIME,
+						  COUNT(CASE WHEN WA.IS_APPROVE = 'Y' THEN 1 END) AS APPROVAL_CNT
+				   FROM FORM_1 F
+							JOIN WORKFLOW_APPROVAL WA
+								 on F.SEQ = WA.DOC_SEQ AND F.FORM_SEQ = WA.FORM_SEQ
+				   WHERE F.EMP_NO = #{empNo}
+				   GROUP BY F.SEQ, F.FORM_SEQ) A
+					  JOIN FORM_1 F ON F.SEQ = A.SEQ
+			 WHERE EMP_NO = #{empNo}
+			 UNION ALL
+			 SELECT F.SEQ as DOC_SEQ,
+					F.FORM_SEQ,
+					F.TITLE,
+					A.MAX_APPROVAL,
+					A.APPROVAL_CNT,
+					F.LAST_APPROVAL_TIME,
+					F.LAST_APPROVAL_EMP,
+					F.CREATE_TIME,
+					F.IS_COMPLETE
+			 FROM (SELECT F.SEQ                                           as SEQ,
+						  COUNT(WA.SEQ)                                   as MAX_APPROVAL,
+						  MAX(APPROVE_TIME)                               as LAST_APPROVAL_TIME,
+						  COUNT(CASE WHEN WA.IS_APPROVE = 'Y' THEN 1 END) AS APPROVAL_CNT
+				   FROM FORM_2 F
+							JOIN WORKFLOW_APPROVAL WA
+								 on F.SEQ = WA.DOC_SEQ AND F.FORM_SEQ = WA.FORM_SEQ
+				   WHERE F.EMP_NO = #{empNo}
+				   GROUP BY F.SEQ, F.FORM_SEQ) A
+					  JOIN FORM_2 F ON F.SEQ = A.SEQ
+			 WHERE EMP_NO = #{empNo}) X
+		ORDER BY CREATE_TIME DESC
+	</select>
+
+	<select id="getOffDoc" resultType="offDoc">
+		SELECT F.*,
+			   H.EMP_NAME as WRITER,
+			   D.DEP_NAME as WRITER_DEP,
+			   H.EMP_RANK as WRITER_RANK
+		FROM FORM_1 F
+				 JOIN HR H ON F.EMP_NO = H.EMP_NO
+				 JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+		WHERE SEQ = #{docSeq}
+	</select>
+
+	<select id="getSelfEvalDoc" resultType="selfEvalDoc">
+		SELECT F.*,
+		       H.EMP_NAME as WRITER,
+		       D.DEP_NAME as WRITER_DEP,
+		       H.EMP_RANK as WRITER_RANK
+		FROM FORM_2 F
+		JOIN HR H ON F.EMP_NO = H.EMP_NO
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+ 		WHERE SEQ = #{docSeq}
+	</select>
+
+	<select id="getApprovals" resultType="approval">
+		SELECT A.*, H.EMP_NAME, H.EMP_RANK, D.DEP_NAME
+		FROM WORKFLOW_APPROVAL A
+		JOIN HR H on A.EMP_NO = H.EMP_NO
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+		WHERE FORM_SEQ = #{formSeq}
+		  AND DOC_SEQ = #{docSeq}
+	</select>
+
+	<select id="getReferences" resultType="reference">
+		SELECT R.*, H.EMP_NAME, D.DEP_NAME
+		FROM WORKFLOW_REF R
+		JOIN HR H on R.EMP_NO = H.EMP_NO
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+		WHERE FORM_SEQ = #{formSeq}
+		  AND DOC_SEQ = #{docSeq}
+	</select>
+
+	<select id="getDocToApproveList" resultType="approvalBox">
+		SELECT X.*
+		FROM (SELECT A.DOC_SEQ,
+					 A.FORM_SEQ,
+					 H.EMP_NAME as WRITER_NAME,
+					 D.DEP_NAME as WRITER_DEP,
+					 F.TITLE,
+					 F.CREATE_TIME,
+					 A.IS_APPROVE,
+					 A.APPROVE_TIME,
+					 A.ACTIVATE
+			  FROM FORM_1 F
+					   JOIN WORKFLOW_APPROVAL A
+							ON F.SEQ = A.DOC_SEQ AND F.FORM_SEQ = A.FORM_SEQ
+					   JOIN HR H
+							ON F.EMP_NO = H.EMP_NO
+					   JOIN DEPARTMENT D
+							ON H.DEP_NO = D.DEP_NO
+			  WHERE A.EMP_NO = #{empNo}
+			  UNION
+			  SELECT A.DOC_SEQ,
+					 A.FORM_SEQ,
+					 H.EMP_NAME as WRITER_NAME,
+					 D.DEP_NAME as WRITER_DEP,
+					 F.TITLE,
+					 F.CREATE_TIME,
+					 A.IS_APPROVE,
+					 A.APPROVE_TIME,
+					 A.ACTIVATE
+			  FROM FORM_2 F
+					   JOIN WORKFLOW_APPROVAL A
+							ON F.SEQ = A.DOC_SEQ AND F.FORM_SEQ = A.FORM_SEQ
+					   JOIN HR H
+							ON F.EMP_NO = H.EMP_NO
+					   JOIN DEPARTMENT D
+							ON H.DEP_NO = D.DEP_NO
+			  WHERE A.EMP_NO = #{empNo}) X
+		ORDER BY CREATE_TIME DESC
+	</select>
 </mapper>

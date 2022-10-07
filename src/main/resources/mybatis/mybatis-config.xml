@@ -36,7 +36,12 @@
 		<typeAlias type="com.kh.helloffice.admin.entity.DeptEmp" alias="deptEmp"/>
 		<typeAlias type="com.kh.helloffice.admin.entity.AlarmDto" alias="alarm"/>
 		<typeAlias type="com.kh.helloffice.admin.entity.CategoryDto" alias="category"/>
-
+		<typeAlias type="com.kh.helloffice.workflow.entity.DocVo" alias="docVo"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.ApprovalBox" alias="approvalBox"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.OffDoc" alias="offDoc"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.SelfEvalDoc" alias="selfEvalDoc"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.Approval" alias="approval"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.Reference" alias="reference"/>
   	</typeAliases>
   
 </configuration>
