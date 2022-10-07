@@ -103,8 +103,7 @@
 					A.APPROVAL_CNT,
 					F.LAST_APPROVAL_TIME,
 					F.LAST_APPROVAL_EMP,
-					F.CREATE_TIME,
-					F.IS_COMPLETE
+					F.CREATE_TIME
 			 FROM (SELECT F.SEQ                                           as SEQ,
 						  COUNT(WA.SEQ)                                   as MAX_APPROVAL,
 						  MAX(APPROVE_TIME)                               as LAST_APPROVAL_TIME,
@@ -124,8 +123,7 @@
 					A.APPROVAL_CNT,
 					F.LAST_APPROVAL_TIME,
 					F.LAST_APPROVAL_EMP,
-					F.CREATE_TIME,
-					F.IS_COMPLETE
+					F.CREATE_TIME
 			 FROM (SELECT F.SEQ                                           as SEQ,
 						  COUNT(WA.SEQ)                                   as MAX_APPROVAL,
 						  MAX(APPROVE_TIME)                               as LAST_APPROVAL_TIME,
@@ -219,4 +217,51 @@
 			  WHERE A.EMP_NO = #{empNo}) X
 		ORDER BY CREATE_TIME DESC
 	</select>
+
+	<update id="approve">
+		<selectKey keyProperty="seq" order="BEFORE" resultType="long">
+			SELECT SEQ, STEP
+			FROM WORKFLOW_APPROVAL
+			WHERE EMP_NO = #{empNo}
+			  AND FORM_SEQ = #{formSeq}
+			  AND DOC_SEQ = #{docSeq}
+		</selectKey>
+		UPDATE WORKFLOW_APPROVAL
+		SET IS_APPROVE = 'Y',
+		    APPROVE_TIME = SYSDATE,
+		    ACTIVATE = 'N'
+		WHERE SEQ = #{seq}
+	</update>
+
+	<update id="updateApprovalDataForOffDoc">
+		UPDATE FORM_1
+		SET (LAST_APPROVAL_TIME, LAST_APPROVAL_EMP) =
+		    (
+		        SELECT A.APPROVE_TIME, H.EMP_NAME
+		        FROM WORKFLOW_APPROVAL A
+		        JOIN HR H ON A.EMP_NO = H.EMP_NO
+		        WHERE A.SEQ = #{seq}
+			)
+		WHERE SEQ = #{docSeq}
+	</update>
+
+	<update id="updateApprovalDataForSelfEvalDoc">
+		UPDATE FORM_2
+		SET (LAST_APPROVAL_TIME, LAST_APPROVAL_EMP) =
+		    (
+		        SELECT A.APPROVE_TIME, H.EMP_NAME
+		        FROM WORKFLOW_APPROVAL A
+		        JOIN HR H ON A.EMP_NO = H.EMP_NO
+		        WHERE A.SEQ = #{seq}
+			)
+		WHERE SEQ = #{docSeq}
+	</update>
+
+	<update id="updateActivate">
+		UPDATE WORKFLOW_APPROVAL
+		SET ACTIVATE = 'Y'
+		WHERE FORM_SEQ = #{formSeq}
+		  AND DOC_SEQ = #{docSeq}
+		  AND STEP = (SELECT STEP FROM WORKFLOW_APPROVAL WHERE SEQ = #{seq}) + 1
+	</update>
 </mapper>

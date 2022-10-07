@@ -59,7 +59,7 @@
                     <c:if test="${a.isApprove eq 'Y'.charAt(0)}"><span class="badge bg-success">완료</span></c:if>
                     <c:if test="${type eq 'approval'}">
                         <c:if test="${a.empNo eq loginEmp.empNo}">
-                            <c:if test="${a.activate eq 'Y'.charAt(0)}"><span class="badge bg-primary">승인하기</span></c:if>
+                            <c:if test="${a.activate eq 'Y'.charAt(0)}"><span id="approve" class="badge bg-primary">승인하기</span></c:if>
                         </c:if>
                     </c:if>
                 </div>
@@ -127,11 +127,18 @@
                     <button type="button" class="btn btn-secondary" id="deleteDoc">삭제하기</button>
                 </div>
             </c:if>
+            <c:if test="${type eq 'approval'}">
+                <div class="text-center">
+                    <a href="${root}/workflow/approval/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
+                </div>
+            </c:if>
        </form><!-- End Horizontal Form -->
 	</main>
 	<%@ include file="../common/footer.jsp" %>
 </body>
 <script>
+    const currentUrl = document.location.pathname;
+
     $(document).ready(function () {
         const create = "${doc.selfEvalDoc.createDate}";
         const start = "${doc.selfEvalDoc.startDate}";
@@ -146,5 +153,18 @@
         $('input[name=endDate]').val(endDate);
     });
 
+    $('#approve').on('click', function (){
+        if(confirm("승인하시겠습니까?")){
+            $.ajax({
+                type: 'PATCH',
+                url: currentUrl
+            }).done(function(data){
+                alert("승인되었습니다.")
+                history.go(0);
+            }).fail(function (data) {
+                alert("문제가 발생했습니다.")
+            });
+        }
+    });
 </script>
 </html>

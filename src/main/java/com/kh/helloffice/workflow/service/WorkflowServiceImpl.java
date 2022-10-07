@@ -70,6 +70,14 @@ public class WorkflowServiceImpl implements WorkflowService{
         return dao.getDocToApproveList(empNo);
     }
 
+    @Override
+    public void approve(Approval vo) throws Exception {
+        dao.approve(vo);
+        dao.updateActivate(vo);
+        int i = dao.updateFormApprovalData(vo);
+        System.out.println("result = " + i);
+    }
+
     private List<Approval> setSeqForApprovals(List<Approval> list, Long docSeq, Long formSeq){
         for (Approval a: list) {
             a.setDocSeq(docSeq);

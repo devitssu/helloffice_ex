@@ -1,10 +1,7 @@
 package com.kh.helloffice.workflow.controller;
 
 import com.kh.helloffice.member.entity.DeptEmp;
-import com.kh.helloffice.workflow.entity.ApprovalBox;
-import com.kh.helloffice.workflow.entity.DocVo;
-import com.kh.helloffice.workflow.entity.Form;
-import com.kh.helloffice.workflow.entity.Document;
+import com.kh.helloffice.workflow.entity.*;
 import com.kh.helloffice.workflow.service.WorkflowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,10 +57,10 @@ public class WorkflowController {
         List<DocVo> docList = service.getDocList(empNo);
 
         List<DocVo> progressList = docList.stream()
-                                    .filter(docDto -> docDto.getIsComplete().equals('N'))
+                                    .filter(doc -> !doc.getApprovalCnt().equals(doc.getMaxApproval()))
                                     .collect(Collectors.toList());
         List<DocVo> completeList = docList.stream()
-                                    .filter(docDto -> docDto.getIsComplete().equals('Y'))
+                                    .filter(doc -> doc.getApprovalCnt().equals(doc.getMaxApproval()))
                                     .collect(Collectors.toList());
 
         model.addAttribute("progressList", progressList);
@@ -98,14 +95,46 @@ public class WorkflowController {
     public String docDetail(@PathVariable Long formNo,
                             @PathVariable Long docNo,
                             Model model) throws Exception {
+        sendDocDetail(formNo, docNo, model);
+        model.addAttribute("type", "doc");
+        return "workflow/doc-detail" + formNo;
+    }
+    @GetMapping("/approval/form/{formNo}/doc/{docNo}")
+    public String approvalDocDetail(@PathVariable Long formNo,
+                                    @PathVariable Long docNo,
+                                    Model model) throws Exception {
+        sendDocDetail(formNo, docNo, model);
+        model.addAttribute("type", "approval");
+        return "workflow/doc-detail" + formNo;
+    }
+
+    @ResponseBody
+    @PatchMapping("/approval/form/{formNo}/doc/{docNo}")
+    public ResponseEntity<Object> approve(@PathVariable Long formNo,
+                                          @PathVariable Long docNo,
+                                          HttpSession session) {
+        Long empNo = getEmpNoFromSession(session);
+
+        Approval vo = new Approval();
+        vo.setDocSeq(docNo);
+        vo.setFormSeq(formNo);
+        vo.setEmpNo(empNo);
+
+        try {
+            service.approve(vo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    private void sendDocDetail(Long formNo, Long docNo, Model model) throws Exception {
         DocVo vo = new DocVo();
         vo.setDocSeq(docNo);
         vo.setFormSeq(formNo);
 
         Document doc = service.getDoc(vo);
         model.addAttribute("doc", doc);
-
-        return "workflow/doc-detail" + formNo;
     }
 
 

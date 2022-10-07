@@ -24,4 +24,10 @@ public interface WorkflowDao {
     SelfEvalDoc getSelfEvalDoc(DocVo vo) throws Exception;
 
     List<ApprovalBox> getDocToApproveList(Long empNo) throws Exception;
+
+    int approve(Approval vo) throws Exception;
+
+    int updateFormApprovalData(Approval vo) throws Exception;
+
+    void updateActivate(Approval vo) throws Exception;
 }

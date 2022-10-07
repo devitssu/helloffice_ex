@@ -1,5 +1,6 @@
 package com.kh.helloffice.workflow.service;
 
+import com.kh.helloffice.workflow.entity.Approval;
 import com.kh.helloffice.workflow.entity.ApprovalBox;
 import com.kh.helloffice.workflow.entity.DocVo;
 import com.kh.helloffice.workflow.entity.Document;
@@ -16,4 +17,6 @@ public interface WorkflowService {
     Document getDoc(DocVo vo) throws Exception;
 
     List<ApprovalBox> getDocToApproveList(Long empNo) throws Exception;
+
+    void approve(Approval vo) throws Exception;
 }

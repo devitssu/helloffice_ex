@@ -61,6 +61,25 @@ public class WorkflowDaoImpl implements WorkflowDao{
     }
 
     @Override
+    public int approve(Approval vo) throws Exception {
+        return session.update("workflow.approve", vo);
+    }
+
+    @Override
+    public int updateFormApprovalData(Approval vo) throws Exception {
+        if(vo.getFormSeq().equals(1L)){
+            return session.update("workflow.updateApprovalDataForOffDoc", vo);
+        } else if (vo.getFormSeq().equals(2L)) {
+            return session.update("workflow.updateApprovalDataForSelfEvalDoc", vo);
+        }else throw  new RuntimeException("FormSeq is not available.");
+    }
+
+    @Override
+    public void updateActivate(Approval vo) throws Exception {
+        session.update("workflow.updateActivate", vo);
+    }
+
+    @Override
     public List<Approval> getApprovals(DocVo vo) throws Exception {
         return session.selectList("workflow.getApprovals", vo);
     }

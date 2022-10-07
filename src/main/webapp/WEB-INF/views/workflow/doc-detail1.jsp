@@ -141,6 +141,11 @@
                     <button type="button" class="btn btn-secondary" id="deleteDoc">삭제하기</button>
                 </div>
             </c:if>
+            <c:if test="${type eq 'approval'}">
+                <div class="text-center">
+                    <a href="${root}/workflow/approval/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
+                </div>
+            </c:if>
        </form><!-- End Horizontal Form -->
 	</main>
 	<%@ include file="../common/footer.jsp" %>
@@ -198,8 +203,18 @@
     });
 
     $('#approve').on('click', function (){
-        alert("승인하시겠습니까");
-    })
+        if(confirm("승인하시겠습니까?")){
+            $.ajax({
+                type: 'PATCH',
+                url: currentUrl
+            }).done(function(data){
+                alert("승인되었습니다.")
+                history.go(0);
+            }).fail(function (data) {
+                alert("문제가 발생했습니다.")
+            });
+        }
+    });
 
 </script>
 </html>

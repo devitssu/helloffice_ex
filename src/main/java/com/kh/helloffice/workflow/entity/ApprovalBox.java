@@ -5,21 +5,18 @@ import lombok.Data;
 import java.sql.Date;
 
 @Data
-public class DocVo {
-
+public class ApprovalBox {
     private Long docSeq;
     private Long formSeq;
     private String formName;
     private String title;
-    private Integer maxApproval;
-    private Integer approvalCnt;
-    private Date lastApprovalTime;
-    private String lastApprovalEmp;
     private Date createTime;
+
+    private Character isApprove;
+    private Date approveTime;
     private String writerName;
     private String writerDep;
     private Character activate;
-    private Long empNo;
 
     public void setFormSeq(Long formSeq) {
         this.formSeq = formSeq;

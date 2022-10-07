@@ -15,10 +15,10 @@
 
 		<ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
 			<li class="nav-item flex-fill" role="presentation">
-				<button class="nav-link w-100 active" id="progress-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-progress" type="button" role="tab" aria-controls="home" aria-selected="true">진행중 문서</button>
+				<button class="nav-link w-100 active" id="progress-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-progress" type="button" role="tab" aria-controls="home" aria-selected="true">결재 대기</button>
 			</li>
 			<li class="nav-item flex-fill" role="presentation">
-				<button class="nav-link w-100" id="completed-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">완료된 문서</button>
+				<button class="nav-link w-100" id="completed-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">결재 완료</button>
 			</li>
 
 		</ul>
@@ -29,19 +29,19 @@
 					<tr>
 						<th scope="col">서식명</th>
 						<th scope="col">제목</th>
-						<th scope="col">진행상태</th>
+						<th scope="col">작성자</th>
 						<th scope="col">기안일</th>
-						<th scope="col">현 결재자</th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Brandon Jacob</td>
-						<td>Designer</td>
-						<td>28</td>
-						<td>2016-05-25</td>
-					</tr>
+					<c:forEach items="${readyList}" var="l">
+						<tr onclick="docDetail(${l.formSeq}, ${l.docSeq})">
+							<th scope="row">${l.formName}</th>
+							<td>${l.title}</td>
+							<td>${l.writerName}[${l.writerDep}]</td>
+							<td>${l.createTime}</td>
+						</tr>
+					</c:forEach>
 					</tbody>
 				</table>
 			</div>
@@ -51,19 +51,21 @@
 					<tr>
 						<th scope="col">서식명</th>
 						<th scope="col">제목</th>
+						<th scope="col">작성자</th>
 						<th scope="col">기안일</th>
-						<th scope="col">완료일</th>
-						<th scope="col">최종 결재자</th>
+						<th scope="col">결재일</th>
 					</tr>
 					</thead>
 					<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Brandon Jacob</td>
-						<td>Designer</td>
-						<td>28</td>
-						<td>2016-05-25</td>
-					</tr>
+					<c:forEach items="${approvedList}" var="l">
+						<tr onclick="docDetail(${l.formSeq}, ${l.docSeq})">
+							<th scope="row">${l.formName}</th>
+							<td>${l.title}</td>
+							<td>${l.writerName}[${l.writerDep}]</td>
+							<td>${l.approveTime}</td>
+							<td>${l.createTime}</td>
+						</tr>
+					</c:forEach>
 					</tbody>
 				</table>
 			</div>
@@ -73,25 +75,9 @@
 	<%@ include file="../common/footer.jsp" %>
 	
 	<script type="text/javascript">
-		function postDetail(no){
-			location.href= 'form/'+ no;
+		function docDetail(formSeq, docSeq){
+			location.href= 'form/'+ formSeq + "/doc/" + docSeq;
 		}
-		
-		let urlParams = new URL(document.location.href).searchParams;
-		let page = urlParams.get('page');
-		
-		$(document).ready(function(){
-			$(`.page[value=${ '${page}' }]`).closest('li').addClass("active");
-		});
-
-		$('#category').change(function(){
-			$('#first').trigger('click');
-		});
-
-		$('#count').change(function(){
-			$('#first').trigger('click');
-		});
-		
 	</script>
 </body>
 </html>
