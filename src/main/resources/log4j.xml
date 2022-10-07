@@ -11,15 +11,30 @@ log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache
 			<param name="ConversionPattern" value="[%d{yyyy/MM/dd HH:mm:ss}] %-5p: %c - %m %n" />
 		</layout>
 	</appender>
-	
-	<!-- File Appender - xml-->
-	<appender name="fileXml" class="org.apache.log4j.FileAppender">
-		<param name="file" value="myLogFile.xml" />
-		<param name="append" value="true" />
-		<layout class="org.apache.log4j.xml.XMLLayout">
+
+	<appender name="console-infolog"
+			  class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %5p %m%n" />
 		</layout>
-	</appender>
-	
+	</appender> <!-- Application Loggers -->
+
+	<logger name="first" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="console" />
+	</logger> <!-- Query Loggers -->
+
+	<logger name="jdbc.sqlonly" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="console-infolog" />
+	</logger>
+
+	<logger name="jdbc.resultsettable" additivity="false">
+		<level value="INFO" />
+		<appender-ref ref="console" />
+	</logger> <!-- Root Logger -->
+
+
 	<!-- Application Loggers -->
 	<logger name="com.kh.app">
 		<level value="debug" />
