@@ -1,11 +1,13 @@
 package com.kh.helloffice.workflow.controller;
 
+import com.kh.helloffice.InvalidDocException;
 import com.kh.helloffice.member.entity.DeptEmp;
 import com.kh.helloffice.workflow.entity.*;
 import com.kh.helloffice.workflow.service.WorkflowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,6 +103,26 @@ public class WorkflowController {
         sendDocDetail(formNo, docNo, model);
         model.addAttribute("type", "doc");
         return "workflow/doc-detail" + formNo;
+    }
+
+    @DeleteMapping("/form/{formNo}/doc/{docNo}")
+    public ResponseEntity<Object> deleteDoc(@PathVariable Long formNo,
+                                            @PathVariable Long docNo) {
+        DocVo vo = new DocVo();
+        vo.setFormSeq(formNo);
+        vo.setDocSeq(docNo);
+
+        try {
+            service.deleteDoc(vo);
+        } catch (InvalidDocException e1) {
+            ResponseEntity<Object> response = ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .contentType(MediaType.valueOf(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                    .body(e1.getMessage());
+            return response;
+        } catch (Exception e2){
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/approval/form/{formNo}/doc/{docNo}")

@@ -32,4 +32,8 @@ public interface WorkflowDao {
     void updateActivate(Approval vo) throws Exception;
 
     List<DocVo> getRefDocList(Long empNo) throws Exception;
+
+    int checkDeletable(DocVo vo) throws Exception;
+
+    void deleteDoc(DocVo vo) throws Exception;
 }

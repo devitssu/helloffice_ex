@@ -1,11 +1,13 @@
 package com.kh.helloffice.workflow.service;
 
+import com.kh.helloffice.InvalidDocException;
 import com.kh.helloffice.workflow.dao.WorkflowDao;
 import com.kh.helloffice.workflow.entity.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -81,6 +83,14 @@ public class WorkflowServiceImpl implements WorkflowService{
     @Override
     public List<DocVo> getRefDocList(Long empNo) throws Exception {
         return dao.getRefDocList(empNo);
+    }
+
+    @Override
+    @ResponseBody
+    public void deleteDoc(DocVo vo) throws Exception {
+        int isDeletable = dao.checkDeletable(vo);
+        if(isDeletable != 0) throw new InvalidDocException("결재가 진행중인 문서는 삭제할 수 없습니다.");
+        dao.deleteDoc(vo);
     }
 
     private List<Approval> setSeqForApprovals(List<Approval> list, Long docSeq, Long formSeq){

@@ -44,7 +44,6 @@ public class WorkflowDaoImpl implements WorkflowDao{
         return session.selectList("workflow.getDocList", empNo);
     }
 
-    //TODO 쿼리짜기
     @Override
     public OffDoc getOffDoc(DocVo vo) throws Exception {
         return session.selectOne("workflow.getOffDoc", vo);
@@ -82,6 +81,16 @@ public class WorkflowDaoImpl implements WorkflowDao{
     @Override
     public List<DocVo> getRefDocList(Long empNo) throws Exception {
         return session.selectList("workflow.getRefDocList", empNo);
+    }
+
+    @Override
+    public int checkDeletable(DocVo vo) throws Exception {
+        return session.selectOne("workflow.checkDeletable", vo);
+    }
+
+    @Override
+    public void deleteDoc(DocVo vo) throws Exception {
+        session.delete("workflow.deleteDoc",vo);
     }
 
     @Override

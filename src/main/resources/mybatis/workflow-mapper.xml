@@ -301,4 +301,21 @@
 	 )
 	ORDER BY CREATE_TIME DESC
 	</select>
+
+	<select id="checkDeletable" resultType="int">
+		SELECT COUNT(*)
+		FROM WORKFLOW_APPROVAL
+		WHERE FORM_SEQ = #{formSeq}
+		AND DOC_SEQ = #{docSeq}
+		AND IS_APPROVE = 'Y'
+	</select>
+
+	<delete id="deleteDoc">
+		DELETE FROM
+		<choose>
+			<when test="formSeq eq 1">FORM_1</when>
+			<when test="formSeq eq 2">FORM_2</when>
+		</choose>
+		WHERE SEQ = #{docSeq}
+	</delete>
 </mapper>

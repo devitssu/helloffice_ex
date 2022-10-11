@@ -27,7 +27,7 @@
            	  <div class="row">
 	           <label for="inputTitle" class="col-sm-1 col-form-label">제목</label>
 	             <div class="col-sm-9">
-                    <input type="text" class="form-control" id="inputTitle" name="title" value="${doc.selfEvalDoc.title}">
+                    <input type="text" class="form-control" id="inputTitle" name="title" value="${doc.selfEvalDoc.title}" readonly>
                   </div>
               </div>
            </div>
@@ -76,7 +76,7 @@
             <div class="row mb-3">
                 <label class="col-sm-1 col-form-label">작성일</label>
                 <div class="col-sm-2">
-                    <input type="date" class="form-control" name="createDate">
+                    <input type="date" class="form-control" name="createDate" readonly>
                 </div>
                 <label class="col-sm-1 col-form-label">부서명</label>
                 <div class="col-sm-2">
@@ -90,41 +90,41 @@
             <div class="row mb-3">
                 <label class="col-sm-1 col-form-label">수습기간</label>
                 <div class="col-sm-2">
-                    <input type="date" class="form-control" name="startDate">
+                    <input type="date" class="form-control" name="startDate" readonly>
                 </div>
                 ~
                 <div class="col-sm-2">
-                    <input type="date" class="form-control" name="endDate">
+                    <input type="date" class="form-control" name="endDate" readonly>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">담당 업무 수행에 대한 소감 (필수)</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"  name="content1">${doc.selfEvalDoc.content1}</textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px"  name="content1" readonly>${doc.selfEvalDoc.content1}</textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">회사에 대한 소감 (필수)</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content2">${doc.selfEvalDoc.content2}</textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content2" readonly>${doc.selfEvalDoc.content2}</textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">담당 업무에 대한 본인의 적성 여부</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content3">${doc.selfEvalDoc.content3}</textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content3" readonly>${doc.selfEvalDoc.content3}</textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label class="row mb-3">기타 건의 사항</label>
                 <div class="row mb-3">
-                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content4">${doc.selfEvalDoc.content4}</textarea>
+                    <textarea class="form-control" placeholder="내용을 입력해주세요." style="height: 100px" name="content4" readonly>${doc.selfEvalDoc.content4}</textarea>
                 </div>
             </div>
             <c:if test="${type eq 'doc'}">
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" id="editDoc">수정하기</button>
-                    <button type="button" class="btn btn-secondary" id="deleteDoc">삭제하기</button>
+                    <button type="button" class="btn btn-danger" id="deleteDoc">삭제하기</button>
+                    <a href="${root}/workflow/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
                 </div>
             </c:if>
             <c:if test="${type ne 'doc'}">
@@ -163,6 +163,21 @@
                 history.go(0);
             }).fail(function (data) {
                 alert("문제가 발생했습니다.")
+            });
+        }
+    });
+
+    $('#deleteDoc').on('click', function () {
+        if(confirm("삭제하시겠습니까?")){
+            $.ajax({
+                type: 'DELETE',
+                url: currentUrl
+            }).done(function(data){
+                alert('삭제되었습니다.');
+                location.href = "/helloffice/workflow/doc";
+            }).fail(function (data) {
+                alert(data.responseText);
+                history.go(0);
             });
         }
     });

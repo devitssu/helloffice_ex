@@ -21,4 +21,6 @@ public interface WorkflowService {
     void approve(Approval vo) throws Exception;
 
     List<DocVo> getRefDocList(Long empNo) throws Exception;
+
+    void deleteDoc(DocVo vo) throws Exception;
 }

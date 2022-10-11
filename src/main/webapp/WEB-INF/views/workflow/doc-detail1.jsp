@@ -137,8 +137,8 @@
             </div>
             <c:if test="${type eq 'doc'}">
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" id="editDoc">수정하기</button>
-                    <button type="button" class="btn btn-secondary" id="deleteDoc">삭제하기</button>
+                    <button type="button" class="btn btn-danger" id="deleteDoc">삭제하기</button>
+                    <a href="${root}/workflow/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
                 </div>
             </c:if>
             <c:if test="${type ne 'doc'}">
@@ -216,5 +216,19 @@
         }
     });
 
+    $('#deleteDoc').on('click', function () {
+        if(confirm("삭제하시겠습니까?")){
+            $.ajax({
+                type: 'DELETE',
+                url: currentUrl
+            }).done(function(data){
+                alert('삭제되었습니다.');
+                location.href = "/helloffice/workflow/doc";
+            }).fail(function (data) {
+                alert(data.responseText);
+                history.go(0);
+            });
+        }
+    });
 </script>
 </html>
