@@ -141,9 +141,14 @@
                     <a href="${root}/workflow/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
                 </div>
             </c:if>
-            <c:if test="${type ne 'doc'}">
+            <c:if test="${type eq 'approval'}">
                 <div class="text-center">
                     <a href="${root}/workflow/approval/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
+                </div>
+            </c:if>
+            <c:if test="${type eq 'ref'}">
+                <div class="text-center">
+                    <a href="${root}/workflow/reference/doc"><button type="button" class="btn btn-secondary">목록으로</button></a>
                 </div>
             </c:if>
        </form><!-- End Horizontal Form -->

@@ -318,4 +318,66 @@
 		</choose>
 		WHERE SEQ = #{docSeq}
 	</delete>
+
+	<insert id="addPush">
+		INSERT INTO PUSH(
+			SEQ,
+		    SENDER,
+			FORM_SEQ,
+			DOC_SEQ,
+			FORM_NAME,
+			RECEIVER,
+			PUSH_TYPE
+		)
+		VALUES(
+		    PUSH_SEQ.NEXTVAL,
+		    #{sender},
+		    #{formSeq},
+		    #{docSeq},
+		    #{formName},
+		    #{receiver},
+		    #{pushType}
+		)
+
+		<selectKey keyProperty="seq" order="AFTER" resultType="long">
+			SELECT PUSH_SEQ.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+
+	<select id="getPushes" resultType="push">
+		SELECT P.*,
+		       H.EMP_NAME as SENDER_NAME,
+		       D.DEP_NAME as SENDER_DEP
+		FROM PUSH P
+		JOIN HR H ON P.SENDER = H.EMP_NO
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+		WHERE RECEIVER = #{empNo}
+	</select>
+
+	<delete id="deletePush">
+		DELETE FROM PUSH
+		WHERE SEQ = #{seq}
+	</delete>
+
+	<select id="getActivate" resultType="long">
+		SELECT EMP_NO
+		FROM WORKFLOW_APPROVAL
+		WHERE FORM_SEQ = #{formSeq}
+		  AND DOC_SEQ = #{docSeq}
+		  AND ACTIVATE = 'Y'
+	</select>
+
+	<select id="getWriterNameAndDep" resultType="docVo">
+		SELECT H.EMP_NAME AS WRITER_NAME,
+		       D.DEP_NAME AS WRITER_DEP,
+			   F.EMP_NO
+		FROM
+		<choose>
+			<when test="formSeq == 1">FORM_1 F</when>
+			<when test="formSeq == 2">FORM_2 F</when>
+		</choose>
+		JOIN HR H ON F.EMP_NO = H.EMP_NO
+		JOIN DEPARTMENT D on H.DEP_NO = D.DEP_NO
+		WHERE SEQ = #{docSeq}
+	</select>
 </mapper>

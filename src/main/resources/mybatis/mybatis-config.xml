@@ -42,6 +42,7 @@
 		<typeAlias type="com.kh.helloffice.workflow.entity.SelfEvalDoc" alias="selfEvalDoc"/>
 		<typeAlias type="com.kh.helloffice.workflow.entity.Approval" alias="approval"/>
 		<typeAlias type="com.kh.helloffice.workflow.entity.Reference" alias="reference"/>
+		<typeAlias type="com.kh.helloffice.workflow.entity.PushData" alias="push"/>
   	</typeAliases>
   
 </configuration>

@@ -38,16 +38,21 @@ public class WorkflowController {
     @PostMapping("/form/{formNo}")
     @ResponseBody
     public ResponseEntity<Object> submitDoc(@PathVariable Long formNo,
-                                            @RequestBody Document data) {
+                                            @RequestBody Document data,
+                                            HttpSession session){
         try{
             if(formNo.equals(1L)){
                 data.setFormType(Form.OFF);
-                service.submitOffDoc(data);
+               data = service.submitOffDoc(data);
             }else if(formNo.equals(2L)){
                 data.setFormType(Form.SELF_EVAL);
-                service.submitSelfEval(data);
+                data = service.submitSelfEval(data);
             }
+
+            DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
+            service.sendNewDocPush(data, loginEmp);
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -149,6 +154,7 @@ public class WorkflowController {
                                           @PathVariable Long docNo,
                                           HttpSession session) {
         Long empNo = getEmpNoFromSession(session);
+        DeptEmp loginEmp = (DeptEmp) session.getAttribute("loginEmp");
 
         Approval vo = new Approval();
         vo.setDocSeq(docNo);
@@ -157,6 +163,25 @@ public class WorkflowController {
 
         try {
             service.approve(vo);
+            service.sendApprovePush(vo, loginEmp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/push")
+    @ResponseBody
+    public List<PushData> getPushes(HttpSession session) throws Exception {
+        Long empNo = getEmpNoFromSession(session);
+        return service.getPushes(empNo);
+    }
+
+    @DeleteMapping("/push/{seq}")
+    public ResponseEntity deletePush(@PathVariable Long seq){
+        try {
+            service.deletePush(seq);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

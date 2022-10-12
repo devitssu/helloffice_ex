@@ -94,6 +94,33 @@ public class WorkflowDaoImpl implements WorkflowDao{
     }
 
     @Override
+    public void addPushes(List<PushData> pushes) throws Exception {
+        for (PushData push: pushes) {
+            session.insert("workflow.addPush", push);
+        }
+    }
+
+    @Override
+    public List<PushData> getPushes(Long empNo) throws Exception {
+        return session.selectList("workflow.getPushes", empNo);
+    }
+
+    @Override
+    public void deletePush(Long seq) throws Exception {
+        session.delete("workflow.deletePush", seq);
+    }
+
+    @Override
+    public Long getActivate(Approval vo) throws Exception {
+        return session.selectOne("workflow.getActivate", vo);
+    }
+
+    @Override
+    public DocVo getWriterNameAndDep(Approval vo) throws Exception {
+        return session.selectOne("workflow.getWriterNameAndDep", vo);
+    }
+
+    @Override
     public List<Approval> getApprovals(DocVo vo) throws Exception {
         return session.selectList("workflow.getApprovals", vo);
     }

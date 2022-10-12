@@ -30,6 +30,8 @@
   <link href="${root}/resources/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="${root}/resources/assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+
   <!-- Template Main CSS File -->
   <link href="${root}/resources/assets/css/style.css" rel="stylesheet">
 
@@ -47,9 +49,16 @@
   <!-- Sweet Alert  -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <style>
     #main{
       background-color: white;
+    }
+
+    #pushList div{
+      font-size: 0.8rem;
+      width: 30rem;
     }
   </style>
 </head>

@@ -36,4 +36,14 @@ public interface WorkflowDao {
     int checkDeletable(DocVo vo) throws Exception;
 
     void deleteDoc(DocVo vo) throws Exception;
+
+    void addPushes(List<PushData> pushes) throws Exception;
+
+    List<PushData> getPushes(Long empNo) throws Exception;
+
+    void deletePush(Long seq) throws Exception;
+
+    Long getActivate(Approval vo) throws Exception;
+
+    DocVo getWriterNameAndDep(Approval vo) throws Exception;
 }
